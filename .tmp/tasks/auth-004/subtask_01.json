@@ -1,0 +1,25 @@
+{
+  "id": "auth-004-01",
+  "seq": "01",
+  "title": "Create AUTH_EVENTS storage domain",
+  "status": "pending",
+  "depends_on": [],
+  "parallel": true,
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-conventions.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/contracts/storage/StorageDomain.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/contracts/storage/ISecureStorageManager.kt"
+  ],
+  "suggested_agent": "CoderAgent",
+  "acceptance_criteria": [
+    "AUTH_EVENTS domain enum value added to StorageDomain.kt",
+    "Domain follows existing StorageDomain pattern",
+    "Build compiles successfully"
+  ],
+  "deliverables": [
+    "app/src/main/java/ke/ac/mku/authcore/contracts/storage/StorageDomain.kt"
+  ]
+}

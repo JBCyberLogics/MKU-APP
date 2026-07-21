@@ -1,0 +1,27 @@
+{
+  "id": "auth-002-04",
+  "seq": "04",
+  "title": "Create BootstrapEvent extensions (8 workflow events)",
+  "status": "pending",
+  "depends_on": [],
+  "parallel": true,
+  "context_files": [
+    ".opencode/context/core/standards/code-quality.md"
+  ],
+  "reference_files": [
+    "app/src/main/java/ke/ac/mku/authcore/bootstrap/BootstrapEvent.kt"
+  ],
+  "suggested_agent": "CoderAgent",
+  "acceptance_criteria": [
+    "8 new BootstrapEvent workflow events created for login lifecycle",
+    "Events follow existing BootstrapEvent patterns",
+    "Events cover: PLATFORM_VALIDATION, CREDENTIAL_VALIDATION, AUTHENTICATION, RESPONSE_VERIFICATION, SESSION_INITIALIZATION, COOKIE_INITIALIZATION, PORTAL_CONNECTION, NOTIFICATION"
+  ],
+  "deliverables": [
+    "app/src/main/java/ke/ac/mku/authcore/bootstrap/events/LoginWorkflowEvents.kt"
+  ],
+  "agent_id": null,
+  "started_at": null,
+  "completed_at": null,
+  "completion_summary": null
+}

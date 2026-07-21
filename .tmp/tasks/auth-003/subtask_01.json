@@ -1,0 +1,26 @@
+{
+  "id": "auth-003-01",
+  "seq": "01",
+  "title": "Extend AuthenticationState enum to 15 states",
+  "status": "completed",
+  "completed_at": "2026-07-18T00:00:00Z",
+  "depends_on": [],
+  "parallel": true,
+  "suggested_agent": "CoderAgent",
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-conventions.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/state/AuthenticationState.kt"
+  ],
+  "acceptance_criteria": [
+    "AuthenticationState enum has 15 total states (5 existing + 10 new)",
+    "All state values are properly named and documented",
+    "Enum follows Kotlin conventions per kotlin-conventions.md",
+    "Code passes quality standards per code-quality.md"
+  ],
+  "deliverables": [
+    "app/src/main/java/ke/ac/mku/authcore/state/AuthenticationState.kt"
+  ]
+}

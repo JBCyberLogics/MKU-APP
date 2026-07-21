@@ -1,0 +1,26 @@
+{
+  "id": "auth-001-07",
+  "seq": "07",
+  "title": "Update AuthCoreModule with DI providers and registrations",
+  "status": "pending",
+  "depends_on": ["04", "05", "06"],
+  "parallel": false,
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-conventions.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/di/AuthCoreModule.kt"
+  ],
+  "suggested_agent": "CoderAgent",
+  "acceptance_criteria": [
+    "AuthenticationEngine registered in ServiceRegistry",
+    "AuthenticationEngine registered in DependencyRegistry",
+    "WebFormLoginHandlerAdapter bound to IAuthNetworkService",
+    "All DI patterns follow existing AuthCoreModule conventions",
+    "Build passes with no compilation errors"
+  ],
+  "deliverables": [
+    "AuthCoreModule.kt (modified with DI registrations)"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "auth-001-04",
+  "seq": "04",
+  "title": "Implement AuthenticationEngine (AUTH-001)",
+  "status": "pending",
+  "depends_on": ["01", "02", "03"],
+  "parallel": false,
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-conventions.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/manager/AuthCoreManager.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/security/monitor/SecurityMonitor.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/state/AuthenticationState.kt"
+  ],
+  "suggested_agent": "CoderAgent",
+  "acceptance_criteria": [
+    "AuthenticationEngine implements IAuthenticationEngine",
+    "No direct HTTP calls - all traffic via IAuthNetworkService",
+    "SecurityMonitor validation before every auth request",
+    "Retry logic: max 3 attempts, 3 second delay between retries",
+    "Location: impl/authentication/AuthenticationEngine.kt"
+  ],
+  "deliverables": [
+    "impl/authentication/AuthenticationEngine.kt"
+  ]
+}

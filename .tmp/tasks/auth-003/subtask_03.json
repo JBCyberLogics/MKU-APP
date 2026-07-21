@@ -1,0 +1,34 @@
+{
+  "id": "auth-003-03",
+  "seq": "03",
+  "title": "Implement AuthenticationStateManager (AUTH-003)",
+  "status": "completed",
+  "completed_at": "2026-07-18T00:00:00Z",
+  "depends_on": ["01", "02", "04", "05"],
+  "parallel": false,
+  "suggested_agent": "CoderAgent",
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-conventions.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/state/AuthenticationState.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/state/StateRegistry.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/contracts/storage/ISecureStorageManager.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/recovery/RecoveryManager.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/security/monitor/SecurityMonitor.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/bootstrap/BootstrapEvent.kt"
+  ],
+  "acceptance_criteria": [
+    "AuthenticationStateManager implements IAuthenticationStateManager",
+    "Wraps StateRegistry via delegation pattern",
+    "FSM validates all 15 state transitions",
+    "Persists every successful transition to AUTH_STATE domain",
+    "Publishes all 8 lifecycle events via BootstrapEvent",
+    "Failed transitions trigger rollback and RecoveryManager",
+    "Single source of truth for authentication state"
+  ],
+  "deliverables": [
+    "app/src/main/java/ke/ac/mku/authcore/auth/state/AuthenticationStateManager.kt"
+  ]
+}

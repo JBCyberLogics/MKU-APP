@@ -1,0 +1,38 @@
+{
+  "id": "auth-002-06",
+  "seq": "06",
+  "title": "Implement LoginOrchestrator",
+  "status": "pending",
+  "depends_on": ["01", "02", "03", "05"],
+  "parallel": false,
+  "context_files": [
+    ".opencode/context/core/standards/code-quality.md"
+  ],
+  "reference_files": [
+    "app/src/main/java/ke/ac/mku/authcore/contracts/authentication/ILoginOrchestrator.kt",
+    "app/src/main/java/ke/ac/mku/authcore/contracts/authentication/IAuthenticationEngine.kt",
+    "app/src/main/java/ke/ac/mku/authcore/contracts/authentication/ISessionManager.kt",
+    "app/src/main/java/ke/ac/mku/authcore/contracts/authentication/ICookieManager.kt",
+    "app/src/main/java/ke/ac/mku/authcore/contracts/portal/IPortalConnector.kt",
+    "app/src/main/java/ke/ac/mku/authcore/bootstrap/events/LoginWorkflowEvents.kt"
+  ],
+  "suggested_agent": "CoderAgent",
+  "acceptance_criteria": [
+    "LoginOrchestrator implements ILoginOrchestrator",
+    "State machine driven execution with 12 states: IDLE → PLATFORM_VALIDATION → CREDENTIAL_VALIDATION → AUTHENTICATION → RESPONSE_VERIFICATION → SESSION_INITIALIZATION → COOKIE_INITIALIZATION → PORTAL_CONNECTION → NOTIFICATION → COMPLETED (or FAILED/CANCELLED)",
+    "No direct HTTP calls - delegates all operations to respective modules",
+    "Security validation via ISecurityMonitor before login",
+    "allow_parallel_logins: false (single active login)",
+    "maximum_retry_attempts: 3",
+    "authentication_timeout: 60 seconds",
+    "Publishes all 8 workflow lifecycle events",
+    "Build passes"
+  ],
+  "deliverables": [
+    "app/src/main/java/ke/ac/mku/authcore/auth/orchestrator/LoginOrchestrator.kt"
+  ],
+  "agent_id": null,
+  "started_at": null,
+  "completed_at": null,
+  "completion_summary": null
+}

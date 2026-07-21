@@ -1,0 +1,30 @@
+{
+  "id": "auth-002-02",
+  "seq": "02",
+  "title": "Create IPortalConnector contract (CORE-012)",
+  "status": "pending",
+  "depends_on": [],
+  "parallel": true,
+  "context_files": [
+    ".opencode/context/core/standards/code-quality.md"
+  ],
+  "reference_files": [
+    "app/src/main/java/ke/ac/mku/authcore/registry/PortalSDK.kt",
+    "app/src/main/java/ke/ac/mku/authcore/registry/PortalDiscovery.kt",
+    "app/src/main/java/ke/ac/mku/authcore/registry/EndpointRegistry.kt"
+  ],
+  "suggested_agent": "CoderAgent",
+  "acceptance_criteria": [
+    "IPortalConnector interface is public and located at contracts/portal/IPortalConnector.kt",
+    "Interface wraps existing PortalSDK, PortalDiscovery, EndpointRegistry without duplicating logic",
+    "Interface follows CORE-012 contract patterns",
+    "Portal abstraction allows LoginOrchestrator to avoid direct portal SDK calls"
+  ],
+  "deliverables": [
+    "app/src/main/java/ke/ac/mku/authcore/contracts/portal/IPortalConnector.kt"
+  ],
+  "agent_id": null,
+  "started_at": null,
+  "completed_at": null,
+  "completion_summary": null
+}

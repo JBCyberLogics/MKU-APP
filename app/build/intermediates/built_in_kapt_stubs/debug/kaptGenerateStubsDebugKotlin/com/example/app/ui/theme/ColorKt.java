@@ -1,0 +1,255 @@
+package com.example.app.ui.theme;
+
+@kotlin.Metadata(mv = {2, 4, 0}, k = 2, xi = 48, d1 = {"\u0000\n\n\u0000\n\u0002\u0018\u0002\n\u0002\bf\"\u0013\u0010\u0000\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b\u0002\u0010\u0003\"\u0013\u0010\u0005\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b\u0006\u0010\u0003\"\u0013\u0010\u0007\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b\b\u0010\u0003\"\u0013\u0010\t\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b\n\u0010\u0003\"\u0013\u0010\u000b\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b\f\u0010\u0003\"\u0013\u0010\r\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b\u000e\u0010\u0003\"\u0013\u0010\u000f\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b\u0010\u0010\u0003\"\u0013\u0010\u0011\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b\u0012\u0010\u0003\"\u0013\u0010\u0013\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b\u0014\u0010\u0003\"\u0013\u0010\u0015\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b\u0016\u0010\u0003\"\u0013\u0010\u0017\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b\u0018\u0010\u0003\"\u0013\u0010\u0019\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b\u001a\u0010\u0003\"\u0013\u0010\u001b\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b\u001c\u0010\u0003\"\u0013\u0010\u001d\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b\u001e\u0010\u0003\"\u0013\u0010\u001f\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b \u0010\u0003\"\u0013\u0010!\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b\"\u0010\u0003\"\u0013\u0010#\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b$\u0010\u0003\"\u0013\u0010%\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b&\u0010\u0003\"\u0013\u0010\'\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b(\u0010\u0003\"\u0013\u0010)\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b*\u0010\u0003\"\u0013\u0010+\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b,\u0010\u0003\"\u0013\u0010-\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b.\u0010\u0003\"\u0013\u0010/\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b0\u0010\u0003\"\u0013\u00101\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b2\u0010\u0003\"\u0013\u00103\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b4\u0010\u0003\"\u0013\u00105\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b6\u0010\u0003\"\u0013\u00107\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b8\u0010\u0003\"\u0013\u00109\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b:\u0010\u0003\"\u0013\u0010;\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b<\u0010\u0003\"\u0013\u0010=\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b>\u0010\u0003\"\u0013\u0010?\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b@\u0010\u0003\"\u0013\u0010A\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\bB\u0010\u0003\"\u0013\u0010C\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\bD\u0010\u0003\"\u0013\u0010E\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\bF\u0010\u0003\"\u0013\u0010G\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\bH\u0010\u0003\"\u0013\u0010I\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\bJ\u0010\u0003\"\u0013\u0010K\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\bL\u0010\u0003\"\u0013\u0010M\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\bN\u0010\u0003\"\u0013\u0010O\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\bP\u0010\u0003\"\u0013\u0010Q\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\bR\u0010\u0003\"\u0013\u0010S\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\bT\u0010\u0003\"\u0013\u0010U\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\bV\u0010\u0003\"\u0013\u0010W\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\bX\u0010\u0003\"\u0013\u0010Y\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\bZ\u0010\u0003\"\u0013\u0010[\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b\\\u0010\u0003\"\u0013\u0010]\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b^\u0010\u0003\"\u0013\u0010_\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\b`\u0010\u0003\"\u0013\u0010a\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\bb\u0010\u0003\"\u0013\u0010c\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\bd\u0010\u0003\"\u0013\u0010e\u001a\u00020\u0001\u00a2\u0006\n\n\u0002\u0010\u0004\u001a\u0004\bf\u0010\u0003\u00a8\u0006g"}, d2 = {"Primary", "Landroidx/compose/ui/graphics/Color;", "getPrimary", "()J", "J", "PrimaryContainer", "getPrimaryContainer", "OnPrimary", "getOnPrimary", "OnPrimaryContainer", "getOnPrimaryContainer", "Secondary", "getSecondary", "SecondaryContainer", "getSecondaryContainer", "OnSecondary", "getOnSecondary", "OnSecondaryContainer", "getOnSecondaryContainer", "Tertiary", "getTertiary", "TertiaryContainer", "getTertiaryContainer", "OnTertiary", "getOnTertiary", "OnTertiaryContainer", "getOnTertiaryContainer", "Surface", "getSurface", "SurfaceBright", "getSurfaceBright", "SurfaceDim", "getSurfaceDim", "SurfaceContainer", "getSurfaceContainer", "SurfaceContainerHigh", "getSurfaceContainerHigh", "SurfaceContainerHighest", "getSurfaceContainerHighest", "SurfaceContainerLow", "getSurfaceContainerLow", "SurfaceContainerLowest", "getSurfaceContainerLowest", "OnSurface", "getOnSurface", "OnSurfaceVariant", "getOnSurfaceVariant", "SurfaceTint", "getSurfaceTint", "SurfaceVariant", "getSurfaceVariant", "Background", "getBackground", "OnBackground", "getOnBackground", "Outline", "getOutline", "OutlineVariant", "getOutlineVariant", "Error", "getError", "ErrorContainer", "getErrorContainer", "OnError", "getOnError", "OnErrorContainer", "getOnErrorContainer", "InverseSurface", "getInverseSurface", "InverseOnSurface", "getInverseOnSurface", "InversePrimary", "getInversePrimary", "PrimaryFixed", "getPrimaryFixed", "PrimaryFixedDim", "getPrimaryFixedDim", "OnPrimaryFixed", "getOnPrimaryFixed", "OnPrimaryFixedVariant", "getOnPrimaryFixedVariant", "SecondaryFixed", "getSecondaryFixed", "SecondaryFixedDim", "getSecondaryFixedDim", "OnSecondaryFixed", "getOnSecondaryFixed", "OnSecondaryFixedVariant", "getOnSecondaryFixedVariant", "TertiaryFixed", "getTertiaryFixed", "TertiaryFixedDim", "getTertiaryFixedDim", "OnTertiaryFixed", "getOnTertiaryFixed", "OnTertiaryFixedVariant", "getOnTertiaryFixedVariant", "WaveColor1", "getWaveColor1", "WaveColor2", "getWaveColor2", "WaveColor3", "getWaveColor3", "app"})
+public final class ColorKt {
+    private static final long Primary = 0L;
+    private static final long PrimaryContainer = 0L;
+    private static final long OnPrimary = 0L;
+    private static final long OnPrimaryContainer = 0L;
+    private static final long Secondary = 0L;
+    private static final long SecondaryContainer = 0L;
+    private static final long OnSecondary = 0L;
+    private static final long OnSecondaryContainer = 0L;
+    private static final long Tertiary = 0L;
+    private static final long TertiaryContainer = 0L;
+    private static final long OnTertiary = 0L;
+    private static final long OnTertiaryContainer = 0L;
+    private static final long Surface = 0L;
+    private static final long SurfaceBright = 0L;
+    private static final long SurfaceDim = 0L;
+    private static final long SurfaceContainer = 0L;
+    private static final long SurfaceContainerHigh = 0L;
+    private static final long SurfaceContainerHighest = 0L;
+    private static final long SurfaceContainerLow = 0L;
+    private static final long SurfaceContainerLowest = 0L;
+    private static final long OnSurface = 0L;
+    private static final long OnSurfaceVariant = 0L;
+    private static final long SurfaceTint = 0L;
+    private static final long SurfaceVariant = 0L;
+    private static final long Background = 0L;
+    private static final long OnBackground = 0L;
+    private static final long Outline = 0L;
+    private static final long OutlineVariant = 0L;
+    private static final long Error = 0L;
+    private static final long ErrorContainer = 0L;
+    private static final long OnError = 0L;
+    private static final long OnErrorContainer = 0L;
+    private static final long InverseSurface = 0L;
+    private static final long InverseOnSurface = 0L;
+    private static final long InversePrimary = 0L;
+    private static final long PrimaryFixed = 0L;
+    private static final long PrimaryFixedDim = 0L;
+    private static final long OnPrimaryFixed = 0L;
+    private static final long OnPrimaryFixedVariant = 0L;
+    private static final long SecondaryFixed = 0L;
+    private static final long SecondaryFixedDim = 0L;
+    private static final long OnSecondaryFixed = 0L;
+    private static final long OnSecondaryFixedVariant = 0L;
+    private static final long TertiaryFixed = 0L;
+    private static final long TertiaryFixedDim = 0L;
+    private static final long OnTertiaryFixed = 0L;
+    private static final long OnTertiaryFixedVariant = 0L;
+    private static final long WaveColor1 = 0L;
+    private static final long WaveColor2 = 0L;
+    private static final long WaveColor3 = 0L;
+    
+    public static final long getPrimary() {
+        return 0L;
+    }
+    
+    public static final long getPrimaryContainer() {
+        return 0L;
+    }
+    
+    public static final long getOnPrimary() {
+        return 0L;
+    }
+    
+    public static final long getOnPrimaryContainer() {
+        return 0L;
+    }
+    
+    public static final long getSecondary() {
+        return 0L;
+    }
+    
+    public static final long getSecondaryContainer() {
+        return 0L;
+    }
+    
+    public static final long getOnSecondary() {
+        return 0L;
+    }
+    
+    public static final long getOnSecondaryContainer() {
+        return 0L;
+    }
+    
+    public static final long getTertiary() {
+        return 0L;
+    }
+    
+    public static final long getTertiaryContainer() {
+        return 0L;
+    }
+    
+    public static final long getOnTertiary() {
+        return 0L;
+    }
+    
+    public static final long getOnTertiaryContainer() {
+        return 0L;
+    }
+    
+    public static final long getSurface() {
+        return 0L;
+    }
+    
+    public static final long getSurfaceBright() {
+        return 0L;
+    }
+    
+    public static final long getSurfaceDim() {
+        return 0L;
+    }
+    
+    public static final long getSurfaceContainer() {
+        return 0L;
+    }
+    
+    public static final long getSurfaceContainerHigh() {
+        return 0L;
+    }
+    
+    public static final long getSurfaceContainerHighest() {
+        return 0L;
+    }
+    
+    public static final long getSurfaceContainerLow() {
+        return 0L;
+    }
+    
+    public static final long getSurfaceContainerLowest() {
+        return 0L;
+    }
+    
+    public static final long getOnSurface() {
+        return 0L;
+    }
+    
+    public static final long getOnSurfaceVariant() {
+        return 0L;
+    }
+    
+    public static final long getSurfaceTint() {
+        return 0L;
+    }
+    
+    public static final long getSurfaceVariant() {
+        return 0L;
+    }
+    
+    public static final long getBackground() {
+        return 0L;
+    }
+    
+    public static final long getOnBackground() {
+        return 0L;
+    }
+    
+    public static final long getOutline() {
+        return 0L;
+    }
+    
+    public static final long getOutlineVariant() {
+        return 0L;
+    }
+    
+    public static final long getError() {
+        return 0L;
+    }
+    
+    public static final long getErrorContainer() {
+        return 0L;
+    }
+    
+    public static final long getOnError() {
+        return 0L;
+    }
+    
+    public static final long getOnErrorContainer() {
+        return 0L;
+    }
+    
+    public static final long getInverseSurface() {
+        return 0L;
+    }
+    
+    public static final long getInverseOnSurface() {
+        return 0L;
+    }
+    
+    public static final long getInversePrimary() {
+        return 0L;
+    }
+    
+    public static final long getPrimaryFixed() {
+        return 0L;
+    }
+    
+    public static final long getPrimaryFixedDim() {
+        return 0L;
+    }
+    
+    public static final long getOnPrimaryFixed() {
+        return 0L;
+    }
+    
+    public static final long getOnPrimaryFixedVariant() {
+        return 0L;
+    }
+    
+    public static final long getSecondaryFixed() {
+        return 0L;
+    }
+    
+    public static final long getSecondaryFixedDim() {
+        return 0L;
+    }
+    
+    public static final long getOnSecondaryFixed() {
+        return 0L;
+    }
+    
+    public static final long getOnSecondaryFixedVariant() {
+        return 0L;
+    }
+    
+    public static final long getTertiaryFixed() {
+        return 0L;
+    }
+    
+    public static final long getTertiaryFixedDim() {
+        return 0L;
+    }
+    
+    public static final long getOnTertiaryFixed() {
+        return 0L;
+    }
+    
+    public static final long getOnTertiaryFixedVariant() {
+        return 0L;
+    }
+    
+    public static final long getWaveColor1() {
+        return 0L;
+    }
+    
+    public static final long getWaveColor2() {
+        return 0L;
+    }
+    
+    public static final long getWaveColor3() {
+        return 0L;
+    }
+}

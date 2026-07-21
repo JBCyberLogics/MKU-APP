@@ -1,0 +1,36 @@
+{
+  "id": "auth-004",
+  "name": "AUTH-004 Authentication Event Manager",
+  "status": "active",
+  "objective": "Implement centralized AuthenticationEventManager as single event gateway for all authentication lifecycle events",
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-conventions.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/bootstrap/EventBus.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/bootstrap/BootstrapEvent.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/auth/engine/AuthenticationEngine.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/auth/workflow/LoginOrchestrator.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/auth/state/AuthenticationStateManager.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/contracts/storage/ISecureStorageManager.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/contracts/storage/StorageDomain.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/security/monitor/SecurityMonitor.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/di/AuthCoreModule.kt"
+  ],
+  "exit_criteria": [
+    "IAuthenticationEventManager is the single event gateway",
+    "All AUTH events (AUTH-001, AUTH-002, AUTH-003) published via AUTH-004",
+    "Events validated before publishing",
+    "Events deduplicated (same event within time window)",
+    "Events persisted to AUTH_EVENTS domain",
+    "Correlation IDs assigned to all events",
+    "Events forwarded to BootstrapEvent after processing",
+    "Event replay capability works",
+    "AuthenticationEngine, LoginOrchestrator, AuthStateManager modified",
+    "Build passes"
+  ],
+  "subtask_count": 7,
+  "completed_count": 0,
+  "created_at": "2026-07-18T00:00:00Z"
+}

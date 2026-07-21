@@ -1,0 +1,18 @@
+{
+  "subtaskId": "session-002-07",
+  "taskId": "session-002",
+  "name": "Implement SessionValidatorMetricsImpl",
+  "description": "Implement SessionValidatorMetricsImpl data class with all metrics fields",
+  "status": "pending",
+  "batch": 2,
+  "file": "session/validation/SessionValidatorMetricsImpl.kt",
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-standards.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/contracts/session/SessionManagerMetrics.kt"
+  ],
+  "dependencies": [],
+  "parallel": true
+}

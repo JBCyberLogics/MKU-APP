@@ -1,0 +1,18 @@
+{
+  "subtaskId": "session-001-04",
+  "taskId": "session-001",
+  "name": "Add 13 session events to BootstrapEvent",
+  "description": "Add 13 session lifecycle events to BootstrapEvent: SessionCreating, SessionCreated, SessionRestoring, SessionRestored, SessionRefreshing, SessionRefreshed, SessionValidating, SessionExpiring, SessionExpired, SessionTerminating, SessionTerminated, SessionFailed, SessionRecovered",
+  "status": "pending",
+  "batch": 2,
+  "file": "bootstrap/BootstrapEvent.kt",
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-standards.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/bootstrap/BootstrapEvent.kt"
+  ],
+  "dependencies": ["session-001-01"],
+  "parallel": false
+}

@@ -1,0 +1,18 @@
+{
+  "subtaskId": "session-002-04",
+  "taskId": "session-002",
+  "name": "Add validation events to BootstrapEvent",
+  "description": "Add 9 validation events: SessionValidationStarted, SessionValidationPassed, SessionValidationWarning, SessionValidationFailed, SessionIntegrityVerified, SessionIntegrityFailed, SessionExpiredDetected, SessionRecoveryRequired, SessionValidatorReady",
+  "status": "pending",
+  "batch": 1,
+  "file": "bootstrap/BootstrapEvent.kt",
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-standards.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/bootstrap/BootstrapEvent.kt"
+  ],
+  "dependencies": [],
+  "parallel": true
+}

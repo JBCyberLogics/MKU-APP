@@ -1,0 +1,27 @@
+{
+  "id": "auth-003-02",
+  "seq": "02",
+  "title": "Define IAuthenticationStateManager contract (CORE-012)",
+  "status": "completed",
+  "completed_at": "2026-07-18T00:00:00Z",
+  "depends_on": ["01"],
+  "parallel": false,
+  "suggested_agent": "CoderAgent",
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-conventions.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/state/AuthenticationState.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/contracts/storage/ISecureStorageManager.kt"
+  ],
+  "acceptance_criteria": [
+    "IAuthenticationStateManager interface defines all required methods",
+    "Contract follows CORE-012 platform contract standards",
+    "Methods include: getState(), transitionTo(), validateTransition(), restoreState()",
+    "Interface is properly annotated for contract documentation"
+  ],
+  "deliverables": [
+    "app/src/main/java/ke/ac/mku/authcore/contracts/authentication/IAuthenticationStateManager.kt"
+  ]
+}

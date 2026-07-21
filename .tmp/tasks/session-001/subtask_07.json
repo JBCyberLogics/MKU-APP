@@ -1,0 +1,18 @@
+{
+  "subtaskId": "session-001-07",
+  "taskId": "session-001",
+  "name": "Create SessionTransition",
+  "description": "Create SessionTransition data class with: fromState, toState, timestamp, success, reason, correlationId",
+  "status": "pending",
+  "batch": 3,
+  "file": "contracts/session/SessionTransition.kt",
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-standards.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/contracts/authentication/StateTransition.kt"
+  ],
+  "dependencies": [],
+  "parallel": true
+}

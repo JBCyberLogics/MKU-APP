@@ -1,0 +1,19 @@
+{
+  "subtaskId": "session-002-05",
+  "taskId": "session-002",
+  "name": "Implement SessionValidator with continuous validation",
+  "description": "Implement SessionValidator with hybrid continuous validation (60s foreground, 300s background), event-driven immediate validation, and integration with SessionManager",
+  "status": "pending",
+  "batch": 2,
+  "file": "session/validation/SessionValidator.kt",
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-standards.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/manager/SessionManager.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/auth/state/AuthenticationStateManager.kt"
+  ],
+  "dependencies": ["session-002-01", "session-002-02", "session-002-03", "session-002-04"],
+  "parallel": true
+}

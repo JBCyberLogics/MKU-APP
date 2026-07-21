@@ -1,0 +1,26 @@
+{
+  "id": "auth-004-07",
+  "seq": "07",
+  "title": "Update AuthCoreModule with DI providers and registrations",
+  "status": "pending",
+  "depends_on": ["03", "04", "05", "06"],
+  "parallel": false,
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-conventions.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/di/AuthCoreModule.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/auth/events/AuthenticationEventManager.kt"
+  ],
+  "suggested_agent": "CoderAgent",
+  "acceptance_criteria": [
+    "AuthenticationEventManager registered in DI container",
+    "IAuthenticationEventManager bound to AuthenticationEventManager implementation",
+    "All modified components receive AuthenticationEventManager via injection",
+    "Build compiles successfully"
+  ],
+  "deliverables": [
+    "app/src/main/java/ke/ac/mku/authcore/di/AuthCoreModule.kt"
+  ]
+}

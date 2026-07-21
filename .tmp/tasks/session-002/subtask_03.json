@@ -1,0 +1,18 @@
+{
+  "subtaskId": "session-002-03",
+  "taskId": "session-002",
+  "name": "Create ISessionValidator interface",
+  "description": "Create ISessionValidator interface with 10 methods: validateSession, validateIntegrity, validateExpiration, validateDevice, validateCookies, getLastValidationResult, isValidationActive, startContinuousValidation, stopContinuousValidation, getMetrics",
+  "status": "pending",
+  "batch": 1,
+  "file": "contracts/session/ISessionValidator.kt",
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-standards.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/contracts/authentication/ISessionManager.kt"
+  ],
+  "dependencies": [],
+  "parallel": true
+}

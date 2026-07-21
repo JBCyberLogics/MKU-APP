@@ -1,0 +1,18 @@
+{
+  "subtaskId": "session-002-06",
+  "taskId": "session-002",
+  "name": "Implement SessionIntegrityChecker",
+  "description": "Implement SessionIntegrityChecker for HMAC verification, signature verification, and tamper detection using ICryptoManager",
+  "status": "pending",
+  "batch": 2,
+  "file": "session/validation/SessionIntegrityChecker.kt",
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-standards.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/contracts/crypto/ICryptoManager.kt"
+  ],
+  "dependencies": ["session-002-01"],
+  "parallel": true
+}

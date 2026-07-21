@@ -1,0 +1,26 @@
+{
+  "id": "auth-004-02",
+  "seq": "02",
+  "title": "Create IAuthenticationEventManager contract (CORE-012)",
+  "status": "pending",
+  "depends_on": [],
+  "parallel": true,
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-conventions.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/contracts/storage/ISecureStorageManager.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/bootstrap/BootstrapEvent.kt"
+  ],
+  "suggested_agent": "CoderAgent",
+  "acceptance_criteria": [
+    "IAuthenticationEventManager interface defined with publish(), subscribe(), validate(), deduplicate() methods",
+    "Follows CORE-012 contract naming conventions",
+    "Correlation ID generation method defined",
+    "Event replay capability method defined"
+  ],
+  "deliverables": [
+    "app/src/main/java/ke/ac/mku/authcore/contracts/events/IAuthenticationEventManager.kt"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "id": "auth-001-03",
+  "seq": "03",
+  "title": "Create AuthNetworkResponse data class",
+  "status": "pending",
+  "depends_on": [],
+  "parallel": true,
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-conventions.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/data/api/WebFormLoginHandler.kt"
+  ],
+  "suggested_agent": "CoderAgent",
+  "acceptance_criteria": [
+    "AuthNetworkResponse is a data class",
+    "Contains success boolean, response body, and status code fields",
+    "Location: data/network/AuthNetworkResponse.kt",
+    "Follows Kotlin data class conventions"
+  ],
+  "deliverables": [
+    "data/network/AuthNetworkResponse.kt"
+  ]
+}

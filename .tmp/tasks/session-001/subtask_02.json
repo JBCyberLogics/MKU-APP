@@ -1,0 +1,19 @@
+{
+  "subtaskId": "session-001-02",
+  "taskId": "session-001",
+  "name": "Extend ISessionManager interface",
+  "description": "Replace ISessionManager with extended interface: createSession, restoreSession, refreshSession, terminateSession, getCurrentState, getCurrentSession, isSessionActive, getRegNumber, getStudentName, getLoginTimestamp, getCookies, validateSession, isSessionExpired, getTimeUntilExpiry, getMetrics",
+  "status": "pending",
+  "batch": 1,
+  "file": "contracts/authentication/ISessionManager.kt",
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-standards.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/contracts/authentication/ISessionManager.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/contracts/authentication/IAuthenticationStateManager.kt"
+  ],
+  "dependencies": [],
+  "parallel": true
+}

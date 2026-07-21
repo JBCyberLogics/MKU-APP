@@ -1,0 +1,31 @@
+{
+  "id": "auth-002-03",
+  "seq": "03",
+  "title": "Create PortalModels (PortalConnectionResult, PortalInfo, PortalConnectionState)",
+  "status": "pending",
+  "depends_on": [],
+  "parallel": true,
+  "context_files": [
+    ".opencode/context/core/standards/code-quality.md"
+  ],
+  "reference_files": [
+    "app/src/main/java/ke/ac/mku/authcore/registry/PortalSDK.kt",
+    "app/src/main/java/ke/ac/mku/authcore/registry/PortalDiscovery.kt"
+  ],
+  "suggested_agent": "CoderAgent",
+  "acceptance_criteria": [
+    "PortalConnectionResult data class created with success/failure state",
+    "PortalInfo data class created with portal metadata",
+    "PortalConnectionState sealed class created with connection states",
+    "Models follow existing data class patterns in codebase"
+  ],
+  "deliverables": [
+    "app/src/main/java/ke/ac/mku/authcore/models/portal/PortalConnectionResult.kt",
+    "app/src/main/java/ke/ac/mku/authcore/models/portal/PortalInfo.kt",
+    "app/src/main/java/ke/ac/mku/authcore/models/portal/PortalConnectionState.kt"
+  ],
+  "agent_id": null,
+  "started_at": null,
+  "completed_at": null,
+  "completion_summary": null
+}

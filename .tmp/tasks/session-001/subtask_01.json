@@ -1,0 +1,19 @@
+{
+  "subtaskId": "session-001-01",
+  "taskId": "session-001",
+  "name": "Expand SessionState to 12 states",
+  "description": "Expand SessionState enum from 3 to 12 states: NONE, CREATING, ACTIVE, RESTORING, REFRESHING, VALIDATING, EXPIRING, EXPIRED, TERMINATING, TERMINATED, FAILED, RECOVERING",
+  "status": "pending",
+  "batch": 1,
+  "file": "state/SessionState.kt",
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-standards.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/state/SessionState.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/state/AuthenticationState.kt"
+  ],
+  "dependencies": [],
+  "parallel": true
+}

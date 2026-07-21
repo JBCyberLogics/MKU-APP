@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ke.ac.mku.authcore.session.recovery.SessionRecoveryManagerTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-07-19T20:05:51.487Z" hostname="kali" time="1.993">
+  <properties/>
+  <testcase name="test recoverSession publishes events via AuthEventManager" classname="ke.ac.mku.authcore.session.recovery.SessionRecoveryManagerTest" time="1.959"/>
+  <testcase name="test initial state is IDLE" classname="ke.ac.mku.authcore.session.recovery.SessionRecoveryManagerTest" time="0.015"/>
+  <testcase name="test onBootstrapEvent triggers recovery" classname="ke.ac.mku.authcore.session.recovery.SessionRecoveryManagerTest" time="0.017"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

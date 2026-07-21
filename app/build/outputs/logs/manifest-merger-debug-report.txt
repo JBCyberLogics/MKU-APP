@@ -1,0 +1,376 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml:2:1-26:12
+INJECTED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml:2:1-26:12
+INJECTED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml:2:1-26:12
+INJECTED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml:2:1-26:12
+MERGED from [androidx.hilt:hilt-navigation-compose:1.1.0] /home/darkage/.gradle/caches/9.5.0/transforms/23aaeeaa6d680f5c7538575a16c6fe92/transformed/jetified-hilt-navigation-compose-1.1.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.hilt:hilt-navigation:1.1.0] /home/darkage/.gradle/caches/9.5.0/transforms/25bd1c8e7ecc7137cb5981b7064f2dcc/transformed/jetified-hilt-navigation-1.1.0/AndroidManifest.xml:2:1-7:12
+MERGED from [com.google.dagger:hilt-android:2.60.1] /home/darkage/.gradle/caches/9.5.0/transforms/749d5f62f88ae04f9cd5756b28c1b42d/transformed/jetified-hilt-android-2.60.1/AndroidManifest.xml:16:1-19:12
+MERGED from [androidx.fragment:fragment:1.5.1] /home/darkage/.gradle/caches/9.5.0/transforms/3b980169286eb734d8dd198fe5789562/transformed/fragment-1.5.1/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.activity:activity:1.8.2] /home/darkage/.gradle/caches/9.5.0/transforms/3ccdc460bebf52a87c26572d1f1979ea/transformed/jetified-activity-1.8.2/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.navigation:navigation-compose:2.5.1] /home/darkage/.gradle/caches/9.5.0/transforms/7ef5ef68cd625faab9679eff934d1850/transformed/jetified-navigation-compose-2.5.1/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.navigation:navigation-runtime-ktx:2.5.1] /home/darkage/.gradle/caches/9.5.0/transforms/f64922e3a972f51a026ba5894c87a232/transformed/navigation-runtime-ktx-2.5.1/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.navigation:navigation-runtime:2.5.1] /home/darkage/.gradle/caches/9.5.0/transforms/a95425f61262b634a132d81fc8246fb9/transformed/navigation-runtime-2.5.1/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.activity:activity-ktx:1.8.2] /home/darkage/.gradle/caches/9.5.0/transforms/9d72ea929d36ffa3b2a31bfb710928e8/transformed/jetified-activity-ktx-1.8.2/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.material3:material3-android:1.2.0] /home/darkage/.gradle/caches/9.5.0/transforms/96032a56e70882fd26693b740a671974/transformed/jetified-material3-release/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.compose.material:material-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/62e5a5b6c90545bc1a290ecab0769156/transformed/jetified-material-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.material:material-icons-core-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/63817fad2a6e8e0b69a302c921a9ea3f/transformed/jetified-material-icons-core-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.material:material-icons-extended-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/216379ff20eaddd7f22daad907dd58ba/transformed/jetified-material-icons-extended-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.material:material-ripple-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/5cadb3e36ef0ae43a938a0d7f104c3a6/transformed/jetified-material-ripple-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.foundation:foundation-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/b47b75e2c49b906df3d5069ecdf6aa6f/transformed/jetified-foundation-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.foundation:foundation-layout-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/0c33bfebe38095778e7c5d5a0b8e79ff/transformed/jetified-foundation-layout-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.animation:animation-core-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/b49bf0e68aef675be047ad9db0955322/transformed/jetified-animation-core-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.animation:animation-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/f9dbb2b6513a08c48fa386b929fef128/transformed/jetified-animation-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-tooling-data-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/fc127be8ec699e7bb64e65cf0e1ef89a/transformed/jetified-ui-tooling-data-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-unit-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/79cf55bc2973538b36435a82136e58da/transformed/jetified-ui-unit-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-geometry-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/c8c6194c41ecd9296d077fb56a0826aa/transformed/jetified-ui-geometry-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-util-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/49fc5380b818aaf7913156b7554707fd/transformed/jetified-ui-util-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-text-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/8f25a58f19b3826b4da39fbed8fecf56/transformed/jetified-ui-text-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-tooling-preview-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/a299b8d1d60003b455fd2e17dfe2f7e7/transformed/jetified-ui-tooling-preview-release/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.compose.ui:ui-graphics-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/834d58900ae26d08c591ee9da69874f9/transformed/jetified-ui-graphics-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-tooling-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/47e3d519e10e9fc01bb1eebbaf84a13c/transformed/jetified-ui-tooling-release/AndroidManifest.xml:17:1-28:12
+MERGED from [androidx.activity:activity-compose:1.8.2] /home/darkage/.gradle/caches/9.5.0/transforms/04fab99b3814259a9957176e74c8b4ee/transformed/jetified-activity-compose-1.8.2/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.navigation:navigation-common-ktx:2.5.1] /home/darkage/.gradle/caches/9.5.0/transforms/7b05d23909571f1791a7d4b7fc3237a5/transformed/navigation-common-ktx-2.5.1/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.navigation:navigation-common:2.5.1] /home/darkage/.gradle/caches/9.5.0/transforms/8ee80d68b0cea576f1c752df53864bdb/transformed/navigation-common-2.5.1/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] /home/darkage/.gradle/caches/9.5.0/transforms/b2cb98a70793276f47fd5b046d40472d/transformed/jetified-savedstate-ktx-1.2.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.savedstate:savedstate:1.2.1] /home/darkage/.gradle/caches/9.5.0/transforms/cab74bb1bb81d6a23fd49c75c4f89dde/transformed/jetified-savedstate-1.2.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.loader:loader:1.0.0] /home/darkage/.gradle/caches/9.5.0/transforms/a7616c8fd59dec37ce53ae16d3c5ab2a/transformed/loader-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.emoji2:emoji2:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/1058e30721583e493c32690fe13b015a/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/d15d9c2ab333e27e233ddaf3e4f9bd3f/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/04179338a23bb4f8bb547424869dcddc/transformed/jetified-lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/e5307145d5191cf021dfe7469872429d/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/8556581a8bb9ab879e2f5f9922fbc807/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/b95852afcbf3ddc8191d9f998259c283/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/a6158cadbd4401dbcb12b21cf83dab3a/transformed/jetified-lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/a3607f7bee403e082c8d378e062be36d/transformed/jetified-lifecycle-viewmodel-ktx-2.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/2e692f9c6a1c8ed4c72a4febecf240e9/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/1306fd3a5b1d4535bbc90ef5489748b8/transformed/jetified-lifecycle-runtime-ktx-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/8e0d1a2a37e725a75cc3111af35446f3/transformed/jetified-lifecycle-viewmodel-compose-2.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/81636e5e1decbf264e9af3e054b53e2c/transformed/jetified-ui-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-test-manifest:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/0d899432be3e84844f4f5ba78137604c/transformed/jetified-ui-test-manifest-1.6.1/AndroidManifest.xml:17:1-28:12
+MERGED from [androidx.compose.ui:ui-text-google-fonts:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/fd39053fa941e294b4429ae63b10eabe/transformed/jetified-ui-text-google-fonts-1.6.1/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/darkage/.gradle/caches/9.5.0/transforms/96ecb13553fecedfde44fa1a3535bfa6/transformed/viewpager-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.autofill:autofill:1.0.0] /home/darkage/.gradle/caches/9.5.0/transforms/8c323c23128d61f3746eb794d1eee889/transformed/jetified-autofill-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.customview:customview:1.0.0] /home/darkage/.gradle/caches/9.5.0/transforms/45c7b844285249e7f2b38633a788fd34/transformed/customview-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core:1.12.0] /home/darkage/.gradle/caches/9.5.0/transforms/2481fad7667fe488e84f774faaff08c4/transformed/core-1.12.0/AndroidManifest.xml:17:1-30:12
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] /home/darkage/.gradle/caches/9.5.0/transforms/92f6e1b0d0b5a1da767287a1efe7c5e5/transformed/jetified-customview-poolingcontainer-1.0.0/AndroidManifest.xml:17:1-23:12
+MERGED from [androidx.core:core-ktx:1.12.0] /home/darkage/.gradle/caches/9.5.0/transforms/580005234a89cad8782405884fc8811b/transformed/jetified-core-ktx-1.12.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.runtime:runtime-saveable-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/2307f92eff9d54ecb6500952ab6dd75f/transformed/jetified-runtime-saveable-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.runtime:runtime-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/ce4f4437f4d9d29cb8a16c47344c454a/transformed/jetified-runtime-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.security:security-crypto:1.1.0-alpha06] /home/darkage/.gradle/caches/9.5.0/transforms/40f2eff8aada95223f0767f19de745a0/transformed/jetified-security-crypto-1.1.0-alpha06/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/darkage/.gradle/caches/9.5.0/transforms/cb2633498d93fd61f0dcbb52ec243241/transformed/interpolator-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/darkage/.gradle/caches/9.5.0/transforms/0165d1c14ff162ad3a96f6848145162b/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/darkage/.gradle/caches/9.5.0/transforms/f166b2b24c9835e340abc51c43926f24/transformed/core-runtime-2.2.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:17:1-55:12
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/darkage/.gradle/caches/9.5.0/transforms/a8e5ffaa98d46d3fc9231d54133f153f/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:17:1-33:12
+MERGED from [androidx.tracing:tracing:1.0.0] /home/darkage/.gradle/caches/9.5.0/transforms/e651b36fa8c4b581b8af8920e1c70517/transformed/jetified-tracing-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.annotation:annotation-experimental:1.4.0] /home/darkage/.gradle/caches/9.5.0/transforms/5a9e19980f98e4c5f377a831cccb6834/transformed/jetified-annotation-experimental-1.4.0/AndroidManifest.xml:2:1-7:12
+MERGED from [com.google.dagger:dagger-lint-aar:2.60.1] /home/darkage/.gradle/caches/9.5.0/transforms/b209ca331030891b6040445d6f249597/transformed/jetified-dagger-lint-aar-2.60.1/AndroidManifest.xml:16:1-19:12
+	package
+		INJECTED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml
+	android:versionName
+		INJECTED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml
+	android:versionCode
+		INJECTED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml:2:11-69
+uses-permission#android.permission.INTERNET
+ADDED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml:4:5-67
+	android:name
+		ADDED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml:4:22-64
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml:5:5-79
+	android:name
+		ADDED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml:5:22-76
+application
+ADDED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml:7:5-24:19
+INJECTED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml:7:5-24:19
+MERGED from [androidx.compose.ui:ui-tooling-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/47e3d519e10e9fc01bb1eebbaf84a13c/transformed/jetified-ui-tooling-release/AndroidManifest.xml:22:5-26:19
+MERGED from [androidx.compose.ui:ui-tooling-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/47e3d519e10e9fc01bb1eebbaf84a13c/transformed/jetified-ui-tooling-release/AndroidManifest.xml:22:5-26:19
+MERGED from [androidx.emoji2:emoji2:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/1058e30721583e493c32690fe13b015a/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.emoji2:emoji2:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/1058e30721583e493c32690fe13b015a/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/d15d9c2ab333e27e233ddaf3e4f9bd3f/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/d15d9c2ab333e27e233ddaf3e4f9bd3f/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.compose.ui:ui-test-manifest:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/0d899432be3e84844f4f5ba78137604c/transformed/jetified-ui-test-manifest-1.6.1/AndroidManifest.xml:22:5-26:19
+MERGED from [androidx.compose.ui:ui-test-manifest:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/0d899432be3e84844f4f5ba78137604c/transformed/jetified-ui-test-manifest-1.6.1/AndroidManifest.xml:22:5-26:19
+MERGED from [androidx.core:core:1.12.0] /home/darkage/.gradle/caches/9.5.0/transforms/2481fad7667fe488e84f774faaff08c4/transformed/core-1.12.0/AndroidManifest.xml:28:5-89
+MERGED from [androidx.core:core:1.12.0] /home/darkage/.gradle/caches/9.5.0/transforms/2481fad7667fe488e84f774faaff08c4/transformed/core-1.12.0/AndroidManifest.xml:28:5-89
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/darkage/.gradle/caches/9.5.0/transforms/0165d1c14ff162ad3a96f6848145162b/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/darkage/.gradle/caches/9.5.0/transforms/0165d1c14ff162ad3a96f6848145162b/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/darkage/.gradle/caches/9.5.0/transforms/a8e5ffaa98d46d3fc9231d54133f153f/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/darkage/.gradle/caches/9.5.0/transforms/a8e5ffaa98d46d3fc9231d54133f153f/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
+	android:extractNativeLibs
+		INJECTED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.12.0] /home/darkage/.gradle/caches/9.5.0/transforms/2481fad7667fe488e84f774faaff08c4/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
+	android:supportsRtl
+		ADDED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml:13:9-35
+	android:label
+		ADDED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml:11:9-41
+	android:roundIcon
+		ADDED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml:12:9-54
+	android:icon
+		ADDED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml:10:9-43
+	android:allowBackup
+		ADDED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml:9:9-35
+	android:theme
+		ADDED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml:14:9-43
+	android:name
+		ADDED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml:8:9-39
+activity#com.example.app.MainActivity
+ADDED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml:15:9-23:20
+	android:exported
+		ADDED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml:17:13-36
+	android:theme
+		ADDED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml:18:13-47
+	android:name
+		ADDED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml:16:13-41
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml:19:13-22:29
+action#android.intent.action.MAIN
+ADDED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml:20:17-69
+	android:name
+		ADDED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml:20:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml:21:17-77
+	android:name
+		ADDED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml:21:27-74
+uses-sdk
+INJECTED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml
+INJECTED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml
+MERGED from [androidx.hilt:hilt-navigation-compose:1.1.0] /home/darkage/.gradle/caches/9.5.0/transforms/23aaeeaa6d680f5c7538575a16c6fe92/transformed/jetified-hilt-navigation-compose-1.1.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.hilt:hilt-navigation-compose:1.1.0] /home/darkage/.gradle/caches/9.5.0/transforms/23aaeeaa6d680f5c7538575a16c6fe92/transformed/jetified-hilt-navigation-compose-1.1.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.hilt:hilt-navigation:1.1.0] /home/darkage/.gradle/caches/9.5.0/transforms/25bd1c8e7ecc7137cb5981b7064f2dcc/transformed/jetified-hilt-navigation-1.1.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.hilt:hilt-navigation:1.1.0] /home/darkage/.gradle/caches/9.5.0/transforms/25bd1c8e7ecc7137cb5981b7064f2dcc/transformed/jetified-hilt-navigation-1.1.0/AndroidManifest.xml:5:5-44
+MERGED from [com.google.dagger:hilt-android:2.60.1] /home/darkage/.gradle/caches/9.5.0/transforms/749d5f62f88ae04f9cd5756b28c1b42d/transformed/jetified-hilt-android-2.60.1/AndroidManifest.xml:18:3-42
+MERGED from [com.google.dagger:hilt-android:2.60.1] /home/darkage/.gradle/caches/9.5.0/transforms/749d5f62f88ae04f9cd5756b28c1b42d/transformed/jetified-hilt-android-2.60.1/AndroidManifest.xml:18:3-42
+MERGED from [androidx.fragment:fragment:1.5.1] /home/darkage/.gradle/caches/9.5.0/transforms/3b980169286eb734d8dd198fe5789562/transformed/fragment-1.5.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.5.1] /home/darkage/.gradle/caches/9.5.0/transforms/3b980169286eb734d8dd198fe5789562/transformed/fragment-1.5.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity:1.8.2] /home/darkage/.gradle/caches/9.5.0/transforms/3ccdc460bebf52a87c26572d1f1979ea/transformed/jetified-activity-1.8.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity:1.8.2] /home/darkage/.gradle/caches/9.5.0/transforms/3ccdc460bebf52a87c26572d1f1979ea/transformed/jetified-activity-1.8.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.navigation:navigation-compose:2.5.1] /home/darkage/.gradle/caches/9.5.0/transforms/7ef5ef68cd625faab9679eff934d1850/transformed/jetified-navigation-compose-2.5.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-compose:2.5.1] /home/darkage/.gradle/caches/9.5.0/transforms/7ef5ef68cd625faab9679eff934d1850/transformed/jetified-navigation-compose-2.5.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-runtime-ktx:2.5.1] /home/darkage/.gradle/caches/9.5.0/transforms/f64922e3a972f51a026ba5894c87a232/transformed/navigation-runtime-ktx-2.5.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-runtime-ktx:2.5.1] /home/darkage/.gradle/caches/9.5.0/transforms/f64922e3a972f51a026ba5894c87a232/transformed/navigation-runtime-ktx-2.5.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-runtime:2.5.1] /home/darkage/.gradle/caches/9.5.0/transforms/a95425f61262b634a132d81fc8246fb9/transformed/navigation-runtime-2.5.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-runtime:2.5.1] /home/darkage/.gradle/caches/9.5.0/transforms/a95425f61262b634a132d81fc8246fb9/transformed/navigation-runtime-2.5.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity-ktx:1.8.2] /home/darkage/.gradle/caches/9.5.0/transforms/9d72ea929d36ffa3b2a31bfb710928e8/transformed/jetified-activity-ktx-1.8.2/AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity-ktx:1.8.2] /home/darkage/.gradle/caches/9.5.0/transforms/9d72ea929d36ffa3b2a31bfb710928e8/transformed/jetified-activity-ktx-1.8.2/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material3:material3-android:1.2.0] /home/darkage/.gradle/caches/9.5.0/transforms/96032a56e70882fd26693b740a671974/transformed/jetified-material3-release/AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.material3:material3-android:1.2.0] /home/darkage/.gradle/caches/9.5.0/transforms/96032a56e70882fd26693b740a671974/transformed/jetified-material3-release/AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.material:material-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/62e5a5b6c90545bc1a290ecab0769156/transformed/jetified-material-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/62e5a5b6c90545bc1a290ecab0769156/transformed/jetified-material-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-icons-core-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/63817fad2a6e8e0b69a302c921a9ea3f/transformed/jetified-material-icons-core-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-icons-core-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/63817fad2a6e8e0b69a302c921a9ea3f/transformed/jetified-material-icons-core-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-icons-extended-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/216379ff20eaddd7f22daad907dd58ba/transformed/jetified-material-icons-extended-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-icons-extended-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/216379ff20eaddd7f22daad907dd58ba/transformed/jetified-material-icons-extended-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-ripple-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/5cadb3e36ef0ae43a938a0d7f104c3a6/transformed/jetified-material-ripple-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-ripple-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/5cadb3e36ef0ae43a938a0d7f104c3a6/transformed/jetified-material-ripple-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/b47b75e2c49b906df3d5069ecdf6aa6f/transformed/jetified-foundation-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/b47b75e2c49b906df3d5069ecdf6aa6f/transformed/jetified-foundation-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-layout-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/0c33bfebe38095778e7c5d5a0b8e79ff/transformed/jetified-foundation-layout-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-layout-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/0c33bfebe38095778e7c5d5a0b8e79ff/transformed/jetified-foundation-layout-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.animation:animation-core-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/b49bf0e68aef675be047ad9db0955322/transformed/jetified-animation-core-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.animation:animation-core-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/b49bf0e68aef675be047ad9db0955322/transformed/jetified-animation-core-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.animation:animation-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/f9dbb2b6513a08c48fa386b929fef128/transformed/jetified-animation-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.animation:animation-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/f9dbb2b6513a08c48fa386b929fef128/transformed/jetified-animation-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-tooling-data-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/fc127be8ec699e7bb64e65cf0e1ef89a/transformed/jetified-ui-tooling-data-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-tooling-data-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/fc127be8ec699e7bb64e65cf0e1ef89a/transformed/jetified-ui-tooling-data-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-unit-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/79cf55bc2973538b36435a82136e58da/transformed/jetified-ui-unit-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-unit-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/79cf55bc2973538b36435a82136e58da/transformed/jetified-ui-unit-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-geometry-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/c8c6194c41ecd9296d077fb56a0826aa/transformed/jetified-ui-geometry-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-geometry-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/c8c6194c41ecd9296d077fb56a0826aa/transformed/jetified-ui-geometry-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-util-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/49fc5380b818aaf7913156b7554707fd/transformed/jetified-ui-util-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-util-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/49fc5380b818aaf7913156b7554707fd/transformed/jetified-ui-util-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-text-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/8f25a58f19b3826b4da39fbed8fecf56/transformed/jetified-ui-text-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-text-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/8f25a58f19b3826b4da39fbed8fecf56/transformed/jetified-ui-text-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-tooling-preview-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/a299b8d1d60003b455fd2e17dfe2f7e7/transformed/jetified-ui-tooling-preview-release/AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.ui:ui-tooling-preview-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/a299b8d1d60003b455fd2e17dfe2f7e7/transformed/jetified-ui-tooling-preview-release/AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.ui:ui-graphics-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/834d58900ae26d08c591ee9da69874f9/transformed/jetified-ui-graphics-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-graphics-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/834d58900ae26d08c591ee9da69874f9/transformed/jetified-ui-graphics-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-tooling-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/47e3d519e10e9fc01bb1eebbaf84a13c/transformed/jetified-ui-tooling-release/AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.ui:ui-tooling-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/47e3d519e10e9fc01bb1eebbaf84a13c/transformed/jetified-ui-tooling-release/AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity-compose:1.8.2] /home/darkage/.gradle/caches/9.5.0/transforms/04fab99b3814259a9957176e74c8b4ee/transformed/jetified-activity-compose-1.8.2/AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity-compose:1.8.2] /home/darkage/.gradle/caches/9.5.0/transforms/04fab99b3814259a9957176e74c8b4ee/transformed/jetified-activity-compose-1.8.2/AndroidManifest.xml:5:5-44
+MERGED from [androidx.navigation:navigation-common-ktx:2.5.1] /home/darkage/.gradle/caches/9.5.0/transforms/7b05d23909571f1791a7d4b7fc3237a5/transformed/navigation-common-ktx-2.5.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-common-ktx:2.5.1] /home/darkage/.gradle/caches/9.5.0/transforms/7b05d23909571f1791a7d4b7fc3237a5/transformed/navigation-common-ktx-2.5.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-common:2.5.1] /home/darkage/.gradle/caches/9.5.0/transforms/8ee80d68b0cea576f1c752df53864bdb/transformed/navigation-common-2.5.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-common:2.5.1] /home/darkage/.gradle/caches/9.5.0/transforms/8ee80d68b0cea576f1c752df53864bdb/transformed/navigation-common-2.5.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] /home/darkage/.gradle/caches/9.5.0/transforms/b2cb98a70793276f47fd5b046d40472d/transformed/jetified-savedstate-ktx-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] /home/darkage/.gradle/caches/9.5.0/transforms/b2cb98a70793276f47fd5b046d40472d/transformed/jetified-savedstate-ktx-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] /home/darkage/.gradle/caches/9.5.0/transforms/cab74bb1bb81d6a23fd49c75c4f89dde/transformed/jetified-savedstate-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] /home/darkage/.gradle/caches/9.5.0/transforms/cab74bb1bb81d6a23fd49c75c4f89dde/transformed/jetified-savedstate-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /home/darkage/.gradle/caches/9.5.0/transforms/a7616c8fd59dec37ce53ae16d3c5ab2a/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /home/darkage/.gradle/caches/9.5.0/transforms/a7616c8fd59dec37ce53ae16d3c5ab2a/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.emoji2:emoji2:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/1058e30721583e493c32690fe13b015a/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.emoji2:emoji2:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/1058e30721583e493c32690fe13b015a/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/d15d9c2ab333e27e233ddaf3e4f9bd3f/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/d15d9c2ab333e27e233ddaf3e4f9bd3f/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/04179338a23bb4f8bb547424869dcddc/transformed/jetified-lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/04179338a23bb4f8bb547424869dcddc/transformed/jetified-lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/e5307145d5191cf021dfe7469872429d/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/e5307145d5191cf021dfe7469872429d/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/8556581a8bb9ab879e2f5f9922fbc807/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/8556581a8bb9ab879e2f5f9922fbc807/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/b95852afcbf3ddc8191d9f998259c283/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/b95852afcbf3ddc8191d9f998259c283/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/a6158cadbd4401dbcb12b21cf83dab3a/transformed/jetified-lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/a6158cadbd4401dbcb12b21cf83dab3a/transformed/jetified-lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/a3607f7bee403e082c8d378e062be36d/transformed/jetified-lifecycle-viewmodel-ktx-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/a3607f7bee403e082c8d378e062be36d/transformed/jetified-lifecycle-viewmodel-ktx-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/2e692f9c6a1c8ed4c72a4febecf240e9/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/2e692f9c6a1c8ed4c72a4febecf240e9/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/1306fd3a5b1d4535bbc90ef5489748b8/transformed/jetified-lifecycle-runtime-ktx-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/1306fd3a5b1d4535bbc90ef5489748b8/transformed/jetified-lifecycle-runtime-ktx-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/8e0d1a2a37e725a75cc3111af35446f3/transformed/jetified-lifecycle-viewmodel-compose-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/8e0d1a2a37e725a75cc3111af35446f3/transformed/jetified-lifecycle-viewmodel-compose-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/81636e5e1decbf264e9af3e054b53e2c/transformed/jetified-ui-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/81636e5e1decbf264e9af3e054b53e2c/transformed/jetified-ui-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-test-manifest:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/0d899432be3e84844f4f5ba78137604c/transformed/jetified-ui-test-manifest-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.ui:ui-test-manifest:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/0d899432be3e84844f4f5ba78137604c/transformed/jetified-ui-test-manifest-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.ui:ui-text-google-fonts:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/fd39053fa941e294b4429ae63b10eabe/transformed/jetified-ui-text-google-fonts-1.6.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-text-google-fonts:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/fd39053fa941e294b4429ae63b10eabe/transformed/jetified-ui-text-google-fonts-1.6.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/darkage/.gradle/caches/9.5.0/transforms/96ecb13553fecedfde44fa1a3535bfa6/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/darkage/.gradle/caches/9.5.0/transforms/96ecb13553fecedfde44fa1a3535bfa6/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.autofill:autofill:1.0.0] /home/darkage/.gradle/caches/9.5.0/transforms/8c323c23128d61f3746eb794d1eee889/transformed/jetified-autofill-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.autofill:autofill:1.0.0] /home/darkage/.gradle/caches/9.5.0/transforms/8c323c23128d61f3746eb794d1eee889/transformed/jetified-autofill-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.customview:customview:1.0.0] /home/darkage/.gradle/caches/9.5.0/transforms/45c7b844285249e7f2b38633a788fd34/transformed/customview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] /home/darkage/.gradle/caches/9.5.0/transforms/45c7b844285249e7f2b38633a788fd34/transformed/customview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.12.0] /home/darkage/.gradle/caches/9.5.0/transforms/2481fad7667fe488e84f774faaff08c4/transformed/core-1.12.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.12.0] /home/darkage/.gradle/caches/9.5.0/transforms/2481fad7667fe488e84f774faaff08c4/transformed/core-1.12.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] /home/darkage/.gradle/caches/9.5.0/transforms/92f6e1b0d0b5a1da767287a1efe7c5e5/transformed/jetified-customview-poolingcontainer-1.0.0/AndroidManifest.xml:20:5-21:38
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] /home/darkage/.gradle/caches/9.5.0/transforms/92f6e1b0d0b5a1da767287a1efe7c5e5/transformed/jetified-customview-poolingcontainer-1.0.0/AndroidManifest.xml:20:5-21:38
+MERGED from [androidx.core:core-ktx:1.12.0] /home/darkage/.gradle/caches/9.5.0/transforms/580005234a89cad8782405884fc8811b/transformed/jetified-core-ktx-1.12.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-ktx:1.12.0] /home/darkage/.gradle/caches/9.5.0/transforms/580005234a89cad8782405884fc8811b/transformed/jetified-core-ktx-1.12.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.runtime:runtime-saveable-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/2307f92eff9d54ecb6500952ab6dd75f/transformed/jetified-runtime-saveable-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.runtime:runtime-saveable-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/2307f92eff9d54ecb6500952ab6dd75f/transformed/jetified-runtime-saveable-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.runtime:runtime-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/ce4f4437f4d9d29cb8a16c47344c454a/transformed/jetified-runtime-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.runtime:runtime-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/ce4f4437f4d9d29cb8a16c47344c454a/transformed/jetified-runtime-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.security:security-crypto:1.1.0-alpha06] /home/darkage/.gradle/caches/9.5.0/transforms/40f2eff8aada95223f0767f19de745a0/transformed/jetified-security-crypto-1.1.0-alpha06/AndroidManifest.xml:20:5-44
+MERGED from [androidx.security:security-crypto:1.1.0-alpha06] /home/darkage/.gradle/caches/9.5.0/transforms/40f2eff8aada95223f0767f19de745a0/transformed/jetified-security-crypto-1.1.0-alpha06/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/darkage/.gradle/caches/9.5.0/transforms/cb2633498d93fd61f0dcbb52ec243241/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/darkage/.gradle/caches/9.5.0/transforms/cb2633498d93fd61f0dcbb52ec243241/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/darkage/.gradle/caches/9.5.0/transforms/0165d1c14ff162ad3a96f6848145162b/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/darkage/.gradle/caches/9.5.0/transforms/0165d1c14ff162ad3a96f6848145162b/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/darkage/.gradle/caches/9.5.0/transforms/f166b2b24c9835e340abc51c43926f24/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/darkage/.gradle/caches/9.5.0/transforms/f166b2b24c9835e340abc51c43926f24/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/darkage/.gradle/caches/9.5.0/transforms/a8e5ffaa98d46d3fc9231d54133f153f/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/darkage/.gradle/caches/9.5.0/transforms/a8e5ffaa98d46d3fc9231d54133f153f/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.tracing:tracing:1.0.0] /home/darkage/.gradle/caches/9.5.0/transforms/e651b36fa8c4b581b8af8920e1c70517/transformed/jetified-tracing-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.tracing:tracing:1.0.0] /home/darkage/.gradle/caches/9.5.0/transforms/e651b36fa8c4b581b8af8920e1c70517/transformed/jetified-tracing-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.annotation:annotation-experimental:1.4.0] /home/darkage/.gradle/caches/9.5.0/transforms/5a9e19980f98e4c5f377a831cccb6834/transformed/jetified-annotation-experimental-1.4.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.4.0] /home/darkage/.gradle/caches/9.5.0/transforms/5a9e19980f98e4c5f377a831cccb6834/transformed/jetified-annotation-experimental-1.4.0/AndroidManifest.xml:5:5-44
+MERGED from [com.google.dagger:dagger-lint-aar:2.60.1] /home/darkage/.gradle/caches/9.5.0/transforms/b209ca331030891b6040445d6f249597/transformed/jetified-dagger-lint-aar-2.60.1/AndroidManifest.xml:18:3-42
+MERGED from [com.google.dagger:dagger-lint-aar:2.60.1] /home/darkage/.gradle/caches/9.5.0/transforms/b209ca331030891b6040445d6f249597/transformed/jetified-dagger-lint-aar-2.60.1/AndroidManifest.xml:18:3-42
+	android:targetSdkVersion
+		INJECTED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /home/darkage/Desktop/mku/app/src/main/AndroidManifest.xml
+activity#androidx.compose.ui.tooling.PreviewActivity
+ADDED from [androidx.compose.ui:ui-tooling-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/47e3d519e10e9fc01bb1eebbaf84a13c/transformed/jetified-ui-tooling-release/AndroidManifest.xml:23:9-25:39
+	android:exported
+		ADDED from [androidx.compose.ui:ui-tooling-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/47e3d519e10e9fc01bb1eebbaf84a13c/transformed/jetified-ui-tooling-release/AndroidManifest.xml:25:13-36
+	android:name
+		ADDED from [androidx.compose.ui:ui-tooling-android:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/47e3d519e10e9fc01bb1eebbaf84a13c/transformed/jetified-ui-tooling-release/AndroidManifest.xml:24:13-71
+provider#androidx.startup.InitializationProvider
+ADDED from [androidx.emoji2:emoji2:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/1058e30721583e493c32690fe13b015a/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/d15d9c2ab333e27e233ddaf3e4f9bd3f/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/d15d9c2ab333e27e233ddaf3e4f9bd3f/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/darkage/.gradle/caches/9.5.0/transforms/a8e5ffaa98d46d3fc9231d54133f153f/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/darkage/.gradle/caches/9.5.0/transforms/a8e5ffaa98d46d3fc9231d54133f153f/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
+	tools:node
+		ADDED from [androidx.emoji2:emoji2:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/1058e30721583e493c32690fe13b015a/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:28:13-31
+	android:authorities
+		ADDED from [androidx.emoji2:emoji2:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/1058e30721583e493c32690fe13b015a/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:26:13-68
+	android:exported
+		ADDED from [androidx.emoji2:emoji2:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/1058e30721583e493c32690fe13b015a/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:27:13-37
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/1058e30721583e493c32690fe13b015a/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:25:13-67
+meta-data#androidx.emoji2.text.EmojiCompatInitializer
+ADDED from [androidx.emoji2:emoji2:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/1058e30721583e493c32690fe13b015a/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.emoji2:emoji2:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/1058e30721583e493c32690fe13b015a/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/1058e30721583e493c32690fe13b015a/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:30:17-75
+meta-data#androidx.lifecycle.ProcessLifecycleInitializer
+ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/d15d9c2ab333e27e233ddaf3e4f9bd3f/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/d15d9c2ab333e27e233ddaf3e4f9bd3f/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/darkage/.gradle/caches/9.5.0/transforms/d15d9c2ab333e27e233ddaf3e4f9bd3f/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:30:17-78
+activity#androidx.activity.ComponentActivity
+ADDED from [androidx.compose.ui:ui-test-manifest:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/0d899432be3e84844f4f5ba78137604c/transformed/jetified-ui-test-manifest-1.6.1/AndroidManifest.xml:23:9-25:39
+	android:exported
+		ADDED from [androidx.compose.ui:ui-test-manifest:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/0d899432be3e84844f4f5ba78137604c/transformed/jetified-ui-test-manifest-1.6.1/AndroidManifest.xml:25:13-36
+	android:name
+		ADDED from [androidx.compose.ui:ui-test-manifest:1.6.1] /home/darkage/.gradle/caches/9.5.0/transforms/0d899432be3e84844f4f5ba78137604c/transformed/jetified-ui-test-manifest-1.6.1/AndroidManifest.xml:24:13-63
+permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.12.0] /home/darkage/.gradle/caches/9.5.0/transforms/2481fad7667fe488e84f774faaff08c4/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.12.0] /home/darkage/.gradle/caches/9.5.0/transforms/2481fad7667fe488e84f774faaff08c4/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.12.0] /home/darkage/.gradle/caches/9.5.0/transforms/2481fad7667fe488e84f774faaff08c4/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
+permission#com.example.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.12.0] /home/darkage/.gradle/caches/9.5.0/transforms/2481fad7667fe488e84f774faaff08c4/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.12.0] /home/darkage/.gradle/caches/9.5.0/transforms/2481fad7667fe488e84f774faaff08c4/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.12.0] /home/darkage/.gradle/caches/9.5.0/transforms/2481fad7667fe488e84f774faaff08c4/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
+uses-permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.12.0] /home/darkage/.gradle/caches/9.5.0/transforms/2481fad7667fe488e84f774faaff08c4/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.12.0] /home/darkage/.gradle/caches/9.5.0/transforms/2481fad7667fe488e84f774faaff08c4/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
+uses-permission#com.example.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.12.0] /home/darkage/.gradle/caches/9.5.0/transforms/2481fad7667fe488e84f774faaff08c4/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.12.0] /home/darkage/.gradle/caches/9.5.0/transforms/2481fad7667fe488e84f774faaff08c4/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
+meta-data#androidx.profileinstaller.ProfileInstallerInitializer
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:30:17-85
+receiver#androidx.profileinstaller.ProfileInstallReceiver
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:34:9-52:20
+	android:enabled
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:37:13-35
+	android:exported
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:38:13-36
+	android:permission
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:39:13-57
+	android:directBootAware
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:36:13-44
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:35:13-76
+intent-filter#action:name:androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:40:13-42:29
+action#androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:17-91
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:25-88
+intent-filter#action:name:androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:43:13-45:29
+action#androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:17-85
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:25-82
+intent-filter#action:name:androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:46:13-48:29
+action#androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:17-88
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:25-85
+intent-filter#action:name:androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:49:13-51:29
+action#androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:17-95
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/darkage/.gradle/caches/9.5.0/transforms/c72d071c0ff57da8683b61b74d9141b8/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:25-92

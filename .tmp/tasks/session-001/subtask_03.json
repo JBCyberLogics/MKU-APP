@@ -1,0 +1,19 @@
+{
+  "subtaskId": "session-001-03",
+  "taskId": "session-001",
+  "name": "Enhance Session model",
+  "description": "Enhance Session data class with metadata fields: sessionId, deviceId, lastRefreshTimestamp, refreshCount, expiryTimestamp, isEncrypted",
+  "status": "pending",
+  "batch": 1,
+  "file": "domain/model/Session.kt",
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-standards.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/domain/model/Session.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/domain/model/User.kt"
+  ],
+  "dependencies": [],
+  "parallel": true
+}

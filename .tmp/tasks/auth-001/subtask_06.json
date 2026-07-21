@@ -1,0 +1,25 @@
+{
+  "id": "auth-001-06",
+  "seq": "06",
+  "title": "Add BootstrapEvent authentication extensions (7 events)",
+  "status": "pending",
+  "depends_on": [],
+  "parallel": true,
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-conventions.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/bootstrap/BootstrapEvent.kt"
+  ],
+  "suggested_agent": "CoderAgent",
+  "acceptance_criteria": [
+    "7 new authentication lifecycle events added to BootstrapEvent",
+    "Events follow existing BootstrapEvent extension pattern",
+    "Events cover: auth started, success, failure, retry, timeout, invalid credentials, security violation",
+    "All events are properly typed and documented"
+  ],
+  "deliverables": [
+    "BootstrapEvent.kt (modified with 7 new events)"
+  ]
+}

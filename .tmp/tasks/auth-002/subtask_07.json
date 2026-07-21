@@ -1,0 +1,31 @@
+{
+  "id": "auth-002-07",
+  "seq": "07",
+  "title": "Update AuthCoreModule (DI providers and registrations)",
+  "status": "pending",
+  "depends_on": ["05", "06"],
+  "parallel": false,
+  "context_files": [
+    ".opencode/context/core/standards/code-quality.md"
+  ],
+  "reference_files": [
+    "app/src/main/java/ke/ac/mku/authcore/di/AuthCoreModule.kt",
+    "app/src/main/java/ke/ac/mku/authcore/contracts/portal/IPortalConnector.kt",
+    "app/src/main/java/ke/ac/mku/authcore/auth/orchestrator/LoginOrchestrator.kt"
+  ],
+  "suggested_agent": "CoderAgent",
+  "acceptance_criteria": [
+    "IPortalConnector bound to PortalConnectorImpl in DI container",
+    "LoginOrchestrator registered in ServiceRegistry",
+    "LoginOrchestrator registered in DependencyRegistry",
+    "All bindings follow existing AuthCoreModule patterns",
+    "Build passes"
+  ],
+  "deliverables": [
+    "app/src/main/java/ke/ac/mku/authcore/di/AuthCoreModule.kt"
+  ],
+  "agent_id": null,
+  "started_at": null,
+  "completed_at": null,
+  "completion_summary": null
+}

@@ -1,0 +1,61 @@
+{
+  "taskId": "session-002",
+  "name": "SESSION-002 Session Validator Implementation",
+  "description": "Implement SESSION-002 Session Validator with continuous validation, HMAC verification, and device binding",
+  "status": "in_progress",
+  "totalSubtasks": 9,
+  "completedSubtasks": 0,
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-standards.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/manager/SessionManager.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/contracts/crypto/ICryptoManager.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/contracts/security/ISecurityMonitor.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/auth/state/AuthenticationStateManager.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/auth/events/AuthenticationEventManager.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/di/AuthCoreModule.kt"
+  ],
+  "pre_tasks": [
+    {
+      "id": "session-002-pre-01",
+      "name": "Update SessionManager for HMAC generation",
+      "description": "Add HMAC generation on createSession/refreshSession, add deviceId binding",
+      "file": "manager/SessionManager.kt",
+      "status": "pending"
+    }
+  ],
+  "batches": [
+    {
+      "batch": 1,
+      "name": "Contracts & Types",
+      "subtasks": ["01", "02", "03", "04"],
+      "parallel": true
+    },
+    {
+      "batch": 2,
+      "name": "Implementation",
+      "subtasks": ["05", "06", "07"],
+      "parallel": true
+    },
+    {
+      "batch": 3,
+      "name": "DI Registration",
+      "subtasks": ["08"],
+      "parallel": false
+    }
+  ],
+  "exit_criteria": [
+    "Build succeeds with no errors",
+    "SessionValidationResult has 8 result types",
+    "ISessionValidator has 10 methods",
+    "9 validation events in BootstrapEvent",
+    "Continuous validation adapts to foreground/background",
+    "HMAC generated on session create/refresh",
+    "HMAC verified on every validation",
+    "Device binding verified on validation",
+    "DI registration at startupOrder: 21",
+    "SessionValidatorReady event published"
+  ]
+}

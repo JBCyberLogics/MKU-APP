@@ -1,0 +1,29 @@
+{
+  "id": "auth-002-01",
+  "seq": "01",
+  "title": "Create ILoginOrchestrator contract (CORE-012)",
+  "status": "pending",
+  "depends_on": [],
+  "parallel": true,
+  "context_files": [
+    ".opencode/context/core/standards/code-quality.md"
+  ],
+  "reference_files": [
+    "app/src/main/java/ke/ac/mku/authcore/contracts/authentication/IAuthenticationEngine.kt",
+    "app/src/main/java/ke/ac/mku/authcore/contracts/authentication/ISessionManager.kt"
+  ],
+  "suggested_agent": "CoderAgent",
+  "acceptance_criteria": [
+    "ILoginOrchestrator interface is public and located at contracts/authentication/ILoginOrchestrator.kt",
+    "Interface defines login workflow entry point method(s)",
+    "Interface follows existing contract patterns from IAuthenticationEngine.kt",
+    "CORE-012 designation documented in contract"
+  ],
+  "deliverables": [
+    "app/src/main/java/ke/ac/mku/authcore/contracts/authentication/ILoginOrchestrator.kt"
+  ],
+  "agent_id": null,
+  "started_at": null,
+  "completed_at": null,
+  "completion_summary": null
+}

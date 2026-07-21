@@ -1,0 +1,34 @@
+{
+  "id": "auth-002-05",
+  "seq": "05",
+  "title": "Implement PortalConnectorImpl",
+  "status": "pending",
+  "depends_on": ["02"],
+  "parallel": false,
+  "context_files": [
+    ".opencode/context/core/standards/code-quality.md"
+  ],
+  "reference_files": [
+    "app/src/main/java/ke/ac/mku/authcore/contracts/portal/IPortalConnector.kt",
+    "app/src/main/java/ke/ac/mku/authcore/registry/PortalSDK.kt",
+    "app/src/main/java/ke/ac/mku/authcore/registry/PortalDiscovery.kt",
+    "app/src/main/java/ke/ac/mku/authcore/registry/EndpointRegistry.kt",
+    "app/src/main/java/ke/ac/mku/authcore/models/portal/PortalConnectionResult.kt",
+    "app/src/main/java/ke/ac/mku/authcore/models/portal/PortalInfo.kt",
+    "app/src/main/java/ke/ac/mku/authcore/models/portal/PortalConnectionState.kt"
+  ],
+  "suggested_agent": "CoderAgent",
+  "acceptance_criteria": [
+    "PortalConnectorImpl implements IPortalConnector",
+    "Delegates to existing PortalSDK, PortalDiscovery, EndpointRegistry without duplicating logic",
+    "Returns PortalConnectionResult with proper state management",
+    "Uses PortalModels created in task 03"
+  ],
+  "deliverables": [
+    "app/src/main/java/ke/ac/mku/authcore/portal/impl/PortalConnectorImpl.kt"
+  ],
+  "agent_id": null,
+  "started_at": null,
+  "completed_at": null,
+  "completion_summary": null
+}

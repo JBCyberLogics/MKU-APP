@@ -1,0 +1,56 @@
+{
+  "taskId": "session-001",
+  "name": "SESSION-001 Session Manager Implementation",
+  "description": "Implement SESSION-001 Session Manager with FSM, event publishing, and DI registration",
+  "status": "in_progress",
+  "totalSubtasks": 8,
+  "completedSubtasks": 0,
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-standards.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/auth/state/AuthenticationStateManager.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/auth/events/AuthenticationEventManager.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/contracts/storage/StorageDomain.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/state/StateRegistry.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/registry/DependencyRegistry.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/di/AuthCoreModule.kt"
+  ],
+  "batches": [
+    {
+      "batch": 1,
+      "name": "Contracts & State",
+      "subtasks": ["01", "02", "03"],
+      "parallel": true
+    },
+    {
+      "batch": 2,
+      "name": "Events",
+      "subtasks": ["04"],
+      "parallel": false
+    },
+    {
+      "batch": 3,
+      "name": "Implementation",
+      "subtasks": ["05", "06", "07"],
+      "parallel": true
+    },
+    {
+      "batch": 4,
+      "name": "DI Registration",
+      "subtasks": ["08"],
+      "parallel": false
+    }
+  ],
+  "exit_criteria": [
+    "Build succeeds with no errors",
+    "All 12 SessionState values defined",
+    "ISessionManager has 15 lifecycle methods",
+    "13 session events in BootstrapEvent",
+    "SessionManager implements FSM with valid transitions",
+    "Events published via IAuthenticationEventManager",
+    "Session persisted to SESSIONS domain",
+    "DI registration complete with startupOrder: 20"
+  ]
+}

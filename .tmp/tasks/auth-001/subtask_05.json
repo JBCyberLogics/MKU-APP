@@ -1,0 +1,25 @@
+{
+  "id": "auth-001-05",
+  "seq": "05",
+  "title": "Implement WebFormLoginHandlerAdapter",
+  "status": "pending",
+  "depends_on": ["02"],
+  "parallel": false,
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-conventions.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/data/api/WebFormLoginHandler.kt"
+  ],
+  "suggested_agent": "CoderAgent",
+  "acceptance_criteria": [
+    "WebFormLoginHandlerAdapter implements IAuthNetworkService",
+    "Wraps WebFormLoginHandler for network communication",
+    "Returns AuthNetworkResponse from network calls",
+    "Location: adapter/network/WebFormLoginHandlerAdapter.kt"
+  ],
+  "deliverables": [
+    "adapter/network/WebFormLoginHandlerAdapter.kt"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "subtaskId": "session-002-01",
+  "taskId": "session-002",
+  "name": "Create SessionValidationResult sealed class",
+  "description": "Create SessionValidationResult sealed class with 8 result types: Valid, Warning, Expired, Invalid, Tampered, Corrupted, RecoveryRequired, Failed",
+  "status": "pending",
+  "batch": 1,
+  "file": "contracts/session/SessionValidationResult.kt",
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-standards.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/domain/model/Session.kt"
+  ],
+  "dependencies": [],
+  "parallel": true
+}

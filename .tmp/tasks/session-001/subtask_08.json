@@ -1,0 +1,19 @@
+{
+  "subtaskId": "session-001-08",
+  "taskId": "session-001",
+  "name": "Update AuthCoreModule DI registration",
+  "description": "Update AuthCoreModule to provide ISessionManager with SessionManager implementation, inject IAuthenticationEventManager, StateRegistry, ISecureStorageManager, RecoveryManager, DependencyRegistry. Register with startupOrder: 20",
+  "status": "pending",
+  "batch": 4,
+  "file": "di/AuthCoreModule.kt",
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-standards.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/di/AuthCoreModule.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/auth/state/AuthenticationStateManager.kt"
+  ],
+  "dependencies": ["session-001-05"],
+  "parallel": false
+}

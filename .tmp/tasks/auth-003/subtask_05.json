@@ -1,0 +1,26 @@
+{
+  "id": "auth-003-05",
+  "seq": "05",
+  "title": "Add StorageDomain.AUTH_STATE for state persistence",
+  "status": "completed",
+  "completed_at": "2026-07-18T00:00:00Z",
+  "depends_on": [],
+  "parallel": true,
+  "suggested_agent": "CoderAgent",
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-conventions.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/contracts/storage/StorageDomain.kt"
+  ],
+  "acceptance_criteria": [
+    "AUTH_STATE domain added to StorageDomain enum",
+    "Domain configured for AES-256-GCM encryption via ISecureStorageManager",
+    "Clear on logout behavior defined",
+    "Restore on startup behavior defined"
+  ],
+  "deliverables": [
+    "app/src/main/java/ke/ac/mku/authcore/contracts/storage/StorageDomain.kt"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "auth-003-04",
+  "seq": "04",
+  "title": "Add BootstrapEvent extensions for 8 state lifecycle events",
+  "status": "completed",
+  "completed_at": "2026-07-18T00:00:00Z",
+  "depends_on": [],
+  "parallel": true,
+  "suggested_agent": "CoderAgent",
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-conventions.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/bootstrap/BootstrapEvent.kt"
+  ],
+  "acceptance_criteria": [
+    "8 state lifecycle events defined as BootstrapEvent extensions",
+    "Events cover: state change, transition start, transition complete, transition failed, recovery triggered, recovery complete, state persisted, state restored",
+    "Events follow existing BootstrapEvent patterns",
+    "Events are properly typed and documented"
+  ],
+  "deliverables": [
+    "app/src/main/java/ke/ac/mku/authcore/bootstrap/BootstrapEvent.kt"
+  ]
+}

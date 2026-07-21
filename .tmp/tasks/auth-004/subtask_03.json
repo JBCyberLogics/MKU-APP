@@ -1,0 +1,33 @@
+{
+  "id": "auth-004-03",
+  "seq": "03",
+  "title": "Implement AuthenticationEventManager (AUTH-004)",
+  "status": "pending",
+  "depends_on": ["01", "02"],
+  "parallel": false,
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-conventions.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/contracts/events/IAuthenticationEventManager.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/bootstrap/EventBus.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/bootstrap/BootstrapEvent.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/security/monitor/SecurityMonitor.kt"
+  ],
+  "suggested_agent": "CoderAgent",
+  "acceptance_criteria": [
+    "AuthenticationEventManager implements IAuthenticationEventManager",
+    "Event validation before publishing",
+    "Event deduplication within time window",
+    "Correlation ID assignment to all events",
+    "Event persistence to AUTH_EVENTS domain",
+    "Security validation applied before forwarding",
+    "Events forwarded to BootstrapEvent after processing",
+    "Subscriber notification implemented",
+    "Event replay capability works"
+  ],
+  "deliverables": [
+    "app/src/main/java/ke/ac/mku/authcore/auth/events/AuthenticationEventManager.kt"
+  ]
+}

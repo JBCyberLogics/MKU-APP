@@ -1,0 +1,19 @@
+{
+  "subtaskId": "session-002-pre-01",
+  "taskId": "session-002",
+  "name": "Update SessionManager for HMAC generation",
+  "description": "Update SessionManager.createSession() and refreshSession() to generate HMAC signature, add deviceId binding using device fingerprint",
+  "status": "pending",
+  "file": "manager/SessionManager.kt",
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-standards.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/manager/SessionManager.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/contracts/crypto/ICryptoManager.kt"
+  ],
+  "dependencies": [],
+  "parallel": false,
+  "is_pre_task": true
+}

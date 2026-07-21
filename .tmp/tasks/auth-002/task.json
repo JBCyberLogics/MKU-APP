@@ -1,0 +1,35 @@
+{
+  "id": "auth-002",
+  "name": "AUTH-002 Login Orchestrator Implementation",
+  "status": "active",
+  "objective": "Implement Login Orchestrator per AUTH-002 spec - coordinates login workflow by delegating to Authentication Engine, Network Layer, Security Layer, Session Layer, Cookie Layer, and Portal Layer",
+  "context_files": [
+    ".opencode/context/core/standards/code-quality.md"
+  ],
+  "reference_files": [
+    "app/src/main/java/ke/ac/mku/authcore/contracts/authentication/IAuthenticationEngine.kt",
+    "app/src/main/java/ke/ac/mku/authcore/auth/engine/AuthenticationEngine.kt",
+    "app/src/main/java/ke/ac/mku/authcore/contracts/authentication/ISessionManager.kt",
+    "app/src/main/java/ke/ac/mku/authcore/contracts/authentication/ICookieManager.kt",
+    "app/src/main/java/ke/ac/mku/authcore/registry/PortalSDK.kt",
+    "app/src/main/java/ke/ac/mku/authcore/registry/PortalDiscovery.kt",
+    "app/src/main/java/ke/ac/mku/authcore/registry/EndpointRegistry.kt",
+    "app/src/main/java/ke/ac/mku/authcore/bootstrap/BootstrapEvent.kt",
+    "app/src/main/java/ke/ac/mku/authcore/di/AuthCoreModule.kt"
+  ],
+  "exit_criteria": [
+    "ILoginOrchestrator is the single public login workflow entry point",
+    "All 12 workflow steps execute in correct order",
+    "No direct HTTP calls from LoginOrchestrator",
+    "Security validation via ISecurityMonitor before login",
+    "All 8 workflow lifecycle events published correctly",
+    "IPortalConnector wraps PortalSDK without duplicating logic",
+    "Retry logic respects maximum_retry_attempts: 3",
+    "LoginOrchestrator registered in ServiceRegistry and DependencyRegistry",
+    "Build passes"
+  ],
+  "subtask_count": 7,
+  "completed_count": 0,
+  "created_at": "2026-07-18T00:00:00Z",
+  "completed_at": null
+}

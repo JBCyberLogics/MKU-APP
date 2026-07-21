@@ -1,0 +1,20 @@
+{
+  "subtaskId": "session-001-05",
+  "taskId": "session-001",
+  "name": "Implement SessionManager with FSM",
+  "description": "Full rewrite of SessionManager with FSM pattern, event publishing via IAuthenticationEventManager, session persistence to SESSIONS domain, timeout handling, refresh logic, and RecoveryManager integration",
+  "status": "pending",
+  "batch": 3,
+  "file": "manager/SessionManager.kt",
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-standards.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/manager/SessionManager.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/auth/state/AuthenticationStateManager.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/auth/events/AuthenticationEventManager.kt"
+  ],
+  "dependencies": ["session-001-02", "session-001-03", "session-001-04"],
+  "parallel": true
+}

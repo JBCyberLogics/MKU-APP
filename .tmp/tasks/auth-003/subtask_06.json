@@ -1,0 +1,28 @@
+{
+  "id": "auth-003-06",
+  "seq": "06",
+  "title": "Update AuthCoreModule with DI providers and registrations",
+  "status": "completed",
+  "completed_at": "2026-07-18T00:00:00Z",
+  "depends_on": ["03"],
+  "parallel": false,
+  "suggested_agent": "CoderAgent",
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-conventions.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/di/AuthCoreModule.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/auth/state/AuthenticationStateManager.kt"
+  ],
+  "acceptance_criteria": [
+    "IAuthenticationStateManager bound to AuthenticationStateManager implementation",
+    "AuthenticationStateManager registered as singleton",
+    "RecoveryManager dependency properly injected",
+    "SecurityMonitor dependency properly injected",
+    "Module compiles and DI container resolves all dependencies"
+  ],
+  "deliverables": [
+    "app/src/main/java/ke/ac/mku/authcore/di/AuthCoreModule.kt"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "auth-001-02",
+  "seq": "02",
+  "title": "Create IAuthNetworkService contract (CORE-012)",
+  "status": "pending",
+  "depends_on": [],
+  "parallel": true,
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-conventions.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/contracts/authentication/IAuthCoreManager.kt",
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/data/api/WebFormLoginHandler.kt"
+  ],
+  "suggested_agent": "CoderAgent",
+  "acceptance_criteria": [
+    "IAuthNetworkService interface is public",
+    "Interface defines network communication methods",
+    "Interface location: contracts/network/IAuthNetworkService.kt",
+    "Follows existing contract patterns"
+  ],
+  "deliverables": [
+    "contracts/network/IAuthNetworkService.kt"
+  ]
+}

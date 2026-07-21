@@ -1,0 +1,18 @@
+{
+  "subtaskId": "session-001-06",
+  "taskId": "session-001",
+  "name": "Create SessionManagerMetrics",
+  "description": "Create SessionManagerMetrics data class with: totalSessions, activeSessions, expiredSessions, averageSessionDurationMs, totalRefreshCount, failedRefreshCount, lastSessionTimestamp",
+  "status": "pending",
+  "batch": 3,
+  "file": "contracts/session/SessionManagerMetrics.kt",
+  "context_files": [
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/code-quality.md",
+    "/home/darkage/Desktop/mku/.opencode/context/core/standards/kotlin-standards.md"
+  ],
+  "reference_files": [
+    "/home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/contracts/authentication/StateMetrics.kt"
+  ],
+  "dependencies": [],
+  "parallel": true
+}
