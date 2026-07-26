@@ -10,10 +10,10 @@ import javax.annotation.processing.Generated;
 import ke.ac.mku.authcore.bootstrap.EventBus;
 import ke.ac.mku.authcore.contracts.authentication.IAuthenticationEventManager;
 import ke.ac.mku.authcore.contracts.crypto.ICryptoManager;
+import ke.ac.mku.authcore.contracts.registry.IDependencyRegistry;
 import ke.ac.mku.authcore.contracts.security.ISecurityMonitor;
 import ke.ac.mku.authcore.contracts.storage.ISecureStorageManager;
 import ke.ac.mku.authcore.recovery.RecoveryManager;
-import ke.ac.mku.authcore.registry.DependencyRegistry;
 import ke.ac.mku.authcore.state.StateRegistry;
 
 @ScopeMetadata("javax.inject.Singleton")
@@ -45,7 +45,7 @@ public final class SessionManager_Factory implements Factory<SessionManager> {
 
   private final Provider<EventBus> eventBusProvider;
 
-  private final Provider<DependencyRegistry> dependencyRegistryProvider;
+  private final Provider<IDependencyRegistry> dependencyRegistryProvider;
 
   private final Provider<IAuthenticationEventManager> authEventManagerProvider;
 
@@ -56,7 +56,7 @@ public final class SessionManager_Factory implements Factory<SessionManager> {
       Provider<ISecureStorageManager> secureStorageProvider,
       Provider<RecoveryManager> recoveryManagerProvider,
       Provider<ISecurityMonitor> securityMonitorProvider, Provider<EventBus> eventBusProvider,
-      Provider<DependencyRegistry> dependencyRegistryProvider,
+      Provider<IDependencyRegistry> dependencyRegistryProvider,
       Provider<IAuthenticationEventManager> authEventManagerProvider,
       Provider<ICryptoManager> cryptoManagerProvider) {
     this.contextProvider = contextProvider;
@@ -80,7 +80,7 @@ public final class SessionManager_Factory implements Factory<SessionManager> {
       Provider<ISecureStorageManager> secureStorageProvider,
       Provider<RecoveryManager> recoveryManagerProvider,
       Provider<ISecurityMonitor> securityMonitorProvider, Provider<EventBus> eventBusProvider,
-      Provider<DependencyRegistry> dependencyRegistryProvider,
+      Provider<IDependencyRegistry> dependencyRegistryProvider,
       Provider<IAuthenticationEventManager> authEventManagerProvider,
       Provider<ICryptoManager> cryptoManagerProvider) {
     return new SessionManager_Factory(contextProvider, stateRegistryProvider, secureStorageProvider, recoveryManagerProvider, securityMonitorProvider, eventBusProvider, dependencyRegistryProvider, authEventManagerProvider, cryptoManagerProvider);
@@ -88,7 +88,7 @@ public final class SessionManager_Factory implements Factory<SessionManager> {
 
   public static SessionManager newInstance(Context context, StateRegistry stateRegistry,
       ISecureStorageManager secureStorage, RecoveryManager recoveryManager,
-      ISecurityMonitor securityMonitor, EventBus eventBus, DependencyRegistry dependencyRegistry,
+      ISecurityMonitor securityMonitor, EventBus eventBus, IDependencyRegistry dependencyRegistry,
       IAuthenticationEventManager authEventManager, ICryptoManager cryptoManager) {
     return new SessionManager(context, stateRegistry, secureStorage, recoveryManager, securityMonitor, eventBus, dependencyRegistry, authEventManager, cryptoManager);
   }

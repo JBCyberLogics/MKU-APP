@@ -1,7 +1,8 @@
 package ke.ac.mku.authcore.contracts.portal
 
-import ke.ac.mku.authcore.domain.model.portal.NormalizedPortalJson
+import ke.ac.mku.authcore.domain.model.portal.UniversalPortalJson
 import ke.ac.mku.authcore.domain.model.portal.SemanticEntity
+import ke.ac.mku.authcore.domain.model.portal.DashboardDataset
 
 /**
  * IUniversalJsonManager - PROGRAM-008
@@ -11,17 +12,22 @@ import ke.ac.mku.authcore.domain.model.portal.SemanticEntity
 interface IUniversalJsonManager {
 
     /**
-     * Generate a normalized JSON model from semantic entities.
+     * Generate a universal JSON model from semantic entities.
      */
-    fun generateJson(entities: List<SemanticEntity>): NormalizedPortalJson
+    fun generateUniversalJson(entities: List<SemanticEntity>): UniversalPortalJson
 
     /**
-     * Return the report from the most recent JSON generation.
+     * Return the latest universal JSON model.
      */
-    fun getLatestJson(): NormalizedPortalJson?
+    fun getLatestUniversalJson(): UniversalPortalJson?
 
     /**
-     * Validate a JSON string against a specific schema.
+     * Return a dashboard-optimized dataset.
      */
-    fun validateJson(json: String, schemaDomain: String): Boolean
+    fun getDashboardDataset(): DashboardDataset?
+
+    /**
+     * Validate a JSON string against the universal schema.
+     */
+    fun validateUniversalJson(json: String): Boolean
 }

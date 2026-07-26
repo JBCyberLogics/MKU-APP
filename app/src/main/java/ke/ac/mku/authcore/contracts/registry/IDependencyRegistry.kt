@@ -18,9 +18,9 @@ interface IDependencyRegistry {
     fun register(
         name: String,
         instance: Any,
-        dependencies: List<String>,
-        startupOrder: Int,
-        isRequired: Boolean
+        dependencies: List<String> = emptyList(),
+        startupOrder: Int = 0,
+        isRequired: Boolean = true
     ): Boolean
 
     /**
@@ -39,7 +39,12 @@ interface IDependencyRegistry {
     fun exists(name: String): Boolean
 
     /**
-     * List all registered services.
+     * List all registered service descriptors.
+     */
+    fun listDescriptors(): List<ke.ac.mku.authcore.registry.ServiceDescriptor>
+
+    /**
+     * List all registered services by name.
      */
     fun list(): List<String>
 

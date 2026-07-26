@@ -30,6 +30,7 @@ class DomAnalysisManager @Inject constructor(
     }
 
     private var latestReport: AnalysisReport? = null
+    private var latestSemanticDom: SemanticDom? = null
 
     init {
         Log.i(TAG, "Initializing $moduleName ($moduleId)")
@@ -82,6 +83,7 @@ class DomAnalysisManager @Inject constructor(
                 confidenceScore = 1.0f // Simplified
             )
 
+            latestSemanticDom = semanticDom
             authEventManager.publish(BootstrapEvent.SemanticDomCreated)
             authEventManager.publish(BootstrapEvent.DomAnalysisCompleted)
             
@@ -97,8 +99,11 @@ class DomAnalysisManager @Inject constructor(
 
     override fun getLatestAnalysisReport(): AnalysisReport? = latestReport
 
+    override fun getLatestSemanticDom(): SemanticDom? = latestSemanticDom
+
     override fun clearCache() {
         latestReport = null
+        latestSemanticDom = null
     }
 
     // ==================== BootstrapObserver Implementation ====================

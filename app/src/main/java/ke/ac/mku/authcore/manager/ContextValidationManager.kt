@@ -5,8 +5,10 @@ import ke.ac.mku.authcore.bootstrap.BootstrapEvent
 import ke.ac.mku.authcore.bootstrap.BootstrapObserver
 import ke.ac.mku.authcore.contracts.authentication.IAuthenticationEventManager
 import ke.ac.mku.authcore.contracts.portal.IContextValidationManager
+import ke.ac.mku.authcore.contracts.portal.IStudentContextManager
 import ke.ac.mku.authcore.domain.model.portal.*
 import javax.inject.Inject
+import javax.inject.Provider
 import javax.inject.Singleton
 
 /**
@@ -20,7 +22,8 @@ class ContextValidationManager @Inject constructor(
     private val integrityValidator: IntegrityValidator,
     private val repairEngine: ContextRepairEngine,
     private val readinessEvaluator: DashboardReadinessEvaluator,
-    private val authEventManager: IAuthenticationEventManager
+    private val authEventManager: IAuthenticationEventManager,
+    private val contextManagerProvider: Provider<IStudentContextManager>
 ) : IContextValidationManager, BootstrapObserver {
 
     private val moduleId = "PROGRAM-015"
@@ -80,6 +83,7 @@ class ContextValidationManager @Inject constructor(
             
             authEventManager.publish(BootstrapEvent.ValidationCompleted)
             if (finalResult.dashboardReady) {
+                authEventManager.publish(BootstrapEvent.PlatformValidationCompleted)
                 authEventManager.publish(BootstrapEvent.DashboardContextReady)
                 authEventManager.publish(BootstrapEvent.LayerThreeCompleted)
                 Log.i(TAG, "Context validated and dashboard ready.")
@@ -111,8 +115,10 @@ class ContextValidationManager @Inject constructor(
     override fun onBootstrapEvent(event: BootstrapEvent) {
         when (event) {
             is BootstrapEvent.StudentContextUpdated -> {
-                Log.d(TAG, "Context update trigger. Initiating validation...")
-                // In a real scenario, this might retrieve the context from Manager
+                Log.i(TAG, "Context update trigger. Initiating validation...")
+                contextManagerProvider.get().getStudentContext()?.let {
+                    validate(it)
+                }
             }
             else -> {}
         }

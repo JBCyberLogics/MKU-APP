@@ -31,12 +31,14 @@ interface ISessionManager {
      * @param regNumber Student registration number
      * @param studentName Student display name (nullable)
      * @param cookies Session cookies from portal authentication
+     * @param portalType The portal this session belongs to (default: student)
      * @return true if session created successfully
      */
     fun createSession(
         regNumber: String,
         studentName: String?,
-        cookies: Map<String, String>
+        cookies: Map<String, String>,
+        portalType: String = "student"
     ): Boolean
 
     /**
@@ -78,8 +80,9 @@ interface ISessionManager {
 
     /**
      * Check if a valid active session exists.
+     * @param portalType Optional portal type to verify against
      */
-    fun isSessionActive(): Boolean
+    fun isSessionActive(portalType: String? = null): Boolean
 
     // ==================== SESSION DATA ACCESS ====================
 
@@ -92,6 +95,11 @@ interface ISessionManager {
      * Get the student name of the authenticated user.
      */
     fun getStudentName(): String?
+
+    /**
+     * Get the portal type this session belongs to.
+     */
+    fun getPortalType(): String?
 
     /**
      * Get the login timestamp (milliseconds since epoch).

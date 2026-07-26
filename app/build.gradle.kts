@@ -87,6 +87,9 @@ dependencies {
     // Security - EncryptedSharedPreferences
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
 
+    // HTML Parsing
+    implementation("org.jsoup:jsoup:1.17.2")
+
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 

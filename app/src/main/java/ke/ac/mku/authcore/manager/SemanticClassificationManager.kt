@@ -4,11 +4,13 @@ import android.util.Log
 import ke.ac.mku.authcore.bootstrap.BootstrapEvent
 import ke.ac.mku.authcore.bootstrap.BootstrapObserver
 import ke.ac.mku.authcore.contracts.authentication.IAuthenticationEventManager
+import ke.ac.mku.authcore.contracts.portal.IDomAnalysisManager
 import ke.ac.mku.authcore.contracts.portal.ISemanticClassificationManager
 import ke.ac.mku.authcore.domain.model.portal.SemanticDom
 import ke.ac.mku.authcore.domain.model.portal.SemanticEntity
 import ke.ac.mku.authcore.domain.model.portal.SemanticRegistry
 import javax.inject.Inject
+import javax.inject.Provider
 import javax.inject.Singleton
 
 /**
@@ -21,7 +23,8 @@ class SemanticClassificationManager @Inject constructor(
     private val classifier: EntityClassifier,
     private val contextAnalyzer: ContextAnalyzer,
     private val confidenceEngine: ConfidenceEngine,
-    private val authEventManager: IAuthenticationEventManager
+    private val authEventManager: IAuthenticationEventManager,
+    private val domAnalysisProvider: Provider<IDomAnalysisManager>
 ) : ISemanticClassificationManager, BootstrapObserver {
 
     private val moduleId = "PROGRAM-007"
@@ -93,7 +96,10 @@ class SemanticClassificationManager @Inject constructor(
     override fun onBootstrapEvent(event: BootstrapEvent) {
         when (event) {
             is BootstrapEvent.DomAnalysisCompleted -> {
-                // Automated trigger logic
+                Log.i(TAG, "DOM Analysis ready. Starting semantic classification...")
+                domAnalysisProvider.get().getLatestSemanticDom()?.let {
+                    classify(it)
+                }
             }
             else -> {}
         }

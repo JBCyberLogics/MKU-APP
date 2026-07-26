@@ -68,7 +68,7 @@ public final class CookieSynchronizationManager_Factory implements Factory<Cooki
 
   @Override
   public CookieSynchronizationManager get() {
-    return newInstance(cookieManagerProvider.get(), sessionManagerProvider.get(), sessionValidatorProvider.get(), recoveryManagerProvider.get(), secureStorageProvider.get(), securityMonitorProvider.get(), authEventManagerProvider.get(), serviceRegistryProvider.get());
+    return newInstance(cookieManagerProvider.get(), sessionManagerProvider.get(), sessionValidatorProvider.get(), recoveryManagerProvider, secureStorageProvider.get(), securityMonitorProvider.get(), authEventManagerProvider.get(), serviceRegistryProvider.get());
   }
 
   public static CookieSynchronizationManager_Factory create(
@@ -85,9 +85,9 @@ public final class CookieSynchronizationManager_Factory implements Factory<Cooki
 
   public static CookieSynchronizationManager newInstance(ICookieManager cookieManager,
       ISessionManager sessionManager, ISessionValidator sessionValidator,
-      ISessionRecoveryManager recoveryManager, ISecureStorageManager secureStorage,
-      ISecurityMonitor securityMonitor, IAuthenticationEventManager authEventManager,
-      ServiceRegistry serviceRegistry) {
-    return new CookieSynchronizationManager(cookieManager, sessionManager, sessionValidator, recoveryManager, secureStorage, securityMonitor, authEventManager, serviceRegistry);
+      javax.inject.Provider<ISessionRecoveryManager> recoveryManagerProvider,
+      ISecureStorageManager secureStorage, ISecurityMonitor securityMonitor,
+      IAuthenticationEventManager authEventManager, ServiceRegistry serviceRegistry) {
+    return new CookieSynchronizationManager(cookieManager, sessionManager, sessionValidator, recoveryManagerProvider, secureStorage, securityMonitor, authEventManager, serviceRegistry);
   }
 }

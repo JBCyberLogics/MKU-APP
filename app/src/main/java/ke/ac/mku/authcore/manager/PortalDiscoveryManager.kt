@@ -5,6 +5,7 @@ import ke.ac.mku.authcore.bootstrap.BootstrapEvent
 import ke.ac.mku.authcore.bootstrap.BootstrapObserver
 import ke.ac.mku.authcore.contracts.authentication.IAuthenticationEventManager
 import ke.ac.mku.authcore.contracts.authentication.ISessionManager
+import ke.ac.mku.authcore.contracts.portal.IDomAnalysisManager
 import ke.ac.mku.authcore.contracts.portal.IPortalConnector
 import ke.ac.mku.authcore.contracts.portal.IPortalDiscoveryManager
 import ke.ac.mku.authcore.domain.model.portal.PortalMap
@@ -14,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Provider
 import javax.inject.Singleton
 
 /**
@@ -28,7 +30,8 @@ class PortalDiscoveryManager @Inject constructor(
     private val mapBuilder: PortalMapBuilder,
     private val scanner: NavigationScanner,
     private val sessionManager: ISessionManager,
-    private val authEventManager: IAuthenticationEventManager
+    private val authEventManager: IAuthenticationEventManager,
+    private val domAnalysisManager: IDomAnalysisManager
 ) : IPortalDiscoveryManager, BootstrapObserver {
 
     private val moduleId = "PORTAL-001"
@@ -90,6 +93,9 @@ class PortalDiscoveryManager @Inject constructor(
                 )
                 mapBuilder.addPage(page)
                 authEventManager.publish(BootstrapEvent.PortalPageDiscovered(url))
+
+                // TRIGGER DOM ANALYSIS
+                domAnalysisManager.analyzeDocument(html, url)
                 
                 // Publish updates
                 authEventManager.publish(BootstrapEvent.PortalMapUpdated)

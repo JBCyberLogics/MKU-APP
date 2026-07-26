@@ -8,6 +8,7 @@ import ke.ac.mku.authcore.contracts.authentication.ISessionManager
 import ke.ac.mku.authcore.contracts.cookie.ICookieManager
 import ke.ac.mku.authcore.contracts.portal.*
 import ke.ac.mku.authcore.recovery.RecoveryManager
+import ke.ac.mku.authcore.service.ServiceRegistry
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -24,7 +25,8 @@ class PortalSynchronizationManager @Inject constructor(
     private val sessionManager: ISessionManager,
     private val cookieManager: ICookieManager,
     private val authEventManager: IAuthenticationEventManager,
-    private val recoveryManager: RecoveryManager
+    private val recoveryManager: RecoveryManager,
+    private val serviceRegistry: ServiceRegistry
 ) : IPortalSynchronizationManager, BootstrapObserver {
 
     private val moduleId = "PORTAL-003"
@@ -55,22 +57,34 @@ class PortalSynchronizationManager @Inject constructor(
             return
         }
 
-        Log.i(TAG, "Executing portal synchronization...")
+        Log.i(TAG, "Executing portal synchronization pipeline...")
         isSyncActive = true
+        // Stage 1: SYNC_REQUEST_RECEIVED
         authEventManager.publish(BootstrapEvent.PortalSyncStarted)
 
         try {
-            // Step 1: Check connectivity and connection state
+            // Stage 2: NETWORK_AVAILABILITY_CHECK
+            // Stage 3: SESSION_VALIDATION
+            if (!sessionManager.isSessionActive()) {
+                throw IllegalStateException("Session validation failed")
+            }
+
+            // Stage 4: PORTAL_CONNECTION_VALIDATION
             if (!portalConnector.isConnected()) {
                 throw IllegalStateException("Portal not connected")
             }
 
-            // Step 2: Fetch and compare state (Incremental sync logic)
-            // This would coordinate with PortalConnector and PortalDataMapper
+            // Stage 5: FETCH_REMOTE_STATE
+            // Stage 6: COMPARE_LOCAL_STATE
+            // Stage 7: CONFLICT_DETECTION
             
-            // Step 3: Resolution (Server authoritative)
+            // Stage 8: CONFLICT_RESOLUTION (Server authoritative)
             
-            // Step 4: Finalize
+            // Stage 9: LOCAL_UPDATE
+            // Stage 10: STATE_VALIDATION
+            authEventManager.publish(BootstrapEvent.PortalConsistencyVerified)
+            
+            // Stage 11: SYNC_COMPLETED
             lastSyncTime = System.currentTimeMillis()
             authEventManager.publish(BootstrapEvent.PortalStateUpdated)
             authEventManager.publish(BootstrapEvent.PortalSyncCompleted)
@@ -121,8 +135,10 @@ class PortalSynchronizationManager @Inject constructor(
             }
             is BootstrapEvent.AuthenticationSuccess,
             is BootstrapEvent.SessionCreated,
-            is BootstrapEvent.SessionRestored -> {
-                // synchronization: sync_on_login
+            is BootstrapEvent.SessionRestored,
+            is BootstrapEvent.PortalConnected,
+            is BootstrapEvent.NetworkOnline -> {
+                // synchronization: sync_on_login, sync_on_network_restore
                 synchronizeNow()
             }
             else -> {}

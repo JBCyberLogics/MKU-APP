@@ -196,7 +196,6 @@ class ResponseProcessingManager @Inject constructor(
     private fun initializeManager() {
         Log.i(TAG, "Initializing Response Processing Manager (Ready)...")
         // action: initialize_response_processing_manager
-        authEventManager.publish(BootstrapEvent.NetworkPlatformReady)
     }
 
     // ==================== Private Helpers ====================

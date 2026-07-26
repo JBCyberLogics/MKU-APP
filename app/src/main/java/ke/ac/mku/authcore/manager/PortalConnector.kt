@@ -6,7 +6,6 @@ import ke.ac.mku.authcore.bootstrap.BootstrapObserver
 import ke.ac.mku.authcore.contracts.authentication.IAuthenticationEventManager
 import ke.ac.mku.authcore.contracts.authentication.ISessionManager
 import ke.ac.mku.authcore.contracts.cookie.ICookieManager
-import ke.ac.mku.authcore.contracts.cookie.ICookieSynchronizationManager
 import ke.ac.mku.authcore.contracts.network.INetworkManager
 import ke.ac.mku.authcore.contracts.network.IResponseProcessingManager
 import ke.ac.mku.authcore.contracts.network.IAuthNetworkService
@@ -16,6 +15,7 @@ import ke.ac.mku.authcore.contracts.security.ICertificatePinningManager
 import ke.ac.mku.authcore.contracts.security.ISecurityMonitor
 import ke.ac.mku.authcore.service.ServiceRegistry
 import javax.inject.Inject
+import javax.inject.Provider
 import javax.inject.Singleton
 
 /**
@@ -26,9 +26,9 @@ import javax.inject.Singleton
  */
 @Singleton
 class PortalConnector @Inject constructor(
-    private val networkManager: INetworkManager,
+    private val networkManagerProvider: Provider<INetworkManager>,
     private val networkService: IAuthNetworkService,
-    private val responseProcessor: IResponseProcessingManager,
+    private val responseProcessorProvider: Provider<IResponseProcessingManager>,
     private val sessionManager: ISessionManager,
     private val cookieManager: ICookieManager,
     private val securityMonitor: ISecurityMonitor,
@@ -63,13 +63,13 @@ class PortalConnector @Inject constructor(
 
         try {
             // 1. Policy check: network required
-            if (!networkManager.isOnline()) {
+            if (!networkManagerProvider.get().isOnline()) {
                 throw IllegalStateException("Network unavailable")
             }
 
-            // 2. Policy check: session required (if already authenticating)
-            // In a real flow, connect might precede full authentication
-            
+            // 2. Policy check: HTTPS and Certificate Pinning
+            // Handled by NetworkService/OkHttp configuration
+
             // 3. Mock connection logic (delegating to NetworkService in reality)
             // val response = networkService.authenticate(...) 
 
@@ -130,7 +130,8 @@ class PortalConnector @Inject constructor(
             }
             is BootstrapEvent.AuthenticationSuccess,
             is BootstrapEvent.SessionCreated,
-            is BootstrapEvent.SessionRestored -> {
+            is BootstrapEvent.SessionRestored,
+            is BootstrapEvent.SessionRecoveryCompleted -> {
                 if (isConnected()) {
                     updateState(PortalState.AUTHENTICATED)
                     authEventManager.publish(BootstrapEvent.PortalAuthenticated)
@@ -171,6 +172,5 @@ class PortalConnector @Inject constructor(
                 source = TAG
             )
         )
-        // could invoke recovery manager if required
     }
 }

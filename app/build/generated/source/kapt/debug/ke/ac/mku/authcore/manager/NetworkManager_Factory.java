@@ -73,7 +73,7 @@ public final class NetworkManager_Factory implements Factory<NetworkManager> {
 
   @Override
   public NetworkManager get() {
-    return newInstance(contextProvider.get(), cookieManagerProvider.get(), cookieSyncManagerProvider.get(), sessionManagerProvider.get(), securityMonitorProvider.get(), pinningManagerProvider.get(), authEventManagerProvider.get(), recoveryManagerProvider.get(), sessionValidatorProvider.get());
+    return newInstance(contextProvider.get(), cookieManagerProvider.get(), cookieSyncManagerProvider.get(), sessionManagerProvider.get(), securityMonitorProvider.get(), pinningManagerProvider.get(), authEventManagerProvider.get(), recoveryManagerProvider, sessionValidatorProvider.get());
   }
 
   public static NetworkManager_Factory create(Provider<Context> contextProvider,
@@ -91,8 +91,9 @@ public final class NetworkManager_Factory implements Factory<NetworkManager> {
   public static NetworkManager newInstance(Context context, ICookieManager cookieManager,
       ICookieSynchronizationManager cookieSyncManager, ISessionManager sessionManager,
       ISecurityMonitor securityMonitor, ICertificatePinningManager pinningManager,
-      IAuthenticationEventManager authEventManager, ISessionRecoveryManager recoveryManager,
+      IAuthenticationEventManager authEventManager,
+      javax.inject.Provider<ISessionRecoveryManager> recoveryManagerProvider,
       ISessionValidator sessionValidator) {
-    return new NetworkManager(context, cookieManager, cookieSyncManager, sessionManager, securityMonitor, pinningManager, authEventManager, recoveryManager, sessionValidator);
+    return new NetworkManager(context, cookieManager, cookieSyncManager, sessionManager, securityMonitor, pinningManager, authEventManager, recoveryManagerProvider, sessionValidator);
   }
 }

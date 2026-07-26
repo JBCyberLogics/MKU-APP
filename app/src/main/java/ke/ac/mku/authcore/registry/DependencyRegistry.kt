@@ -1,18 +1,22 @@
 package ke.ac.mku.authcore.registry
 
 import android.util.Log
+import ke.ac.mku.authcore.contracts.registry.IDependencyRegistry
+import ke.ac.mku.authcore.contracts.registry.ValidationResult
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArrayList
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DependencyRegistry @Inject constructor() {
+class DependencyRegistry @Inject constructor() : IDependencyRegistry {
 
     companion object {
         private const val TAG = "DependencyRegistry"
     }
 
-    private val services = mutableMapOf<String, ServiceDescriptor>()
-    private val observers = mutableListOf<RegistryObserver>()
+    private val services = ConcurrentHashMap<String, ServiceDescriptor>()
+    private val observers = CopyOnWriteArrayList<RegistryObserver>()
     private var isInitialized = false
     private var isValidated = false
 
@@ -28,25 +32,23 @@ class DependencyRegistry @Inject constructor() {
         observers.forEach { it.onRegistryEvent(event) }
     }
 
-    fun initialize(): Boolean {
-        return try {
+    override fun initialize() {
+        try {
             notifyObservers(RegistryEvent.RegistryInitialized)
             Log.i(TAG, "Registry initialized")
             isInitialized = true
-            true
         } catch (e: Exception) {
             notifyObservers(RegistryEvent.RegistryError(e.message ?: "Initialization failed"))
             Log.e(TAG, "Registry initialization failed: ${e.message}")
-            false
         }
     }
 
-    fun register(
+    override fun register(
         name: String,
         instance: Any,
-        dependencies: List<String> = emptyList(),
-        startupOrder: Int = 0,
-        isRequired: Boolean = true
+        dependencies: List<String>,
+        startupOrder: Int,
+        isRequired: Boolean
     ): Boolean {
         return try {
             if (services.containsKey(name)) {
@@ -64,7 +66,7 @@ class DependencyRegistry @Inject constructor() {
 
             services[name] = descriptor
             notifyObservers(RegistryEvent.ServiceRegistered(name))
-            Log.d(TAG, "Registered service: $name (order: $startupOrder)")
+            Log.d(TAG, "Registered service: $name with dependencies: $dependencies")
             true
         } catch (e: Exception) {
             notifyObservers(RegistryEvent.RegistryError("Failed to register $name: ${e.message}"))
@@ -73,7 +75,7 @@ class DependencyRegistry @Inject constructor() {
         }
     }
 
-    fun resolve(name: String): Any? {
+    override fun resolve(name: String): Any? {
         val descriptor = services[name]
         if (descriptor == null) {
             Log.w(TAG, "Service $name not found in registry")
@@ -82,11 +84,10 @@ class DependencyRegistry @Inject constructor() {
 
         descriptor.markResolved()
         notifyObservers(RegistryEvent.ServiceResolved(name))
-        Log.d(TAG, "Resolved service: $name")
         return descriptor.instance
     }
 
-    fun <T> resolve(name: String, clazz: Class<T>): T? {
+    override fun <T> resolve(name: String, clazz: Class<T>): T? {
         val instance = resolve(name)
         return if (clazz.isInstance(instance)) {
             @Suppress("UNCHECKED_CAST")
@@ -96,13 +97,21 @@ class DependencyRegistry @Inject constructor() {
         }
     }
 
-    fun exists(name: String): Boolean = services.containsKey(name)
+    override fun exists(name: String): Boolean = services.containsKey(name)
 
-    fun list(): List<String> = services.keys.toList()
+    override fun list(): List<String> = services.keys().toList()
 
-    fun listByOrder(): List<ServiceDescriptor> = services.values.sortedBy { it.startupOrder }
+    override fun listDescriptors(): List<ServiceDescriptor> = services.values.toList()
 
-    fun validate(): ValidationResult {
+    override fun listByOrder(): List<Any> {
+        return try {
+            getTopologicalSort().mapNotNull { services[it]?.instance }
+        } catch (e: Exception) {
+            services.values.sortedBy { it.startupOrder }.map { it.instance }
+        }
+    }
+
+    override fun validate(): ValidationResult {
         val errors = mutableListOf<String>()
 
         // Check for missing dependencies
@@ -115,16 +124,13 @@ class DependencyRegistry @Inject constructor() {
         }
 
         // Check for circular dependencies
-        val circularDeps = findCircularDependencies()
-        if (circularDeps.isNotEmpty()) {
-            errors.add("Circular dependencies detected: ${circularDeps.joinToString(" -> ")}")
+        try {
+            getTopologicalSort()
+        } catch (e: IllegalStateException) {
+            errors.add(e.message ?: "Circular dependency detected")
         }
 
-        // Check startup order is valid
-        val orders = services.values.map { it.startupOrder }
-        if (orders.distinct().size != orders.size) {
-            errors.add("Duplicate startup order values detected")
-        }
+        // REMOVED duplicate startupOrder check - using DAG instead
 
         isValidated = errors.isEmpty()
 
@@ -141,56 +147,31 @@ class DependencyRegistry @Inject constructor() {
         )
     }
 
-    private fun findCircularDependencies(): List<String> {
+    override fun isReady(): Boolean = isInitialized && isValidated && services.isNotEmpty()
+
+    override fun getStartupSequence(): List<String> {
+        return getTopologicalSort()
+    }
+
+    fun getTopologicalSort(): List<String> {
+        val sorted = mutableListOf<String>()
         val visited = mutableSetOf<String>()
-        val recursionStack = mutableSetOf<String>()
-        val path = mutableListOf<String>()
+        val temp = mutableSetOf<String>()
 
-        fun dfs(serviceName: String): Boolean {
-            visited.add(serviceName)
-            recursionStack.add(serviceName)
-            path.add(serviceName)
-
-            val descriptor = services[serviceName]
-            descriptor?.dependencies?.forEach { dep ->
-                if (!visited.contains(dep)) {
-                    if (dfs(dep)) return true
-                } else if (recursionStack.contains(dep)) {
-                    path.add(dep)
-                    return true
-                }
-            }
-
-            recursionStack.remove(serviceName)
-            path.removeAt(path.size - 1)
-            return false
-        }
-
-        services.keys.forEach { name ->
-            if (!visited.contains(name)) {
-                if (dfs(name)) {
-                    return path
-                }
+        fun visit(name: String) {
+            if (name in temp) throw IllegalStateException("Circular dependency detected at $name")
+            if (name !in visited) {
+                temp.add(name)
+                val descriptor = services[name]
+                descriptor?.dependencies?.forEach { visit(it) }
+                temp.remove(name)
+                visited.add(name)
+                sorted.add(name)
             }
         }
 
-        return emptyList()
+        // Sort keys to ensure deterministic output
+        services.keys().toList().sorted().forEach { if (it !in visited) visit(it) }
+        return sorted
     }
-
-    fun isReady(): Boolean = isInitialized && isValidated && services.isNotEmpty()
-
-    fun getStartupSequence(): List<String> {
-        return services.values
-            .sortedBy { it.startupOrder }
-            .map { it.name }
-    }
-}
-
-data class ValidationResult(
-    val isValid: Boolean,
-    val errors: List<String>
-)
-
-interface RegistryObserver {
-    fun onRegistryEvent(event: RegistryEvent)
 }

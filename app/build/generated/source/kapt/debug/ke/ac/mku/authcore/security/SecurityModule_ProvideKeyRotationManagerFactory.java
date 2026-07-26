@@ -9,6 +9,7 @@ import dagger.internal.QualifierMetadata;
 import dagger.internal.ScopeMetadata;
 import javax.annotation.processing.Generated;
 import ke.ac.mku.authcore.contracts.crypto.ICryptoManager;
+import ke.ac.mku.authcore.registry.DependencyRegistry;
 import ke.ac.mku.authcore.security.crypto.KeyRotationManager;
 
 @ScopeMetadata("javax.inject.Singleton")
@@ -32,24 +33,29 @@ public final class SecurityModule_ProvideKeyRotationManagerFactory implements Fa
 
   private final Provider<ICryptoManager> cryptoManagerProvider;
 
+  private final Provider<DependencyRegistry> registryProvider;
+
   private SecurityModule_ProvideKeyRotationManagerFactory(Provider<Context> contextProvider,
-      Provider<ICryptoManager> cryptoManagerProvider) {
+      Provider<ICryptoManager> cryptoManagerProvider,
+      Provider<DependencyRegistry> registryProvider) {
     this.contextProvider = contextProvider;
     this.cryptoManagerProvider = cryptoManagerProvider;
+    this.registryProvider = registryProvider;
   }
 
   @Override
   public KeyRotationManager get() {
-    return provideKeyRotationManager(contextProvider.get(), cryptoManagerProvider.get());
+    return provideKeyRotationManager(contextProvider.get(), cryptoManagerProvider.get(), registryProvider.get());
   }
 
   public static SecurityModule_ProvideKeyRotationManagerFactory create(
-      Provider<Context> contextProvider, Provider<ICryptoManager> cryptoManagerProvider) {
-    return new SecurityModule_ProvideKeyRotationManagerFactory(contextProvider, cryptoManagerProvider);
+      Provider<Context> contextProvider, Provider<ICryptoManager> cryptoManagerProvider,
+      Provider<DependencyRegistry> registryProvider) {
+    return new SecurityModule_ProvideKeyRotationManagerFactory(contextProvider, cryptoManagerProvider, registryProvider);
   }
 
   public static KeyRotationManager provideKeyRotationManager(Context context,
-      ICryptoManager cryptoManager) {
-    return Preconditions.checkNotNullFromProvides(SecurityModule.INSTANCE.provideKeyRotationManager(context, cryptoManager));
+      ICryptoManager cryptoManager, DependencyRegistry registry) {
+    return Preconditions.checkNotNullFromProvides(SecurityModule.INSTANCE.provideKeyRotationManager(context, cryptoManager, registry));
   }
 }

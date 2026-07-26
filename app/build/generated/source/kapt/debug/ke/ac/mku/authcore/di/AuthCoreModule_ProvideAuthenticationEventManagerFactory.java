@@ -39,36 +39,36 @@ public final class AuthCoreModule_ProvideAuthenticationEventManagerFactory imple
 
   private final Provider<SecurityMonitor> securityMonitorProvider;
 
-  private final Provider<DependencyRegistry> dependencyRegistryProvider;
+  private final Provider<DependencyRegistry> registryProvider;
 
   private AuthCoreModule_ProvideAuthenticationEventManagerFactory(
       Provider<SecureStorageManager> secureStorageManagerProvider,
       Provider<EventBus> eventBusProvider, Provider<StateRegistry> stateRegistryProvider,
       Provider<SecurityMonitor> securityMonitorProvider,
-      Provider<DependencyRegistry> dependencyRegistryProvider) {
+      Provider<DependencyRegistry> registryProvider) {
     this.secureStorageManagerProvider = secureStorageManagerProvider;
     this.eventBusProvider = eventBusProvider;
     this.stateRegistryProvider = stateRegistryProvider;
     this.securityMonitorProvider = securityMonitorProvider;
-    this.dependencyRegistryProvider = dependencyRegistryProvider;
+    this.registryProvider = registryProvider;
   }
 
   @Override
   public IAuthenticationEventManager get() {
-    return provideAuthenticationEventManager(secureStorageManagerProvider.get(), eventBusProvider.get(), stateRegistryProvider.get(), securityMonitorProvider.get(), dependencyRegistryProvider.get());
+    return provideAuthenticationEventManager(secureStorageManagerProvider.get(), eventBusProvider.get(), stateRegistryProvider.get(), securityMonitorProvider.get(), registryProvider.get());
   }
 
   public static AuthCoreModule_ProvideAuthenticationEventManagerFactory create(
       Provider<SecureStorageManager> secureStorageManagerProvider,
       Provider<EventBus> eventBusProvider, Provider<StateRegistry> stateRegistryProvider,
       Provider<SecurityMonitor> securityMonitorProvider,
-      Provider<DependencyRegistry> dependencyRegistryProvider) {
-    return new AuthCoreModule_ProvideAuthenticationEventManagerFactory(secureStorageManagerProvider, eventBusProvider, stateRegistryProvider, securityMonitorProvider, dependencyRegistryProvider);
+      Provider<DependencyRegistry> registryProvider) {
+    return new AuthCoreModule_ProvideAuthenticationEventManagerFactory(secureStorageManagerProvider, eventBusProvider, stateRegistryProvider, securityMonitorProvider, registryProvider);
   }
 
   public static IAuthenticationEventManager provideAuthenticationEventManager(
       SecureStorageManager secureStorageManager, EventBus eventBus, StateRegistry stateRegistry,
-      SecurityMonitor securityMonitor, DependencyRegistry dependencyRegistry) {
-    return Preconditions.checkNotNullFromProvides(AuthCoreModule.INSTANCE.provideAuthenticationEventManager(secureStorageManager, eventBus, stateRegistry, securityMonitor, dependencyRegistry));
+      SecurityMonitor securityMonitor, DependencyRegistry registry) {
+    return Preconditions.checkNotNullFromProvides(AuthCoreModule.INSTANCE.provideAuthenticationEventManager(secureStorageManager, eventBus, stateRegistry, securityMonitor, registry));
   }
 }

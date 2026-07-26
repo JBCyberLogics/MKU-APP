@@ -24,6 +24,7 @@ import ke.ac.mku.authcore.session.validation.SessionValidatorMetricsImpl
 import ke.ac.mku.authcore.contracts.storage.ISecureStorageManager
 import ke.ac.mku.authcore.contracts.storage.StorageDomain
 import ke.ac.mku.authcore.domain.model.Session
+import ke.ac.mku.authcore.domain.model.User
 import ke.ac.mku.authcore.registry.DependencyRegistry
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -85,6 +86,10 @@ class SessionValidator constructor(
     private var recoveryRequests = 0L
     private var lastValidationTime = 0L
 
+    // AUTH-TXN-001: Transaction Lock
+    @Volatile
+    private var isEnabled = true
+
     // Configuration
     private var foregroundInterval = DEFAULT_FOREGROUND_INTERVAL
     private var backgroundInterval = DEFAULT_BACKGROUND_INTERVAL
@@ -97,7 +102,22 @@ class SessionValidator constructor(
 
     // ==================== ISessionValidator Implementation ====================
 
+    override fun setEnabled(enabled: Boolean) {
+        Log.i(TAG, "SessionValidator enabled: $enabled")
+        this.isEnabled = enabled
+        if (!enabled && isValidationActive) {
+            Log.d(TAG, "Pausing continuous validation due to transaction lock")
+        }
+    }
+
     override fun validateSession(): SessionValidationResult {
+        if (!isEnabled) {
+            Log.d(TAG, "Skipping session validation: Validator disabled (Policy: auth_transaction_active)")
+            return SessionValidationResult.Valid(
+                session = sessionManager.getCurrentSession() ?: Session(User("anonymous"), emptyMap(), 0, "anon"),
+                validationTime = System.currentTimeMillis()
+            )
+        }
         val now = System.currentTimeMillis()
         totalValidations++
         lastValidationTime = now
@@ -444,23 +464,6 @@ class SessionValidator constructor(
                 if (isValidationActive) {
                     stopContinuousValidation()
                 }
-            }
-            is BootstrapEvent.BootstrapCompleted -> {
-                // Register with dependency registry
-                dependencyRegistry.register(
-                    name = "session_validator",
-                    instance = this,
-                    dependencies = listOf(
-                        "session_manager",
-                        "secure_storage_manager",
-                        "crypto_manager",
-                        "security_monitor"
-                    ),
-                    startupOrder = 21,
-                    isRequired = true
-                )
-                Log.i(TAG, "SessionValidator registered with DependencyRegistry")
-                authEventManager.publish(BootstrapEvent.SessionValidatorReady)
             }
             else -> { /* Ignore other events */ }
         }

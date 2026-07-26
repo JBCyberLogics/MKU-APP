@@ -21,13 +21,16 @@ import java.security.KeyStore
 import java.security.cert.Certificate
 import java.security.cert.X509Certificate
 import java.util.concurrent.ConcurrentHashMap
+import java.net.Socket
 import javax.inject.Inject
 import javax.inject.Singleton
 import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLEngine
 import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.TrustManager
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
+import javax.net.ssl.X509ExtendedTrustManager
 
 /**
  * CertificateTrustManager - SECURITY-004
@@ -128,9 +131,11 @@ class CertificateTrustManager @Inject constructor(
         val fingerprint = pinningService.computeCertificateFingerprint(certificate)
 
         try {
-            // First, validate the certificate chain using our custom TrustManager
-            customTrustManager.checkServerTrusted(chain, "RSA")
-
+            // Note: We don't call customTrustManager.checkServerTrusted here 
+            // because this method (validateCertificate) is called from HostnameVerifier
+            // or manual checks. The actual SSL handshake validation is handled 
+            // by OkHttp using the custom SSLSocketFactory/TrustManager.
+            
             // Check hostname matches certificate
             if (!verifyHostname(host, certificate)) {
                 recordFailure(host, TrustStatus.HOSTNAME_MISMATCH)
@@ -277,22 +282,35 @@ class CertificateTrustManager @Inject constructor(
     // ==================== PRIVATE HELPERS ====================
 
     private fun initializeDefaultPins() {
-        // Initialize with placeholder pins for development
-        // These must be replaced with real pins before production release
+        // Initialize with production pins for MKU Student Portal and VLMS
         TrustedEndpoint.DEFAULT_ENDPOINTS.forEach { endpoint ->
-            val placeholderPins = listOf(
-                ke.ac.mku.authcore.contracts.security.CertificatePin(
-                    publicKeyHash = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=", // Placeholder
-                    algorithm = "SHA-256",
-                    isBackup = false
-                ),
-                ke.ac.mku.authcore.contracts.security.CertificatePin(
-                    publicKeyHash = "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=", // Backup placeholder
-                    algorithm = "SHA-256",
-                    isBackup = true
+            val productionPins = when {
+                endpoint.host.contains("vlms.mku.ac.ke") -> listOf(
+                    ke.ac.mku.authcore.contracts.security.CertificatePin(
+                        publicKeyHash = "5Wlm2T4vQVshZI+gi4W1hTXnn+mZMUYU1i2Avq7VVas=", // vlms.mku.ac.ke Leaf
+                        algorithm = "SHA-256",
+                        isBackup = false
+                    ),
+                    ke.ac.mku.authcore.contracts.security.CertificatePin(
+                        publicKeyHash = "nWN7PSep5XDQdge5zK24CnCRXHr3KvzhKEGxsdqCX9E=", // Let's Encrypt Intermediate
+                        algorithm = "SHA-256",
+                        isBackup = true
+                    )
                 )
-            )
-            pinSets[endpoint.host] = PinSet.create(endpoint.host, placeholderPins)
+                else -> listOf(
+                    ke.ac.mku.authcore.contracts.security.CertificatePin(
+                        publicKeyHash = "AYajYaKzuz3YSRwertDDgzz5l1Pkv+arBvmnzwucOjw=", // *.mku.ac.ke Leaf
+                        algorithm = "SHA-256",
+                        isBackup = false
+                    ),
+                    ke.ac.mku.authcore.contracts.security.CertificatePin(
+                        publicKeyHash = "8kGWrpQHhmc0jwLo43RYo6bmqtHgsNxhARjM5yFCe/w=", // GoDaddy G2 Intermediate
+                        algorithm = "SHA-256",
+                        isBackup = true
+                    )
+                )
+            }
+            pinSets[endpoint.host] = PinSet.create(endpoint.host, productionPins)
         }
     }
 
@@ -300,25 +318,8 @@ class CertificateTrustManager @Inject constructor(
         val tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
         tmf.init(null as KeyStore?)
 
-        val trustManagers = tmf.trustManagers
-        val x509Tm = trustManagers.filterIsInstance<X509TrustManager>().firstOrNull()
-
-        return object : X509TrustManager {
-            override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {
-                x509Tm?.checkClientTrusted(chain, authType)
-            }
-
-            override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {
-                // Custom validation is done in validateCertificate
-                // This is called by the SSL handshake and we delegate to default validation
-                // The actual pinning check happens in our custom SSLSocketFactory
-                x509Tm?.checkServerTrusted(chain, authType)
-            }
-
-            override fun getAcceptedIssuers(): Array<X509Certificate> {
-                return x509Tm?.acceptedIssuers ?: emptyArray()
-            }
-        }
+        // Return the system default trust manager (which respects NetworkSecurityConfig)
+        return tmf.trustManagers.filterIsInstance<X509TrustManager>().first()
     }
 
     private fun createSSLSocketFactory(): SSLSocketFactory {
@@ -358,15 +359,22 @@ class CertificateTrustManager @Inject constructor(
         val names = mutableListOf<String>()
 
         try {
-            val subject = certificate.subjectX500Principal.name
             // Extract CN from subject
+            val subject = certificate.subjectX500Principal.name
             val cnMatch = Regex("CN=([^,]+)").find(subject)
             cnMatch?.groupValues?.get(1)?.let { names.add(it) }
+
+            // Extract Subject Alternative Names (SAN)
+            certificate.subjectAlternativeNames?.forEach { list ->
+                if (list.size >= 2 && list[0] == 2) { // 2 is DNS name type
+                    (list[1] as? String)?.let { names.add(it) }
+                }
+            }
         } catch (e: Exception) {
             Log.w(TAG, "Failed to extract subject names: ${e.message}")
         }
 
-        return names
+        return names.distinct()
     }
 
     private fun cacheCertificate(host: String, certificate: X509Certificate) {

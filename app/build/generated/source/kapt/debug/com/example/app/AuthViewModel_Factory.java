@@ -6,6 +6,7 @@ import dagger.internal.Provider;
 import dagger.internal.QualifierMetadata;
 import dagger.internal.ScopeMetadata;
 import javax.annotation.processing.Generated;
+import ke.ac.mku.authcore.bootstrap.EventBus;
 import ke.ac.mku.authcore.manager.AuthCoreManager;
 
 @ScopeMetadata
@@ -27,20 +28,25 @@ import ke.ac.mku.authcore.manager.AuthCoreManager;
 public final class AuthViewModel_Factory implements Factory<AuthViewModel> {
   private final Provider<AuthCoreManager> authCoreManagerProvider;
 
-  private AuthViewModel_Factory(Provider<AuthCoreManager> authCoreManagerProvider) {
+  private final Provider<EventBus> eventBusProvider;
+
+  private AuthViewModel_Factory(Provider<AuthCoreManager> authCoreManagerProvider,
+      Provider<EventBus> eventBusProvider) {
     this.authCoreManagerProvider = authCoreManagerProvider;
+    this.eventBusProvider = eventBusProvider;
   }
 
   @Override
   public AuthViewModel get() {
-    return newInstance(authCoreManagerProvider.get());
+    return newInstance(authCoreManagerProvider.get(), eventBusProvider.get());
   }
 
-  public static AuthViewModel_Factory create(Provider<AuthCoreManager> authCoreManagerProvider) {
-    return new AuthViewModel_Factory(authCoreManagerProvider);
+  public static AuthViewModel_Factory create(Provider<AuthCoreManager> authCoreManagerProvider,
+      Provider<EventBus> eventBusProvider) {
+    return new AuthViewModel_Factory(authCoreManagerProvider, eventBusProvider);
   }
 
-  public static AuthViewModel newInstance(AuthCoreManager authCoreManager) {
-    return new AuthViewModel(authCoreManager);
+  public static AuthViewModel newInstance(AuthCoreManager authCoreManager, EventBus eventBus) {
+    return new AuthViewModel(authCoreManager, eventBus);
   }
 }

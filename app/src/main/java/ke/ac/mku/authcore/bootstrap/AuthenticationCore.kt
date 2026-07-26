@@ -9,7 +9,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AuthenticationCore @Inject constructor(
+class AuthenticationCore constructor(
     private val authRepository: AuthRepository,
     private val portalDiscovery: PortalDiscovery,
     private val endpointRegistry: EndpointRegistry

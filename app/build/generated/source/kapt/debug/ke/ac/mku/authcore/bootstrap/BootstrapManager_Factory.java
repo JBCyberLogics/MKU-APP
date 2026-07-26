@@ -33,30 +33,41 @@ public final class BootstrapManager_Factory implements Factory<BootstrapManager>
 
   private final Provider<AuthCoreManager> authCoreManagerProvider;
 
+  private final Provider<PlatformBootstrap> bootstrapProvider;
+
+  private final Provider<PlatformVerifier> verifierProvider;
+
   private final Provider<EventBus> eventBusProvider;
 
   private BootstrapManager_Factory(Provider<ConfigManager> configManagerProvider,
       Provider<DependencyRegistry> dependencyRegistryProvider,
-      Provider<AuthCoreManager> authCoreManagerProvider, Provider<EventBus> eventBusProvider) {
+      Provider<AuthCoreManager> authCoreManagerProvider,
+      Provider<PlatformBootstrap> bootstrapProvider, Provider<PlatformVerifier> verifierProvider,
+      Provider<EventBus> eventBusProvider) {
     this.configManagerProvider = configManagerProvider;
     this.dependencyRegistryProvider = dependencyRegistryProvider;
     this.authCoreManagerProvider = authCoreManagerProvider;
+    this.bootstrapProvider = bootstrapProvider;
+    this.verifierProvider = verifierProvider;
     this.eventBusProvider = eventBusProvider;
   }
 
   @Override
   public BootstrapManager get() {
-    return newInstance(configManagerProvider.get(), dependencyRegistryProvider.get(), authCoreManagerProvider.get(), eventBusProvider.get());
+    return newInstance(configManagerProvider.get(), dependencyRegistryProvider.get(), authCoreManagerProvider.get(), bootstrapProvider.get(), verifierProvider.get(), eventBusProvider.get());
   }
 
   public static BootstrapManager_Factory create(Provider<ConfigManager> configManagerProvider,
       Provider<DependencyRegistry> dependencyRegistryProvider,
-      Provider<AuthCoreManager> authCoreManagerProvider, Provider<EventBus> eventBusProvider) {
-    return new BootstrapManager_Factory(configManagerProvider, dependencyRegistryProvider, authCoreManagerProvider, eventBusProvider);
+      Provider<AuthCoreManager> authCoreManagerProvider,
+      Provider<PlatformBootstrap> bootstrapProvider, Provider<PlatformVerifier> verifierProvider,
+      Provider<EventBus> eventBusProvider) {
+    return new BootstrapManager_Factory(configManagerProvider, dependencyRegistryProvider, authCoreManagerProvider, bootstrapProvider, verifierProvider, eventBusProvider);
   }
 
   public static BootstrapManager newInstance(ConfigManager configManager,
-      DependencyRegistry dependencyRegistry, AuthCoreManager authCoreManager, EventBus eventBus) {
-    return new BootstrapManager(configManager, dependencyRegistry, authCoreManager, eventBus);
+      DependencyRegistry dependencyRegistry, AuthCoreManager authCoreManager,
+      PlatformBootstrap bootstrap, PlatformVerifier verifier, EventBus eventBus) {
+    return new BootstrapManager(configManager, dependencyRegistry, authCoreManager, bootstrap, verifier, eventBus);
   }
 }

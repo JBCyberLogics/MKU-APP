@@ -2,7 +2,8 @@ package com.example.app
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,12 +15,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Logout
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -28,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
@@ -50,19 +47,23 @@ fun LoginScreen(
     var passwordVisible by remember { mutableStateOf(false) }
     var rememberMe by remember { mutableStateOf(false) }
 
+    var showError by remember { mutableStateOf(false) }
+    var errorText by remember { mutableStateOf("") }
+
     val scrollState = rememberScrollState()
 
-    // Show error snackbar
-    val snackbarHostState = remember { SnackbarHostState() }
+    // Handle error events
     LaunchedEffect(uiState.errorMessage) {
         uiState.errorMessage?.let {
-            snackbarHostState.showSnackbar(it)
+            errorText = it
+            showError = true
+            kotlinx.coroutines.delay(4000)
+            showError = false
             viewModel.clearError()
         }
     }
 
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
         containerColor = Color.Transparent
     ) { paddingValues ->
         Box(
@@ -78,10 +79,15 @@ fun LoginScreen(
                 )
                 .padding(paddingValues)
         ) {
-            if (uiState.isLoggedIn) {
-                // Success State
-                SuccessContent(
-                    onLogout = { viewModel.logout() }
+            if (uiState.isDashboardReady) {
+                // Final Dashboard State (Direct Launch)
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("Dashboard Placeholder - Architecture Complete", style = MaterialTheme.typography.headlineMedium)
+                }
+            } else if (uiState.isValidating) {
+                // Premium Loading Experience
+                LoadingOverlay(
+                    step = uiState.loadingStep
                 )
             } else {
                 // Login Form
@@ -269,7 +275,7 @@ fun LoginScreen(
 
                     // Login button
                     Button(
-                        onClick = { viewModel.login(regNumber, password) },
+                        onClick = { viewModel.login(regNumber, password, selectedPortal) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp),
@@ -318,10 +324,32 @@ fun LoginScreen(
 
                     // Footer
                     Text(
-                        text = "© 2026 MKU System •",
+                        text = "Design by Mr.Wanjama • © 2026 MKU System",
                         style = MaterialTheme.typography.labelSmall,
                         color = Outline
                     )
+                }
+            }
+
+            val errorAlpha by animateFloatAsState(
+                targetValue = if (showError) 1f else 0f,
+                animationSpec = tween(durationMillis = 300),
+                label = "errorAlpha"
+            )
+
+            if (errorAlpha > 0f) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .padding(top = 64.dp)
+                        .padding(horizontal = 24.dp)
+                        .graphicsLayer {
+                            alpha = errorAlpha
+                            scaleX = 0.8f + (0.2f * errorAlpha)
+                            scaleY = 0.8f + (0.2f * errorAlpha)
+                        }
+                ) {
+                    ErrorPopupCard(text = errorText)
                 }
             }
         }
@@ -329,19 +357,49 @@ fun LoginScreen(
 }
 
 @Composable
-private fun SuccessContent(
-    onLogout: () -> Unit
+private fun ErrorPopupCard(text: String) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.errorContainer
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Default.Error,
+                contentDescription = "Error",
+                tint = MaterialTheme.colorScheme.error,
+                modifier = Modifier.size(24.dp)
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(
+                text = text,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onErrorContainer
+            )
+        }
+    }
+}
+
+@Composable
+private fun LoadingOverlay(
+    step: String
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp)
+            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.95f))
             .statusBarsPadding()
             .navigationBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // Success icon
+        // Logo or Loader
         Box(
             modifier = Modifier
                 .size(120.dp)
@@ -355,55 +413,41 @@ private fun SuccessContent(
                 .background(PrimaryContainer),
             contentAlignment = Alignment.Center
         ) {
-            Icon(
-                imageVector = Icons.Default.Check,
-                contentDescription = "Success",
-                modifier = Modifier.size(64.dp),
-                tint = Primary
+            CircularProgressIndicator(
+                modifier = Modifier.size(80.dp),
+                color = Primary,
+                strokeWidth = 4.dp
             )
         }
 
         Spacer(modifier = Modifier.height(32.dp))
 
         Text(
-            text = "Login Successful",
-            style = MaterialTheme.typography.headlineLarge,
+            text = "Platform Initialization",
+            style = MaterialTheme.typography.headlineMedium,
             color = Primary
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
+        // Dynamic Loading Step
         Text(
-            text = "Welcome to MKU Student Portal",
+            text = step,
             style = MaterialTheme.typography.bodyLarge,
-            color = OnSurfaceVariant
+            color = OnSurfaceVariant,
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center
         )
 
         Spacer(modifier = Modifier.height(48.dp))
-
-        // Logout button
-        OutlinedButton(
-            onClick = onLogout,
+        
+        LinearProgressIndicator(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
-            shape = RoundedCornerShape(18.dp),
-            colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = Primary
-            ),
-            border = BorderStroke(1.dp, Primary)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Logout,
-                contentDescription = null,
-                modifier = Modifier.size(20.dp)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = "LOGOUT",
-                style = MaterialTheme.typography.titleMedium
-            )
-        }
+                .fillMaxWidth(0.7f)
+                .height(4.dp)
+                .clip(RoundedCornerShape(2.dp)),
+            color = Primary,
+            trackColor = PrimaryContainer
+        )
     }
 }
 

@@ -5,10 +5,12 @@ import ke.ac.mku.authcore.bootstrap.BootstrapEvent
 import ke.ac.mku.authcore.bootstrap.BootstrapObserver
 import ke.ac.mku.authcore.contracts.authentication.IAuthenticationEventManager
 import ke.ac.mku.authcore.contracts.portal.IRelationshipManager
+import ke.ac.mku.authcore.contracts.portal.IUniversalJsonManager
 import ke.ac.mku.authcore.domain.model.portal.EntityRelationshipGraph
 import ke.ac.mku.authcore.domain.model.portal.RelationshipEdge
 import ke.ac.mku.authcore.domain.model.portal.SemanticEntity
 import javax.inject.Inject
+import javax.inject.Provider
 import javax.inject.Singleton
 
 /**
@@ -20,7 +22,8 @@ import javax.inject.Singleton
 class RelationshipManager @Inject constructor(
     private val graphBuilder: EntityGraphBuilder,
     private val discoveryEngine: RelationshipDiscoveryEngine,
-    private val authEventManager: IAuthenticationEventManager
+    private val authEventManager: IAuthenticationEventManager,
+    private val jsonManager: Provider<IUniversalJsonManager>
 ) : IRelationshipManager, BootstrapObserver {
 
     private val moduleId = "PROGRAM-009"
@@ -90,7 +93,12 @@ class RelationshipManager @Inject constructor(
     override fun onBootstrapEvent(event: BootstrapEvent) {
         when (event) {
             is BootstrapEvent.PortalJsonReady -> {
-                // Logic to trigger graph building from Universal JSON
+                Log.i(TAG, "Portal JSON ready. Building Relationship Graph...")
+                jsonManager.get().getLatestUniversalJson()?.rawEntities?.let {
+                    if (it.isNotEmpty()) {
+                        buildGraph(it)
+                    }
+                }
             }
             else -> {}
         }

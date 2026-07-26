@@ -20,6 +20,7 @@ import ke.ac.mku.authcore.contracts.security.ISecurityMonitor
 import ke.ac.mku.authcore.contracts.session.ISessionRecoveryManager
 import ke.ac.mku.authcore.contracts.session.ISessionValidator
 import javax.inject.Inject
+import javax.inject.Provider
 import javax.inject.Singleton
 
 /**
@@ -37,7 +38,7 @@ class NetworkManager @Inject constructor(
     private val securityMonitor: ISecurityMonitor,
     private val pinningManager: ICertificatePinningManager,
     private val authEventManager: IAuthenticationEventManager,
-    private val recoveryManager: ISessionRecoveryManager,
+    private val recoveryManagerProvider: Provider<ISessionRecoveryManager>,
     private val sessionValidator: ISessionValidator
 ) : INetworkManager, BootstrapObserver {
 
@@ -111,6 +112,11 @@ class NetworkManager @Inject constructor(
 
         Log.i(TAG, "NetworkManager initialized and ready.")
         authEventManager.publish(BootstrapEvent.NetworkReady)
+        
+        // AUTH-TXN-001: Signal platform readiness
+        if (isOnline()) {
+            authEventManager.publish(BootstrapEvent.NetworkPlatformReady)
+        }
     }
 
     override fun isOnline(): Boolean {
@@ -127,7 +133,7 @@ class NetworkManager @Inject constructor(
         authEventManager.publish(BootstrapEvent.NetworkRecoveryStarted)
         
         // JSON: failure_handling: invoke_recovery_manager
-        recoveryManager.recoverSession()
+        recoveryManagerProvider.get().recoverSession()
         
         authEventManager.publish(BootstrapEvent.NetworkRecoveryCompleted)
         if (isOnline()) updateNetworkState(NetworkState.ONLINE)

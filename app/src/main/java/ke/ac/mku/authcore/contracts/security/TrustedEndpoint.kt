@@ -44,6 +44,13 @@ data class TrustedEndpoint(
                 requirePinning = true,
                 allowSubdomains = false,
                 description = "MKU Student Portal"
+            ),
+            TrustedEndpoint(
+                host = "vlms.mku.ac.ke",
+                baseUrl = "https://vlms.mku.ac.ke",
+                requirePinning = true,
+                allowSubdomains = false,
+                description = "MKU Virtual Learning Management System"
             )
         )
 

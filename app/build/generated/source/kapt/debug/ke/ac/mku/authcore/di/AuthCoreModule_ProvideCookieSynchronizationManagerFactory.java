@@ -76,7 +76,7 @@ public final class AuthCoreModule_ProvideCookieSynchronizationManagerFactory imp
 
   @Override
   public ICookieSynchronizationManager get() {
-    return provideCookieSynchronizationManager(cookieManagerProvider.get(), sessionManagerProvider.get(), sessionValidatorProvider.get(), recoveryManagerProvider.get(), secureStorageManagerProvider.get(), securityMonitorProvider.get(), authEventManagerProvider.get(), serviceRegistryProvider.get(), registryProvider.get());
+    return provideCookieSynchronizationManager(cookieManagerProvider.get(), sessionManagerProvider.get(), sessionValidatorProvider.get(), recoveryManagerProvider, secureStorageManagerProvider.get(), securityMonitorProvider.get(), authEventManagerProvider.get(), serviceRegistryProvider.get(), registryProvider.get());
   }
 
   public static AuthCoreModule_ProvideCookieSynchronizationManagerFactory create(
@@ -94,10 +94,11 @@ public final class AuthCoreModule_ProvideCookieSynchronizationManagerFactory imp
 
   public static ICookieSynchronizationManager provideCookieSynchronizationManager(
       ICookieManager cookieManager, ISessionManager sessionManager,
-      ISessionValidator sessionValidator, ISessionRecoveryManager recoveryManager,
+      ISessionValidator sessionValidator,
+      javax.inject.Provider<ISessionRecoveryManager> recoveryManagerProvider,
       ISecureStorageManager secureStorageManager, ISecurityMonitor securityMonitor,
       IAuthenticationEventManager authEventManager, ServiceRegistry serviceRegistry,
       DependencyRegistry registry) {
-    return Preconditions.checkNotNullFromProvides(AuthCoreModule.INSTANCE.provideCookieSynchronizationManager(cookieManager, sessionManager, sessionValidator, recoveryManager, secureStorageManager, securityMonitor, authEventManager, serviceRegistry, registry));
+    return Preconditions.checkNotNullFromProvides(AuthCoreModule.INSTANCE.provideCookieSynchronizationManager(cookieManager, sessionManager, sessionValidator, recoveryManagerProvider, secureStorageManager, securityMonitor, authEventManager, serviceRegistry, registry));
   }
 }

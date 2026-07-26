@@ -7,8 +7,10 @@ import dagger.internal.Provider;
 import dagger.internal.QualifierMetadata;
 import dagger.internal.ScopeMetadata;
 import javax.annotation.processing.Generated;
+import ke.ac.mku.authcore.config.ConfigManager;
 import ke.ac.mku.authcore.data.api.AuthApiService;
-import retrofit2.Retrofit;
+import ke.ac.mku.authcore.registry.DependencyRegistry;
+import okhttp3.OkHttpClient;
 
 @ScopeMetadata("javax.inject.Singleton")
 @QualifierMetadata
@@ -27,23 +29,33 @@ import retrofit2.Retrofit;
     "nullness:initialization.field.uninitialized"
 })
 public final class AuthCoreModule_ProvideAuthApiServiceFactory implements Factory<AuthApiService> {
-  private final Provider<Retrofit> retrofitProvider;
+  private final Provider<OkHttpClient> okHttpClientProvider;
 
-  private AuthCoreModule_ProvideAuthApiServiceFactory(Provider<Retrofit> retrofitProvider) {
-    this.retrofitProvider = retrofitProvider;
+  private final Provider<ConfigManager> configManagerProvider;
+
+  private final Provider<DependencyRegistry> registryProvider;
+
+  private AuthCoreModule_ProvideAuthApiServiceFactory(Provider<OkHttpClient> okHttpClientProvider,
+      Provider<ConfigManager> configManagerProvider,
+      Provider<DependencyRegistry> registryProvider) {
+    this.okHttpClientProvider = okHttpClientProvider;
+    this.configManagerProvider = configManagerProvider;
+    this.registryProvider = registryProvider;
   }
 
   @Override
   public AuthApiService get() {
-    return provideAuthApiService(retrofitProvider.get());
+    return provideAuthApiService(okHttpClientProvider.get(), configManagerProvider.get(), registryProvider.get());
   }
 
   public static AuthCoreModule_ProvideAuthApiServiceFactory create(
-      Provider<Retrofit> retrofitProvider) {
-    return new AuthCoreModule_ProvideAuthApiServiceFactory(retrofitProvider);
+      Provider<OkHttpClient> okHttpClientProvider, Provider<ConfigManager> configManagerProvider,
+      Provider<DependencyRegistry> registryProvider) {
+    return new AuthCoreModule_ProvideAuthApiServiceFactory(okHttpClientProvider, configManagerProvider, registryProvider);
   }
 
-  public static AuthApiService provideAuthApiService(Retrofit retrofit) {
-    return Preconditions.checkNotNullFromProvides(AuthCoreModule.INSTANCE.provideAuthApiService(retrofit));
+  public static AuthApiService provideAuthApiService(OkHttpClient okHttpClient,
+      ConfigManager configManager, DependencyRegistry registry) {
+    return Preconditions.checkNotNullFromProvides(AuthCoreModule.INSTANCE.provideAuthApiService(okHttpClient, configManager, registry));
   }
 }

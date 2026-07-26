@@ -10,12 +10,12 @@ import retrofit2.http.Url
 
 interface AuthApiService {
     @GET
-    suspend fun getLoginPage(@Url url: String = "https://login.mku.ac.ke/"): Response<ResponseBody>
+    suspend fun getLoginPage(@Url url: String): Response<ResponseBody>
 
     @FormUrlEncoded
     @POST
     suspend fun submitLogin(
-        @Url url: String = "https://login.mku.ac.ke/",
+        @Url url: String,
         @FieldMap fields: Map<String, String>
     ): Response<ResponseBody>
 }

@@ -80,7 +80,7 @@ public final class AuthCoreModule_ProvideNetworkManagerFactory implements Factor
 
   @Override
   public INetworkManager get() {
-    return provideNetworkManager(contextProvider.get(), cookieManagerProvider.get(), cookieSyncManagerProvider.get(), sessionManagerProvider.get(), securityMonitorProvider.get(), pinningManagerProvider.get(), authEventManagerProvider.get(), recoveryManagerProvider.get(), sessionValidatorProvider.get(), registryProvider.get());
+    return provideNetworkManager(contextProvider.get(), cookieManagerProvider.get(), cookieSyncManagerProvider.get(), sessionManagerProvider.get(), securityMonitorProvider.get(), pinningManagerProvider.get(), authEventManagerProvider.get(), recoveryManagerProvider, sessionValidatorProvider.get(), registryProvider.get());
   }
 
   public static AuthCoreModule_ProvideNetworkManagerFactory create(
@@ -99,8 +99,9 @@ public final class AuthCoreModule_ProvideNetworkManagerFactory implements Factor
   public static INetworkManager provideNetworkManager(Context context, ICookieManager cookieManager,
       ICookieSynchronizationManager cookieSyncManager, ISessionManager sessionManager,
       ISecurityMonitor securityMonitor, ICertificatePinningManager pinningManager,
-      IAuthenticationEventManager authEventManager, ISessionRecoveryManager recoveryManager,
+      IAuthenticationEventManager authEventManager,
+      javax.inject.Provider<ISessionRecoveryManager> recoveryManagerProvider,
       ISessionValidator sessionValidator, DependencyRegistry registry) {
-    return Preconditions.checkNotNullFromProvides(AuthCoreModule.INSTANCE.provideNetworkManager(context, cookieManager, cookieSyncManager, sessionManager, securityMonitor, pinningManager, authEventManager, recoveryManager, sessionValidator, registry));
+    return Preconditions.checkNotNullFromProvides(AuthCoreModule.INSTANCE.provideNetworkManager(context, cookieManager, cookieSyncManager, sessionManager, securityMonitor, pinningManager, authEventManager, recoveryManagerProvider, sessionValidator, registry));
   }
 }

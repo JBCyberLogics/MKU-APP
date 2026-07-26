@@ -104,4 +104,10 @@ interface ISessionValidator {
      * @return SessionValidatorMetrics
      */
     fun getMetrics(): SessionValidatorMetrics
+
+    /**
+     * AUTH-TXN-001: Transaction Lock
+     * When disabled, all validation operations are skipped.
+     */
+    fun setEnabled(enabled: Boolean)
 }

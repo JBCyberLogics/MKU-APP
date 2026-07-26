@@ -116,6 +116,9 @@ class SessionRecoveryManager(
     private val _isRecoveryRunning = MutableStateFlow(false)
     override fun isRecoveryRunning(): Boolean = _isRecoveryRunning.value
 
+    // Periodic check
+    private var isEnabled = true
+
     // Metrics
     private var metrics = SessionRecoveryMetrics()
     private val metricsLock = Any()
@@ -207,6 +210,10 @@ class SessionRecoveryManager(
     // ========== ISessionRecoveryManager Implementation ==========
 
     override fun recoverSession(): RecoveryResult {
+        if (!isEnabled) {
+            Log.d(TAG, "Skipping session recovery: Manager disabled (Policy: auth_transaction_active)")
+            return RecoveryResult.Failed("Manager disabled during transaction", 0, "AUTH_TXN_LOCKED")
+        }
         return runBlocking {
             executeRecoveryPipeline()
         }
@@ -234,6 +241,14 @@ class SessionRecoveryManager(
             return true
         }
         return false
+    }
+
+    override fun setEnabled(enabled: Boolean) {
+        Log.i(TAG, "SessionRecoveryManager enabled: $enabled")
+        this.isEnabled = enabled
+        if (!enabled && _isRecoveryRunning.value) {
+            Log.d(TAG, "Warning: Session recovery disabled while running.")
+        }
     }
 
     override fun getMetrics(): SessionRecoveryMetrics {

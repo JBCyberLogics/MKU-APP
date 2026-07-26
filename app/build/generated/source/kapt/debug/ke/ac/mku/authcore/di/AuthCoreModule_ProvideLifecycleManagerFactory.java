@@ -33,29 +33,29 @@ public final class AuthCoreModule_ProvideLifecycleManagerFactory implements Fact
 
   private final Provider<ServiceRegistry> serviceRegistryProvider;
 
-  private final Provider<DependencyRegistry> dependencyRegistryProvider;
+  private final Provider<DependencyRegistry> registryProvider;
 
   private AuthCoreModule_ProvideLifecycleManagerFactory(Provider<EventBus> eventBusProvider,
       Provider<ServiceRegistry> serviceRegistryProvider,
-      Provider<DependencyRegistry> dependencyRegistryProvider) {
+      Provider<DependencyRegistry> registryProvider) {
     this.eventBusProvider = eventBusProvider;
     this.serviceRegistryProvider = serviceRegistryProvider;
-    this.dependencyRegistryProvider = dependencyRegistryProvider;
+    this.registryProvider = registryProvider;
   }
 
   @Override
   public LifecycleManager get() {
-    return provideLifecycleManager(eventBusProvider.get(), serviceRegistryProvider.get(), dependencyRegistryProvider.get());
+    return provideLifecycleManager(eventBusProvider.get(), serviceRegistryProvider.get(), registryProvider.get());
   }
 
   public static AuthCoreModule_ProvideLifecycleManagerFactory create(
       Provider<EventBus> eventBusProvider, Provider<ServiceRegistry> serviceRegistryProvider,
-      Provider<DependencyRegistry> dependencyRegistryProvider) {
-    return new AuthCoreModule_ProvideLifecycleManagerFactory(eventBusProvider, serviceRegistryProvider, dependencyRegistryProvider);
+      Provider<DependencyRegistry> registryProvider) {
+    return new AuthCoreModule_ProvideLifecycleManagerFactory(eventBusProvider, serviceRegistryProvider, registryProvider);
   }
 
   public static LifecycleManager provideLifecycleManager(EventBus eventBus,
-      ServiceRegistry serviceRegistry, DependencyRegistry dependencyRegistry) {
-    return Preconditions.checkNotNullFromProvides(AuthCoreModule.INSTANCE.provideLifecycleManager(eventBus, serviceRegistry, dependencyRegistry));
+      ServiceRegistry serviceRegistry, DependencyRegistry registry) {
+    return Preconditions.checkNotNullFromProvides(AuthCoreModule.INSTANCE.provideLifecycleManager(eventBus, serviceRegistry, registry));
   }
 }

@@ -25,6 +25,7 @@ data class Session(
     val lastRefreshTimestamp: Long = loginTimestamp,
     val refreshCount: Int = 0,
     val expiryTimestamp: Long = loginTimestamp + SESSION_TIMEOUT_MS,
+    val portalType: String = "student",
     val isEncrypted: Boolean = true
 ) {
     companion object {

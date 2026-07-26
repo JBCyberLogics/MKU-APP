@@ -47,7 +47,7 @@ public final class AuthCoreModule_ProvideSessionManagerFactory implements Factor
 
   private final Provider<EventBus> eventBusProvider;
 
-  private final Provider<DependencyRegistry> dependencyRegistryProvider;
+  private final Provider<DependencyRegistry> registryProvider;
 
   private final Provider<IAuthenticationEventManager> authEventManagerProvider;
 
@@ -58,7 +58,7 @@ public final class AuthCoreModule_ProvideSessionManagerFactory implements Factor
       Provider<SecureStorageManager> secureStorageManagerProvider,
       Provider<RecoveryManager> recoveryManagerProvider,
       Provider<SecurityMonitor> securityMonitorProvider, Provider<EventBus> eventBusProvider,
-      Provider<DependencyRegistry> dependencyRegistryProvider,
+      Provider<DependencyRegistry> registryProvider,
       Provider<IAuthenticationEventManager> authEventManagerProvider,
       Provider<ICryptoManager> cryptoManagerProvider) {
     this.contextProvider = contextProvider;
@@ -67,14 +67,14 @@ public final class AuthCoreModule_ProvideSessionManagerFactory implements Factor
     this.recoveryManagerProvider = recoveryManagerProvider;
     this.securityMonitorProvider = securityMonitorProvider;
     this.eventBusProvider = eventBusProvider;
-    this.dependencyRegistryProvider = dependencyRegistryProvider;
+    this.registryProvider = registryProvider;
     this.authEventManagerProvider = authEventManagerProvider;
     this.cryptoManagerProvider = cryptoManagerProvider;
   }
 
   @Override
   public ISessionManager get() {
-    return provideSessionManager(contextProvider.get(), stateRegistryProvider.get(), secureStorageManagerProvider.get(), recoveryManagerProvider.get(), securityMonitorProvider.get(), eventBusProvider.get(), dependencyRegistryProvider.get(), authEventManagerProvider.get(), cryptoManagerProvider.get());
+    return provideSessionManager(contextProvider.get(), stateRegistryProvider.get(), secureStorageManagerProvider.get(), recoveryManagerProvider.get(), securityMonitorProvider.get(), eventBusProvider.get(), registryProvider.get(), authEventManagerProvider.get(), cryptoManagerProvider.get());
   }
 
   public static AuthCoreModule_ProvideSessionManagerFactory create(
@@ -82,16 +82,16 @@ public final class AuthCoreModule_ProvideSessionManagerFactory implements Factor
       Provider<SecureStorageManager> secureStorageManagerProvider,
       Provider<RecoveryManager> recoveryManagerProvider,
       Provider<SecurityMonitor> securityMonitorProvider, Provider<EventBus> eventBusProvider,
-      Provider<DependencyRegistry> dependencyRegistryProvider,
+      Provider<DependencyRegistry> registryProvider,
       Provider<IAuthenticationEventManager> authEventManagerProvider,
       Provider<ICryptoManager> cryptoManagerProvider) {
-    return new AuthCoreModule_ProvideSessionManagerFactory(contextProvider, stateRegistryProvider, secureStorageManagerProvider, recoveryManagerProvider, securityMonitorProvider, eventBusProvider, dependencyRegistryProvider, authEventManagerProvider, cryptoManagerProvider);
+    return new AuthCoreModule_ProvideSessionManagerFactory(contextProvider, stateRegistryProvider, secureStorageManagerProvider, recoveryManagerProvider, securityMonitorProvider, eventBusProvider, registryProvider, authEventManagerProvider, cryptoManagerProvider);
   }
 
   public static ISessionManager provideSessionManager(Context context, StateRegistry stateRegistry,
       SecureStorageManager secureStorageManager, RecoveryManager recoveryManager,
-      SecurityMonitor securityMonitor, EventBus eventBus, DependencyRegistry dependencyRegistry,
+      SecurityMonitor securityMonitor, EventBus eventBus, DependencyRegistry registry,
       IAuthenticationEventManager authEventManager, ICryptoManager cryptoManager) {
-    return Preconditions.checkNotNullFromProvides(AuthCoreModule.INSTANCE.provideSessionManager(context, stateRegistry, secureStorageManager, recoveryManager, securityMonitor, eventBus, dependencyRegistry, authEventManager, cryptoManager));
+    return Preconditions.checkNotNullFromProvides(AuthCoreModule.INSTANCE.provideSessionManager(context, stateRegistry, secureStorageManager, recoveryManager, securityMonitor, eventBus, registry, authEventManager, cryptoManager));
   }
 }

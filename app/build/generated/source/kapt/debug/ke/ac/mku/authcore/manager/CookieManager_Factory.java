@@ -13,6 +13,7 @@ import ke.ac.mku.authcore.contracts.security.ISecurityMonitor;
 import ke.ac.mku.authcore.contracts.session.ISessionRecoveryManager;
 import ke.ac.mku.authcore.contracts.session.ISessionValidator;
 import ke.ac.mku.authcore.contracts.storage.ISecureStorageManager;
+import ke.ac.mku.authcore.state.StateRegistry;
 
 @ScopeMetadata("javax.inject.Singleton")
 @QualifierMetadata
@@ -45,13 +46,16 @@ public final class CookieManager_Factory implements Factory<CookieManager> {
 
   private final Provider<IAuthenticationEventManager> authEventManagerProvider;
 
+  private final Provider<StateRegistry> stateRegistryProvider;
+
   private CookieManager_Factory(Provider<ISessionManager> sessionManagerProvider,
       Provider<ISessionValidator> sessionValidatorProvider,
       Provider<ISessionRecoveryManager> recoveryManagerProvider,
       Provider<ISecureStorageManager> secureStorageProvider,
       Provider<ICryptoManager> cryptoManagerProvider,
       Provider<ISecurityMonitor> securityMonitorProvider,
-      Provider<IAuthenticationEventManager> authEventManagerProvider) {
+      Provider<IAuthenticationEventManager> authEventManagerProvider,
+      Provider<StateRegistry> stateRegistryProvider) {
     this.sessionManagerProvider = sessionManagerProvider;
     this.sessionValidatorProvider = sessionValidatorProvider;
     this.recoveryManagerProvider = recoveryManagerProvider;
@@ -59,11 +63,12 @@ public final class CookieManager_Factory implements Factory<CookieManager> {
     this.cryptoManagerProvider = cryptoManagerProvider;
     this.securityMonitorProvider = securityMonitorProvider;
     this.authEventManagerProvider = authEventManagerProvider;
+    this.stateRegistryProvider = stateRegistryProvider;
   }
 
   @Override
   public CookieManager get() {
-    return newInstance(sessionManagerProvider.get(), sessionValidatorProvider, recoveryManagerProvider, secureStorageProvider.get(), cryptoManagerProvider.get(), securityMonitorProvider.get(), authEventManagerProvider.get());
+    return newInstance(sessionManagerProvider.get(), sessionValidatorProvider, recoveryManagerProvider, secureStorageProvider.get(), cryptoManagerProvider.get(), securityMonitorProvider.get(), authEventManagerProvider.get(), stateRegistryProvider.get());
   }
 
   public static CookieManager_Factory create(Provider<ISessionManager> sessionManagerProvider,
@@ -72,15 +77,17 @@ public final class CookieManager_Factory implements Factory<CookieManager> {
       Provider<ISecureStorageManager> secureStorageProvider,
       Provider<ICryptoManager> cryptoManagerProvider,
       Provider<ISecurityMonitor> securityMonitorProvider,
-      Provider<IAuthenticationEventManager> authEventManagerProvider) {
-    return new CookieManager_Factory(sessionManagerProvider, sessionValidatorProvider, recoveryManagerProvider, secureStorageProvider, cryptoManagerProvider, securityMonitorProvider, authEventManagerProvider);
+      Provider<IAuthenticationEventManager> authEventManagerProvider,
+      Provider<StateRegistry> stateRegistryProvider) {
+    return new CookieManager_Factory(sessionManagerProvider, sessionValidatorProvider, recoveryManagerProvider, secureStorageProvider, cryptoManagerProvider, securityMonitorProvider, authEventManagerProvider, stateRegistryProvider);
   }
 
   public static CookieManager newInstance(ISessionManager sessionManager,
       javax.inject.Provider<ISessionValidator> sessionValidatorProvider,
       javax.inject.Provider<ISessionRecoveryManager> recoveryManagerProvider,
       ISecureStorageManager secureStorage, ICryptoManager cryptoManager,
-      ISecurityMonitor securityMonitor, IAuthenticationEventManager authEventManager) {
-    return new CookieManager(sessionManager, sessionValidatorProvider, recoveryManagerProvider, secureStorage, cryptoManager, securityMonitor, authEventManager);
+      ISecurityMonitor securityMonitor, IAuthenticationEventManager authEventManager,
+      StateRegistry stateRegistry) {
+    return new CookieManager(sessionManager, sessionValidatorProvider, recoveryManagerProvider, secureStorage, cryptoManager, securityMonitor, authEventManager, stateRegistry);
   }
 }

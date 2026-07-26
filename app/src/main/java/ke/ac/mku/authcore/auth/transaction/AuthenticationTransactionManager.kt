@@ -3,13 +3,14 @@ package ke.ac.mku.authcore.auth.transaction
 import android.util.Log
 import ke.ac.mku.authcore.bootstrap.BootstrapEvent
 import ke.ac.mku.authcore.bootstrap.EventBus
-import ke.ac.mku.authcore.contracts.authentication.IAuthenticationEventManager
-import ke.ac.mku.authcore.contracts.authentication.ISessionManager
+import ke.ac.mku.authcore.contracts.authentication.*
 import ke.ac.mku.authcore.contracts.cookie.ICookieManager
 import ke.ac.mku.authcore.contracts.session.ISessionRecoveryManager
 import ke.ac.mku.authcore.contracts.session.ISessionValidator
 import ke.ac.mku.authcore.contracts.ui.IDashboardRenderManager
 import ke.ac.mku.authcore.bootstrap.PlatformVerifier
+import ke.ac.mku.authcore.contracts.portal.IPortalConnector
+import ke.ac.mku.authcore.contracts.security.ISecurityMonitor
 import ke.ac.mku.authcore.data.api.WebFormLoginHandler
 import ke.ac.mku.authcore.domain.model.AuthResult
 import ke.ac.mku.authcore.domain.model.User
@@ -24,7 +25,7 @@ import javax.inject.Singleton
  * AuthenticationTransactionManager - AUTH-TXN-001
  * 
  * Central orchestrator for atomic authentication transactions.
- * Prevents race conditions by locking and suspending concurrent platform services.
+ * Merged with AUTH-002 LoginOrchestrator workflow.
  */
 @Singleton
 class AuthenticationTransactionManager @Inject constructor(
@@ -36,7 +37,9 @@ class AuthenticationTransactionManager @Inject constructor(
     private val platformVerifier: PlatformVerifier,
     private val dashboardRenderer: IDashboardRenderManager,
     private val eventBus: EventBus,
-    private val authEventManager: IAuthenticationEventManager
+    private val authEventManager: IAuthenticationEventManager,
+    private val securityMonitor: ISecurityMonitor,
+    private val portalConnector: IPortalConnector
 ) {
     companion object {
         private const val TAG = "AuthTransactionManager"
@@ -54,7 +57,7 @@ class AuthenticationTransactionManager @Inject constructor(
         password: String,
         portalType: String = "student"
     ): AuthResult = mutex.withLock {
-        Log.i(TAG, "Initiating authentication transaction for $regNumber")
+        Log.i(TAG, "Initiating atomic authentication transaction for $regNumber")
         
         try {
             acquireLock()
@@ -62,7 +65,7 @@ class AuthenticationTransactionManager @Inject constructor(
             val result = performLoginWorkflow(regNumber, password, portalType)
             
             if (result is AuthResult.Success) {
-                completeTransaction()
+                completeTransaction(regNumber)
                 result
             } else {
                 failTransaction(result as AuthResult.Failure)
@@ -93,6 +96,7 @@ class AuthenticationTransactionManager @Inject constructor(
         // 2. Enable event queuing
         eventBus.setQueuing(true)
         
+        authEventManager.publish(BootstrapEvent.LoginWorkflowStarted)
         authEventManager.publish(BootstrapEvent.AuthenticationProcessing("Transaction Locked"))
     }
 
@@ -116,9 +120,18 @@ class AuthenticationTransactionManager @Inject constructor(
         portalType: String
     ): AuthResult = withContext(Dispatchers.IO) {
         
+        // Step 02: Platform Validation
         updateState(AuthTransactionState.LOGIN_PAGE_LOADING)
-        // Simulating granular steps since WebFormLoginHandler combines them
+        if (!securityMonitor.isPlatformSecure()) {
+            return@withContext AuthResult.Failure("Platform security verification failed")
+        }
         
+        // Step 03: Credential Validation
+        if (regNumber.isBlank() || password.isBlank()) {
+            return@withContext AuthResult.Failure("Registration number and password are required")
+        }
+        
+        // Step 04-06: Authentication
         updateState(AuthTransactionState.AUTHENTICATING)
         updateState(AuthTransactionState.LOGIN_REQUEST_SENT)
         
@@ -129,12 +142,14 @@ class AuthenticationTransactionManager @Inject constructor(
             return@withContext AuthResult.Failure(response.errorMessage ?: "Login failed")
         }
         
-        // Step: COOKIE_CAPTURE & PERSISTED
+        // Step 07: Response Verification
+        authEventManager.publish(BootstrapEvent.LoginAuthenticated(regNumber))
+        
+        // Step 08-09: Session & Cookie Initialization
         updateState(AuthTransactionState.COOKIE_CAPTURE)
         cookieManager.saveCookies(response.cookies)
         updateState(AuthTransactionState.COOKIE_PERSISTED)
         
-        // Step: SESSION_CREATING & CREATED
         updateState(AuthTransactionState.SESSION_CREATING)
         sessionManager.createSession(
             regNumber = regNumber,
@@ -143,21 +158,29 @@ class AuthenticationTransactionManager @Inject constructor(
             portalType = portalType
         )
         updateState(AuthTransactionState.SESSION_CREATED)
+        authEventManager.publish(BootstrapEvent.LoginSessionCreated(regNumber, portalType))
         
-        // Resume session validator as per JSON: resume_after: SESSION_CREATED
+        // Resume session validator for validation step
         sessionValidator.setEnabled(true)
         
-        // Step: SESSION_VALIDATING
+        // Step 10: Portal Connection
+        updateState(AuthTransactionState.PORTAL_VALIDATING)
+        try {
+            portalConnector.connect()
+            if (portalConnector.isConnected()) {
+                authEventManager.publish(BootstrapEvent.LoginPortalConnected("https://login.mku.ac.ke/"))
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "Portal connection failed (non-fatal): ${e.message}")
+        }
+        
+        // Step 11: Validation
         updateState(AuthTransactionState.SESSION_VALIDATING)
         val validation = sessionValidator.validateSession()
         if (validation !is ke.ac.mku.authcore.contracts.session.SessionValidationResult.Valid && 
             validation !is ke.ac.mku.authcore.contracts.session.SessionValidationResult.Warning) {
             return@withContext AuthResult.Failure("Session validation failed after login")
         }
-        
-        // Step: PORTAL_VALIDATING
-        updateState(AuthTransactionState.PORTAL_VALIDATING)
-        // Simulating success access check
         
         AuthResult.Success(User(registrationNumber = regNumber))
     }
@@ -166,11 +189,14 @@ class AuthenticationTransactionManager @Inject constructor(
         Log.d(TAG, "Transaction State: $currentState -> $newState")
         currentState = newState
         authEventManager.publish(BootstrapEvent.AuthenticationProcessing(newState.name))
+        authEventManager.publish(BootstrapEvent.LoginWorkflowProcessing(newState.name))
     }
 
-    private fun completeTransaction() {
+    private fun completeTransaction(regNumber: String) {
         updateState(AuthTransactionState.AUTHENTICATED)
         Log.i(TAG, "Authentication Transaction SUCCESS")
+        
+        authEventManager.publish(BootstrapEvent.LoginCompleted(regNumber))
         
         releaseLock()
         

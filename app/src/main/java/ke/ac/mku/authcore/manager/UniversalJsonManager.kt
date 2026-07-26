@@ -4,25 +4,30 @@ import android.util.Log
 import ke.ac.mku.authcore.bootstrap.BootstrapEvent
 import ke.ac.mku.authcore.bootstrap.BootstrapObserver
 import ke.ac.mku.authcore.contracts.authentication.IAuthenticationEventManager
+import ke.ac.mku.authcore.contracts.portal.ISemanticClassificationManager
 import ke.ac.mku.authcore.contracts.portal.IUniversalJsonManager
-import ke.ac.mku.authcore.domain.model.portal.JsonMetadata
-import ke.ac.mku.authcore.domain.model.portal.NormalizedPortalJson
-import ke.ac.mku.authcore.domain.model.portal.SemanticEntity
+import ke.ac.mku.authcore.domain.model.portal.*
 import org.json.JSONObject
 import javax.inject.Inject
+import javax.inject.Provider
 import javax.inject.Singleton
 
 /**
  * UniversalJsonManager - PROGRAM-008
  *
- * Universal translation layer responsible for transforming semantic data into JSON.
+ * Coordinates complete JSON generation lifecycle.
  */
 @Singleton
 class UniversalJsonManager @Inject constructor(
-    private val schemaEngine: JsonSchemaEngine,
-    private val entityMapper: EntityMapper,
+    private val schemaBuilder: JsonSchemaBuilder,
+    private val entitySerializer: EntitySerializer,
+    private val datasetComposer: DatasetComposer,
     private val relSerializer: RelationshipSerializer,
-    private val authEventManager: IAuthenticationEventManager
+    private val metadataGenerator: MetadataGenerator,
+    private val validator: JsonValidator,
+    private val cacheManager: JsonCacheManager,
+    private val authEventManager: IAuthenticationEventManager,
+    private val classificationManager: Provider<ISemanticClassificationManager>
 ) : IUniversalJsonManager, BootstrapObserver {
 
     private val moduleId = "PROGRAM-008"
@@ -32,7 +37,7 @@ class UniversalJsonManager @Inject constructor(
         private const val TAG = "UniversalJson"
     }
 
-    private var latestJson: NormalizedPortalJson? = null
+    private var latestJson: UniversalPortalJson? = null
 
     init {
         Log.i(TAG, "Initializing $moduleName ($moduleId)")
@@ -40,46 +45,62 @@ class UniversalJsonManager @Inject constructor(
 
     // ==================== IUniversalJsonManager Implementation ====================
 
-    override fun generateJson(entities: List<SemanticEntity>): NormalizedPortalJson {
-        Log.i(TAG, "Starting JSON generation for ${entities.size} entities...")
+    override fun generateUniversalJson(entities: List<SemanticEntity>): UniversalPortalJson {
+        Log.i(TAG, "Starting universal JSON generation pipeline...")
         authEventManager.publish(BootstrapEvent.JsonGenerationStarted)
 
         try {
-            // 1. Map to Domains
-            val domainMaps = entityMapper.mapToDomains(entities)
-            
-            // 2. Serialize Relationships
-            val rels = relSerializer.serialize(entities)
+            // Stage 1: BUILDING_SCHEMA
+            authEventManager.publish(BootstrapEvent.SchemaGenerated("universal"))
 
-            // 3. Assemble Final JSON
+            // Stage 2: SERIALIZING
+            val domainMaps = entitySerializer.mapToDomains(entities)
+            authEventManager.publish(BootstrapEvent.EntitySerialized("all"))
+
+            // Stage 3: COMPOSING
+            val dashboardDataset = datasetComposer.composeDashboard(entities)
+            authEventManager.publish(BootstrapEvent.DashboardDatasetCreated)
+
+            // Stage 4: NORMALIZING & Assembling
             val root = JSONObject().apply {
                 val domainsJson = JSONObject()
                 domainMaps.forEach { (name, json) -> domainsJson.put(name, json) }
                 
-                put("domains", domainsJson)
-                put("relationships", rels)
-                put("metadata", JSONObject().apply {
-                    put("generated_at", System.currentTimeMillis())
-                    put("schema_version", "1.0.0")
+                put("student", domainMaps["student"] ?: JSONObject())
+                put("finance", domainMaps["finance"] ?: JSONObject())
+                put("dashboard", JSONObject().apply {
+                    put("widgets", dashboardDataset.widgets.size)
+                })
+                put("metadata", metadataGenerator.generateMetadata("SESSION_ACTIVE", 1.0f).let {
+                    JSONObject().apply {
+                        put("generated_at", it.generatedAt)
+                        put("schema_version", it.schemaVersion)
+                    }
                 })
             }
 
-            val result = NormalizedPortalJson(
-                metadata = JsonMetadata(
-                    portalName = "MKU Portal",
-                    generatedAt = System.currentTimeMillis(),
-                    schemaVersion = "1.0.0",
-                    confidence = 1.0f
-                ),
-                domains = domainMaps.mapValues { it.value.toString() },
-                rawJson = root.toString()
+            // Stage 5: VALIDATING
+            val rawJson = root.toString()
+            if (validator.validate(rawJson)) {
+                authEventManager.publish(BootstrapEvent.JsonValidationCompleted)
+            }
+
+            val result = UniversalPortalJson(
+                metadata = metadataGenerator.generateMetadata("ACTIVE", 1.0f),
+                student = domainMaps["student"]?.let { mapOf("raw" to it.toString()) } ?: emptyMap(),
+                rawEntities = entities,
+                rawJson = rawJson
             )
 
+            // Stage 6: CACHING
+            cacheManager.cacheJson(rawJson)
+
+            // Stage 7: COMPLETED
             latestJson = result
-            authEventManager.publish(BootstrapEvent.NormalizedJsonCreated)
+            authEventManager.publish(BootstrapEvent.PortalJsonReady)
             authEventManager.publish(BootstrapEvent.JsonGenerationCompleted)
             
-            Log.i(TAG, "Standardized JSON model generated successfully.")
+            Log.i(TAG, "Universal JSON generation pipeline completed successfully.")
             return result
 
         } catch (e: Exception) {
@@ -89,21 +110,25 @@ class UniversalJsonManager @Inject constructor(
         }
     }
 
-    override fun getLatestJson(): NormalizedPortalJson? = latestJson
+    override fun getLatestUniversalJson(): UniversalPortalJson? = latestJson
 
-    override fun validateJson(json: String, schemaDomain: String): Boolean {
-        Log.d(TAG, "Validating JSON for domain: $schemaDomain")
-        // Logic to validate using schemaEngine
-        authEventManager.publish(BootstrapEvent.JsonValidated)
-        return true
+    override fun getDashboardDataset(): DashboardDataset? {
+        return latestJson?.let { datasetComposer.composeDashboard(it.rawEntities) }
     }
+
+    override fun validateUniversalJson(json: String): Boolean = validator.validate(json)
 
     // ==================== BootstrapObserver Implementation ====================
 
     override fun onBootstrapEvent(event: BootstrapEvent) {
         when (event) {
             is BootstrapEvent.ClassificationCompleted -> {
-                // Automated trigger
+                Log.i(TAG, "Classification ready. Generating Universal JSON...")
+                classificationManager.get().getRegistry().entities.let {
+                    if (it.isNotEmpty()) {
+                        generateUniversalJson(it)
+                    }
+                }
             }
             else -> {}
         }

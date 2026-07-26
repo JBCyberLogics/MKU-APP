@@ -16,6 +16,11 @@ interface IDashboardIntelligenceManager {
     fun generateDashboardPlan(): DashboardPlan
 
     /**
+     * Return the last generated dashboard plan.
+     */
+    fun getLatestPlan(): DashboardPlan?
+
+    /**
      * Return the current set of intelligent recommendations.
      */
     fun getRecommendationModel(): RecommendationModel

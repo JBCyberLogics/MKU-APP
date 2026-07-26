@@ -93,6 +93,12 @@ interface ICookieManager {
      * Save cookies from a response (OkHttp compatibility).
      */
     fun saveFromResponse(url: String, cookies: List<Cookie>)
+    
+    /**
+     * AUTH-TXN-001: Transaction Lock
+     * When locked, delete and validation operations are restricted.
+     */
+    fun setTransactionLock(locked: Boolean)
 }
 
 /**

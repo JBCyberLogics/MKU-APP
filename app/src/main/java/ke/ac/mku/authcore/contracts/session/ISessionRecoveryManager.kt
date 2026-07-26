@@ -100,4 +100,7 @@ interface ISessionRecoveryManager {
      * @return String containing the recovery report
      */
     fun getRecoveryReport(): String
+    
+    // AUTH-TXN-001: Transaction Lock
+    fun setEnabled(enabled: Boolean)
 }

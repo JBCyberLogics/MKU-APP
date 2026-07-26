@@ -31,9 +31,13 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import javax.annotation.processing.Generated;
+import ke.ac.mku.authcore.auth.transaction.AuthenticationTransactionManager;
+import ke.ac.mku.authcore.bootstrap.AuthenticationCore;
 import ke.ac.mku.authcore.bootstrap.BootstrapManager;
 import ke.ac.mku.authcore.bootstrap.CoreInitializer;
 import ke.ac.mku.authcore.bootstrap.EventBus;
+import ke.ac.mku.authcore.bootstrap.PlatformBootstrap;
+import ke.ac.mku.authcore.bootstrap.PlatformVerifier;
 import ke.ac.mku.authcore.config.ConfigManager;
 import ke.ac.mku.authcore.config.HealthMonitor;
 import ke.ac.mku.authcore.contracts.authentication.IAuthenticationEngine;
@@ -45,54 +49,145 @@ import ke.ac.mku.authcore.contracts.cookie.ICookieSynchronizationManager;
 import ke.ac.mku.authcore.contracts.crypto.ICryptoManager;
 import ke.ac.mku.authcore.contracts.network.IAuthNetworkService;
 import ke.ac.mku.authcore.contracts.network.INetworkManager;
+import ke.ac.mku.authcore.contracts.network.IResponseProcessingManager;
+import ke.ac.mku.authcore.contracts.portal.IContextCacheManager;
+import ke.ac.mku.authcore.contracts.portal.IContextEventManager;
+import ke.ac.mku.authcore.contracts.portal.IContextSynchronizationManager;
+import ke.ac.mku.authcore.contracts.portal.IContextValidationManager;
+import ke.ac.mku.authcore.contracts.portal.IDomAnalysisManager;
+import ke.ac.mku.authcore.contracts.portal.IKnowledgeGraphManager;
 import ke.ac.mku.authcore.contracts.portal.IPortalConnector;
+import ke.ac.mku.authcore.contracts.portal.IPortalDiscoveryManager;
+import ke.ac.mku.authcore.contracts.portal.IRelationshipManager;
+import ke.ac.mku.authcore.contracts.portal.ISemanticClassificationManager;
+import ke.ac.mku.authcore.contracts.portal.IStudentContextManager;
+import ke.ac.mku.authcore.contracts.portal.IUniversalJsonManager;
 import ke.ac.mku.authcore.contracts.security.ICertificatePinningManager;
 import ke.ac.mku.authcore.contracts.session.ISessionRecoveryManager;
 import ke.ac.mku.authcore.contracts.session.ISessionValidator;
+import ke.ac.mku.authcore.contracts.ui.IAdaptiveLayoutManager;
+import ke.ac.mku.authcore.contracts.ui.IDashboardIntelligenceManager;
+import ke.ac.mku.authcore.contracts.ui.IDashboardRenderManager;
+import ke.ac.mku.authcore.contracts.ui.IMotionEngine;
+import ke.ac.mku.authcore.contracts.ui.IWidgetRegistryManager;
 import ke.ac.mku.authcore.data.api.AuthApiService;
 import ke.ac.mku.authcore.data.api.WebFormLoginHandler;
-import ke.ac.mku.authcore.data.repository.AuthRepositoryImpl;
+import ke.ac.mku.authcore.di.AuthCoreModule_ProvideAdaptiveLayoutManagerFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideAuthApiServiceFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideAuthCoreManagerFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideAuthRepositoryFactory;
+import ke.ac.mku.authcore.di.AuthCoreModule_ProvideAuthenticationCoreFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideAuthenticationEngineFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideAuthenticationEventManagerFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideAuthenticationStateManagerFactory;
+import ke.ac.mku.authcore.di.AuthCoreModule_ProvideAuthenticationTransactionManagerFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideBootstrapManagerFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideCertificatePinningManagerFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideCertificateTrustManagerFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideConfigManagerFactory;
+import ke.ac.mku.authcore.di.AuthCoreModule_ProvideContextCacheManagerFactory;
+import ke.ac.mku.authcore.di.AuthCoreModule_ProvideContextEventManagerFactory;
+import ke.ac.mku.authcore.di.AuthCoreModule_ProvideContextSynchronizationManagerFactory;
+import ke.ac.mku.authcore.di.AuthCoreModule_ProvideContextValidationManagerFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideCookieManagerFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideCookieSynchronizationManagerFactory;
+import ke.ac.mku.authcore.di.AuthCoreModule_ProvideDashboardIntelligenceManagerFactory;
+import ke.ac.mku.authcore.di.AuthCoreModule_ProvideDashboardRenderManagerFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideDependencyRegistryFactory;
+import ke.ac.mku.authcore.di.AuthCoreModule_ProvideDomAnalysisManagerFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideEndpointRegistryFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideEventBusFactory;
+import ke.ac.mku.authcore.di.AuthCoreModule_ProvideHealthMonitorFactory;
+import ke.ac.mku.authcore.di.AuthCoreModule_ProvideKnowledgeGraphManagerFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideLifecycleManagerFactory;
+import ke.ac.mku.authcore.di.AuthCoreModule_ProvideMotionEngineFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideNetworkManagerFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideOkHttpClientFactory;
+import ke.ac.mku.authcore.di.AuthCoreModule_ProvidePlatformBootstrapFactory;
+import ke.ac.mku.authcore.di.AuthCoreModule_ProvidePlatformVerifierFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvidePortalConnectorFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvidePortalDiscoveryFactory;
-import ke.ac.mku.authcore.di.AuthCoreModule_ProvidePortalSDKFactory;
+import ke.ac.mku.authcore.di.AuthCoreModule_ProvidePortalDiscoveryManagerFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideRecoveryManagerFactory;
-import ke.ac.mku.authcore.di.AuthCoreModule_ProvideRetrofitFactory;
+import ke.ac.mku.authcore.di.AuthCoreModule_ProvideRelationshipManagerFactory;
+import ke.ac.mku.authcore.di.AuthCoreModule_ProvideResponseProcessingManagerFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideSecureStorageManagerFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideSecurityManagerFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideSecurityMonitorFactory;
+import ke.ac.mku.authcore.di.AuthCoreModule_ProvideSemanticClassificationManagerFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideServiceRegistryFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideSessionManagerFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideSessionRecoveryManagerFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideSessionValidatorFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideStateRegistryFactory;
+import ke.ac.mku.authcore.di.AuthCoreModule_ProvideStudentContextManagerFactory;
+import ke.ac.mku.authcore.di.AuthCoreModule_ProvideUniversalJsonManagerFactory;
 import ke.ac.mku.authcore.di.AuthCoreModule_ProvideWebFormLoginHandlerAdapterFactory;
+import ke.ac.mku.authcore.di.AuthCoreModule_ProvideWebFormLoginHandlerFactory;
+import ke.ac.mku.authcore.di.AuthCoreModule_ProvideWidgetRegistryManagerFactory;
 import ke.ac.mku.authcore.domain.repository.AuthRepository;
 import ke.ac.mku.authcore.lifecycle.LifecycleManager;
 import ke.ac.mku.authcore.manager.AuthCoreManager;
-import ke.ac.mku.authcore.manager.CookieManager;
+import ke.ac.mku.authcore.manager.CacheIntegrityValidator;
+import ke.ac.mku.authcore.manager.ConfidenceEngine;
+import ke.ac.mku.authcore.manager.ContextAnalyzer;
+import ke.ac.mku.authcore.manager.ContextChangeDetector;
+import ke.ac.mku.authcore.manager.ContextEventRouter;
+import ke.ac.mku.authcore.manager.ContextMerger;
+import ke.ac.mku.authcore.manager.ContextRepairEngine;
+import ke.ac.mku.authcore.manager.CsrfTokenManager;
+import ke.ac.mku.authcore.manager.DashboardReadinessEvaluator;
+import ke.ac.mku.authcore.manager.DashboardRefreshPlanner;
+import ke.ac.mku.authcore.manager.DatasetComposer;
+import ke.ac.mku.authcore.manager.DeltaComputationEngine;
+import ke.ac.mku.authcore.manager.EntityClassifier;
+import ke.ac.mku.authcore.manager.EntityGraphBuilder;
+import ke.ac.mku.authcore.manager.EntitySerializer;
+import ke.ac.mku.authcore.manager.FormAnalyzer;
+import ke.ac.mku.authcore.manager.GraphDatabase;
+import ke.ac.mku.authcore.manager.HtmlDocumentParser;
+import ke.ac.mku.authcore.manager.IncrementalCacheEngine;
+import ke.ac.mku.authcore.manager.IntegrityValidator;
+import ke.ac.mku.authcore.manager.JsonCacheManager;
+import ke.ac.mku.authcore.manager.JsonSchemaBuilder;
+import ke.ac.mku.authcore.manager.JsonValidator;
+import ke.ac.mku.authcore.manager.MetadataGenerator;
+import ke.ac.mku.authcore.manager.NavigationScanner;
+import ke.ac.mku.authcore.manager.NetworkInterceptorAnalyzer;
+import ke.ac.mku.authcore.manager.ParameterAnalyzer;
+import ke.ac.mku.authcore.manager.PortalCrawler;
+import ke.ac.mku.authcore.manager.PortalMapBuilder;
+import ke.ac.mku.authcore.manager.PriorityEngine;
+import ke.ac.mku.authcore.manager.PriorityEventDispatcher;
+import ke.ac.mku.authcore.manager.ReasoningEngine;
+import ke.ac.mku.authcore.manager.RelationshipDiscoveryEngine;
+import ke.ac.mku.authcore.manager.RelationshipSerializer;
+import ke.ac.mku.authcore.manager.RequestDiscoveryManager;
+import ke.ac.mku.authcore.manager.RequestFingerprintEngine;
+import ke.ac.mku.authcore.manager.SchemaValidator;
+import ke.ac.mku.authcore.manager.SemanticQueryEngine;
+import ke.ac.mku.authcore.manager.SnapshotManager;
+import ke.ac.mku.authcore.manager.StudentActivityDetector;
+import ke.ac.mku.authcore.manager.StudentContextBuilder;
+import ke.ac.mku.authcore.manager.TableAnalyzer;
+import ke.ac.mku.authcore.manager.ui.DashboardDecisionEngine;
+import ke.ac.mku.authcore.manager.ui.GridGenerationEngine;
+import ke.ac.mku.authcore.manager.ui.LoadingExperienceManager;
+import ke.ac.mku.authcore.manager.ui.PhysicsAnimationEngine;
+import ke.ac.mku.authcore.manager.ui.RecommendationEngine;
+import ke.ac.mku.authcore.manager.ui.RenderTreeBuilder;
+import ke.ac.mku.authcore.manager.ui.RenderTreeExecutor;
+import ke.ac.mku.authcore.manager.ui.StateBindingEngine;
+import ke.ac.mku.authcore.manager.ui.TransitionManager;
+import ke.ac.mku.authcore.manager.ui.WidgetEligibilityEngine;
+import ke.ac.mku.authcore.manager.ui.WidgetFactory;
+import ke.ac.mku.authcore.manager.ui.WidgetPlacementEngine;
+import ke.ac.mku.authcore.manager.ui.WidgetPlacementOptimizer;
+import ke.ac.mku.authcore.manager.ui.WidgetPriorityManager;
 import ke.ac.mku.authcore.recovery.RecoveryManager;
 import ke.ac.mku.authcore.registry.DependencyRegistry;
 import ke.ac.mku.authcore.registry.EndpointRegistry;
 import ke.ac.mku.authcore.registry.PortalDiscovery;
-import ke.ac.mku.authcore.registry.PortalSDK;
 import ke.ac.mku.authcore.registry.SecurityManager;
 import ke.ac.mku.authcore.security.SecurityModule_ProvideCryptoManagerFactory;
 import ke.ac.mku.authcore.security.SecurityModule_ProvideSecurityAuditLoggerFactory;
@@ -111,7 +206,6 @@ import ke.ac.mku.authcore.security.storage.SecureStorageManager;
 import ke.ac.mku.authcore.service.ServiceRegistry;
 import ke.ac.mku.authcore.state.StateRegistry;
 import okhttp3.OkHttpClient;
-import retrofit2.Retrofit;
 
 @DaggerGenerated
 @Generated(
@@ -521,7 +615,7 @@ public final class DaggerMKUApplication_HiltComponents_SingletonC {
       public T get() {
         switch (id) {
           case 0: // com.example.app.AuthViewModel
-          return (T) new AuthViewModel(singletonCImpl.provideAuthCoreManagerProvider.get());
+          return (T) new AuthViewModel(singletonCImpl.provideAuthCoreManagerProvider.get(), singletonCImpl.provideEventBusProvider.get());
 
           default: throw new AssertionError(id);
         }
@@ -643,45 +737,15 @@ public final class DaggerMKUApplication_HiltComponents_SingletonC {
 
     Provider<ISessionValidator> provideSessionValidatorProvider;
 
+    Provider<WebFormLoginHandler> provideWebFormLoginHandlerProvider;
+
     Provider<IAuthNetworkService> provideWebFormLoginHandlerAdapterProvider;
 
     Provider<IAuthenticationEngine> provideAuthenticationEngineProvider;
 
     Provider<ICookieManager> provideCookieManagerProvider;
 
-    Provider<AuthCoreManager> provideAuthCoreManagerProvider;
-
-    Provider<PortalDiscovery> providePortalDiscoveryProvider;
-
-    Provider<EndpointRegistry> provideEndpointRegistryProvider;
-
-    Provider<SecurityManager> provideSecurityManagerProvider;
-
-    Provider<PortalSDK> providePortalSDKProvider;
-
-    Provider<IPortalConnector> providePortalConnectorProvider;
-
-    Provider<IAuthenticationStateManager> provideAuthenticationStateManagerProvider;
-
     Provider<ISessionRecoveryManager> provideSessionRecoveryManagerProvider;
-
-    Provider<CertificateTrustManager> provideCertificateTrustManagerProvider;
-
-    Provider<OkHttpClient> provideOkHttpClientProvider;
-
-    Provider<Retrofit> provideRetrofitProvider;
-
-    Provider<AuthApiService> provideAuthApiServiceProvider;
-
-    Provider<CookieManager> cookieManagerProvider;
-
-    Provider<AuthRepositoryImpl> authRepositoryImplProvider;
-
-    Provider<AuthRepository> provideAuthRepositoryProvider;
-
-    Provider<HealthMonitor> healthMonitorProvider;
-
-    Provider<BootstrapManager> provideBootstrapManagerProvider;
 
     Provider<ICookieSynchronizationManager> provideCookieSynchronizationManagerProvider;
 
@@ -691,17 +755,194 @@ public final class DaggerMKUApplication_HiltComponents_SingletonC {
 
     Provider<INetworkManager> provideNetworkManagerProvider;
 
+    Provider<IResponseProcessingManager> provideResponseProcessingManagerProvider;
+
+    Provider<IPortalConnector> providePortalConnectorProvider;
+
+    Provider<IAuthenticationStateManager> provideAuthenticationStateManagerProvider;
+
+    Provider<CertificateTrustManager> provideCertificateTrustManagerProvider;
+
+    Provider<RequestFingerprintEngine> requestFingerprintEngineProvider;
+
+    Provider<ParameterAnalyzer> parameterAnalyzerProvider;
+
+    Provider<CsrfTokenManager> csrfTokenManagerProvider;
+
+    Provider<RequestDiscoveryManager> requestDiscoveryManagerProvider;
+
+    Provider<NetworkInterceptorAnalyzer> networkInterceptorAnalyzerProvider;
+
+    Provider<OkHttpClient> provideOkHttpClientProvider;
+
+    Provider<AuthApiService> provideAuthApiServiceProvider;
+
+    Provider<PortalCrawler> portalCrawlerProvider;
+
+    Provider<PortalMapBuilder> portalMapBuilderProvider;
+
+    Provider<NavigationScanner> navigationScannerProvider;
+
+    Provider<HtmlDocumentParser> htmlDocumentParserProvider;
+
+    Provider<TableAnalyzer> tableAnalyzerProvider;
+
+    Provider<FormAnalyzer> formAnalyzerProvider;
+
+    Provider<IDomAnalysisManager> provideDomAnalysisManagerProvider;
+
+    Provider<IPortalDiscoveryManager> providePortalDiscoveryManagerProvider;
+
+    Provider<GraphDatabase> graphDatabaseProvider;
+
+    Provider<ReasoningEngine> reasoningEngineProvider;
+
+    Provider<SemanticQueryEngine> semanticQueryEngineProvider;
+
+    Provider<EntityGraphBuilder> entityGraphBuilderProvider;
+
+    Provider<RelationshipDiscoveryEngine> relationshipDiscoveryEngineProvider;
+
+    Provider<JsonSchemaBuilder> jsonSchemaBuilderProvider;
+
+    Provider<EntitySerializer> entitySerializerProvider;
+
+    Provider<DatasetComposer> datasetComposerProvider;
+
+    Provider<RelationshipSerializer> relationshipSerializerProvider;
+
+    Provider<MetadataGenerator> metadataGeneratorProvider;
+
+    Provider<JsonValidator> jsonValidatorProvider;
+
+    Provider<JsonCacheManager> jsonCacheManagerProvider;
+
+    Provider<EntityClassifier> entityClassifierProvider;
+
+    Provider<ContextAnalyzer> contextAnalyzerProvider;
+
+    Provider<ConfidenceEngine> confidenceEngineProvider;
+
+    Provider<ISemanticClassificationManager> provideSemanticClassificationManagerProvider;
+
+    Provider<IUniversalJsonManager> provideUniversalJsonManagerProvider;
+
+    Provider<IRelationshipManager> provideRelationshipManagerProvider;
+
+    Provider<IKnowledgeGraphManager> provideKnowledgeGraphManagerProvider;
+
+    Provider<StudentContextBuilder> studentContextBuilderProvider;
+
+    Provider<PriorityEngine> priorityEngineProvider;
+
+    Provider<IStudentContextManager> provideStudentContextManagerProvider;
+
+    Provider<SchemaValidator> schemaValidatorProvider;
+
+    Provider<IntegrityValidator> integrityValidatorProvider;
+
+    Provider<ContextRepairEngine> contextRepairEngineProvider;
+
+    Provider<DashboardReadinessEvaluator> dashboardReadinessEvaluatorProvider;
+
+    Provider<IContextValidationManager> provideContextValidationManagerProvider;
+
+    Provider<WidgetFactory> widgetFactoryProvider;
+
+    Provider<WidgetEligibilityEngine> widgetEligibilityEngineProvider;
+
+    Provider<WidgetPriorityManager> widgetPriorityManagerProvider;
+
+    Provider<IWidgetRegistryManager> provideWidgetRegistryManagerProvider;
+
+    Provider<RenderTreeExecutor> renderTreeExecutorProvider;
+
+    Provider<StateBindingEngine> stateBindingEngineProvider;
+
+    Provider<GridGenerationEngine> gridGenerationEngineProvider;
+
+    Provider<WidgetPlacementOptimizer> widgetPlacementOptimizerProvider;
+
+    Provider<RenderTreeBuilder> renderTreeBuilderProvider;
+
+    Provider<DashboardDecisionEngine> dashboardDecisionEngineProvider;
+
+    Provider<WidgetPlacementEngine> widgetPlacementEngineProvider;
+
+    Provider<RecommendationEngine> recommendationEngineProvider;
+
+    Provider<IDashboardIntelligenceManager> provideDashboardIntelligenceManagerProvider;
+
+    Provider<IAdaptiveLayoutManager> provideAdaptiveLayoutManagerProvider;
+
+    Provider<IDashboardRenderManager> provideDashboardRenderManagerProvider;
+
+    Provider<PlatformVerifier> providePlatformVerifierProvider;
+
+    Provider<AuthenticationTransactionManager> provideAuthenticationTransactionManagerProvider;
+
+    Provider<AuthRepository> provideAuthRepositoryProvider;
+
+    Provider<HealthMonitor> provideHealthMonitorProvider;
+
+    Provider<AuthCoreManager> provideAuthCoreManagerProvider;
+
+    Provider<PlatformBootstrap> providePlatformBootstrapProvider;
+
+    Provider<BootstrapManager> provideBootstrapManagerProvider;
+
+    Provider<SecurityManager> provideSecurityManagerProvider;
+
+    Provider<ContextChangeDetector> contextChangeDetectorProvider;
+
+    Provider<DeltaComputationEngine> deltaComputationEngineProvider;
+
+    Provider<ContextMerger> contextMergerProvider;
+
+    Provider<IContextSynchronizationManager> provideContextSynchronizationManagerProvider;
+
+    Provider<SnapshotManager> snapshotManagerProvider;
+
+    Provider<IncrementalCacheEngine> incrementalCacheEngineProvider;
+
+    Provider<CacheIntegrityValidator> cacheIntegrityValidatorProvider;
+
+    Provider<IContextCacheManager> provideContextCacheManagerProvider;
+
+    Provider<StudentActivityDetector> studentActivityDetectorProvider;
+
+    Provider<DashboardRefreshPlanner> dashboardRefreshPlannerProvider;
+
+    Provider<ContextEventRouter> contextEventRouterProvider;
+
+    Provider<PriorityEventDispatcher> priorityEventDispatcherProvider;
+
+    Provider<IContextEventManager> provideContextEventManagerProvider;
+
+    Provider<TransitionManager> transitionManagerProvider;
+
+    Provider<PhysicsAnimationEngine> physicsAnimationEngineProvider;
+
+    Provider<LoadingExperienceManager> loadingExperienceManagerProvider;
+
+    Provider<IMotionEngine> provideMotionEngineProvider;
+
+    Provider<PortalDiscovery> providePortalDiscoveryProvider;
+
+    Provider<EndpointRegistry> provideEndpointRegistryProvider;
+
+    Provider<AuthenticationCore> provideAuthenticationCoreProvider;
+
     Provider<CoreInitializer> coreInitializerProvider;
 
     SingletonCImpl(ApplicationContextModule applicationContextModuleParam) {
       this.applicationContextModule = applicationContextModuleParam;
       initialize(applicationContextModuleParam);
       initialize2(applicationContextModuleParam);
+      initialize3(applicationContextModuleParam);
+      initialize4(applicationContextModuleParam);
+      initialize5(applicationContextModuleParam);
 
-    }
-
-    WebFormLoginHandler webFormLoginHandler() {
-      return new WebFormLoginHandler(provideAuthApiServiceProvider.get());
     }
 
     @SuppressWarnings("unchecked")
@@ -726,37 +967,124 @@ public final class DaggerMKUApplication_HiltComponents_SingletonC {
       this.provideAuthenticationEventManagerProvider = DoubleCheck.provider(new SwitchingProvider<IAuthenticationEventManager>(singletonCImpl, 26));
       this.provideSessionManagerProvider = DoubleCheck.provider(new SwitchingProvider<ISessionManager>(singletonCImpl, 10));
       this.provideSessionValidatorProvider = DoubleCheck.provider(new SwitchingProvider<ISessionValidator>(singletonCImpl, 27));
+      this.provideWebFormLoginHandlerProvider = new DelegateFactory<>();
       this.provideWebFormLoginHandlerAdapterProvider = DoubleCheck.provider(new SwitchingProvider<IAuthNetworkService>(singletonCImpl, 30));
       this.provideAuthenticationEngineProvider = DoubleCheck.provider(new SwitchingProvider<IAuthenticationEngine>(singletonCImpl, 29));
       this.provideCookieManagerProvider = new DelegateFactory<>();
-      this.provideAuthCoreManagerProvider = new DelegateFactory<>();
-      this.providePortalDiscoveryProvider = DoubleCheck.provider(new SwitchingProvider<PortalDiscovery>(singletonCImpl, 34));
+      this.provideSessionRecoveryManagerProvider = new DelegateFactory<>();
     }
 
     @SuppressWarnings("unchecked")
     private void initialize2(final ApplicationContextModule applicationContextModuleParam) {
-      this.provideEndpointRegistryProvider = DoubleCheck.provider(new SwitchingProvider<EndpointRegistry>(singletonCImpl, 33));
-      this.provideSecurityManagerProvider = DoubleCheck.provider(new SwitchingProvider<SecurityManager>(singletonCImpl, 35));
-      this.providePortalSDKProvider = DoubleCheck.provider(new SwitchingProvider<PortalSDK>(singletonCImpl, 32));
+      this.provideCookieSynchronizationManagerProvider = DoubleCheck.provider(new SwitchingProvider<ICookieSynchronizationManager>(singletonCImpl, 33));
+      this.certificatePinningServiceProvider = DoubleCheck.provider(new SwitchingProvider<CertificatePinningService>(singletonCImpl, 35));
+      this.provideCertificatePinningManagerProvider = DoubleCheck.provider(new SwitchingProvider<ICertificatePinningManager>(singletonCImpl, 34));
+      this.provideNetworkManagerProvider = DoubleCheck.provider(new SwitchingProvider<INetworkManager>(singletonCImpl, 32));
+      this.provideResponseProcessingManagerProvider = DoubleCheck.provider(new SwitchingProvider<IResponseProcessingManager>(singletonCImpl, 36));
       this.providePortalConnectorProvider = DoubleCheck.provider(new SwitchingProvider<IPortalConnector>(singletonCImpl, 31));
-      this.provideAuthenticationStateManagerProvider = DoubleCheck.provider(new SwitchingProvider<IAuthenticationStateManager>(singletonCImpl, 36));
-      this.provideSessionRecoveryManagerProvider = DoubleCheck.provider(new SwitchingProvider<ISessionRecoveryManager>(singletonCImpl, 28));
+      this.provideAuthenticationStateManagerProvider = DoubleCheck.provider(new SwitchingProvider<IAuthenticationStateManager>(singletonCImpl, 37));
+      DelegateFactory.setDelegate(provideSessionRecoveryManagerProvider, DoubleCheck.provider(new SwitchingProvider<ISessionRecoveryManager>(singletonCImpl, 28)));
       DelegateFactory.setDelegate(provideCookieManagerProvider, DoubleCheck.provider(new SwitchingProvider<ICookieManager>(singletonCImpl, 9)));
-      this.provideCertificateTrustManagerProvider = DoubleCheck.provider(new SwitchingProvider<CertificateTrustManager>(singletonCImpl, 37));
+      this.provideCertificateTrustManagerProvider = DoubleCheck.provider(new SwitchingProvider<CertificateTrustManager>(singletonCImpl, 38));
+      this.requestFingerprintEngineProvider = DoubleCheck.provider(new SwitchingProvider<RequestFingerprintEngine>(singletonCImpl, 41));
+      this.parameterAnalyzerProvider = DoubleCheck.provider(new SwitchingProvider<ParameterAnalyzer>(singletonCImpl, 42));
+      this.csrfTokenManagerProvider = DoubleCheck.provider(new SwitchingProvider<CsrfTokenManager>(singletonCImpl, 43));
+      this.requestDiscoveryManagerProvider = DoubleCheck.provider(new SwitchingProvider<RequestDiscoveryManager>(singletonCImpl, 40));
+      this.networkInterceptorAnalyzerProvider = DoubleCheck.provider(new SwitchingProvider<NetworkInterceptorAnalyzer>(singletonCImpl, 39));
       this.provideOkHttpClientProvider = DoubleCheck.provider(new SwitchingProvider<OkHttpClient>(singletonCImpl, 8));
-      this.provideRetrofitProvider = DoubleCheck.provider(new SwitchingProvider<Retrofit>(singletonCImpl, 7));
-      this.provideAuthApiServiceProvider = DoubleCheck.provider(new SwitchingProvider<AuthApiService>(singletonCImpl, 6));
-      this.cookieManagerProvider = DoubleCheck.provider(new SwitchingProvider<CookieManager>(singletonCImpl, 38));
-      this.authRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<AuthRepositoryImpl>(singletonCImpl, 5));
+      this.provideAuthApiServiceProvider = DoubleCheck.provider(new SwitchingProvider<AuthApiService>(singletonCImpl, 7));
+      DelegateFactory.setDelegate(provideWebFormLoginHandlerProvider, DoubleCheck.provider(new SwitchingProvider<WebFormLoginHandler>(singletonCImpl, 6)));
+      this.portalCrawlerProvider = DoubleCheck.provider(new SwitchingProvider<PortalCrawler>(singletonCImpl, 46));
+      this.portalMapBuilderProvider = DoubleCheck.provider(new SwitchingProvider<PortalMapBuilder>(singletonCImpl, 47));
+      this.navigationScannerProvider = DoubleCheck.provider(new SwitchingProvider<NavigationScanner>(singletonCImpl, 48));
+      this.htmlDocumentParserProvider = DoubleCheck.provider(new SwitchingProvider<HtmlDocumentParser>(singletonCImpl, 50));
+      this.tableAnalyzerProvider = DoubleCheck.provider(new SwitchingProvider<TableAnalyzer>(singletonCImpl, 51));
+      this.formAnalyzerProvider = DoubleCheck.provider(new SwitchingProvider<FormAnalyzer>(singletonCImpl, 52));
+      this.provideDomAnalysisManagerProvider = DoubleCheck.provider(new SwitchingProvider<IDomAnalysisManager>(singletonCImpl, 49));
+    }
+
+    @SuppressWarnings("unchecked")
+    private void initialize3(final ApplicationContextModule applicationContextModuleParam) {
+      this.providePortalDiscoveryManagerProvider = DoubleCheck.provider(new SwitchingProvider<IPortalDiscoveryManager>(singletonCImpl, 45));
+      this.graphDatabaseProvider = DoubleCheck.provider(new SwitchingProvider<GraphDatabase>(singletonCImpl, 54));
+      this.reasoningEngineProvider = DoubleCheck.provider(new SwitchingProvider<ReasoningEngine>(singletonCImpl, 55));
+      this.semanticQueryEngineProvider = DoubleCheck.provider(new SwitchingProvider<SemanticQueryEngine>(singletonCImpl, 56));
+      this.entityGraphBuilderProvider = DoubleCheck.provider(new SwitchingProvider<EntityGraphBuilder>(singletonCImpl, 58));
+      this.relationshipDiscoveryEngineProvider = DoubleCheck.provider(new SwitchingProvider<RelationshipDiscoveryEngine>(singletonCImpl, 59));
+      this.jsonSchemaBuilderProvider = DoubleCheck.provider(new SwitchingProvider<JsonSchemaBuilder>(singletonCImpl, 61));
+      this.entitySerializerProvider = DoubleCheck.provider(new SwitchingProvider<EntitySerializer>(singletonCImpl, 62));
+      this.datasetComposerProvider = DoubleCheck.provider(new SwitchingProvider<DatasetComposer>(singletonCImpl, 63));
+      this.relationshipSerializerProvider = DoubleCheck.provider(new SwitchingProvider<RelationshipSerializer>(singletonCImpl, 64));
+      this.metadataGeneratorProvider = DoubleCheck.provider(new SwitchingProvider<MetadataGenerator>(singletonCImpl, 65));
+      this.jsonValidatorProvider = DoubleCheck.provider(new SwitchingProvider<JsonValidator>(singletonCImpl, 66));
+      this.jsonCacheManagerProvider = DoubleCheck.provider(new SwitchingProvider<JsonCacheManager>(singletonCImpl, 67));
+      this.entityClassifierProvider = DoubleCheck.provider(new SwitchingProvider<EntityClassifier>(singletonCImpl, 69));
+      this.contextAnalyzerProvider = DoubleCheck.provider(new SwitchingProvider<ContextAnalyzer>(singletonCImpl, 70));
+      this.confidenceEngineProvider = DoubleCheck.provider(new SwitchingProvider<ConfidenceEngine>(singletonCImpl, 71));
+      this.provideSemanticClassificationManagerProvider = DoubleCheck.provider(new SwitchingProvider<ISemanticClassificationManager>(singletonCImpl, 68));
+      this.provideUniversalJsonManagerProvider = DoubleCheck.provider(new SwitchingProvider<IUniversalJsonManager>(singletonCImpl, 60));
+      this.provideRelationshipManagerProvider = DoubleCheck.provider(new SwitchingProvider<IRelationshipManager>(singletonCImpl, 57));
+      this.provideKnowledgeGraphManagerProvider = DoubleCheck.provider(new SwitchingProvider<IKnowledgeGraphManager>(singletonCImpl, 53));
+      this.studentContextBuilderProvider = DoubleCheck.provider(new SwitchingProvider<StudentContextBuilder>(singletonCImpl, 73));
+      this.priorityEngineProvider = DoubleCheck.provider(new SwitchingProvider<PriorityEngine>(singletonCImpl, 74));
+      this.provideStudentContextManagerProvider = DoubleCheck.provider(new SwitchingProvider<IStudentContextManager>(singletonCImpl, 72));
+      this.schemaValidatorProvider = DoubleCheck.provider(new SwitchingProvider<SchemaValidator>(singletonCImpl, 76));
+      this.integrityValidatorProvider = DoubleCheck.provider(new SwitchingProvider<IntegrityValidator>(singletonCImpl, 77));
+    }
+
+    @SuppressWarnings("unchecked")
+    private void initialize4(final ApplicationContextModule applicationContextModuleParam) {
+      this.contextRepairEngineProvider = DoubleCheck.provider(new SwitchingProvider<ContextRepairEngine>(singletonCImpl, 78));
+      this.dashboardReadinessEvaluatorProvider = DoubleCheck.provider(new SwitchingProvider<DashboardReadinessEvaluator>(singletonCImpl, 79));
+      this.provideContextValidationManagerProvider = DoubleCheck.provider(new SwitchingProvider<IContextValidationManager>(singletonCImpl, 75));
+      this.widgetFactoryProvider = DoubleCheck.provider(new SwitchingProvider<WidgetFactory>(singletonCImpl, 81));
+      this.widgetEligibilityEngineProvider = DoubleCheck.provider(new SwitchingProvider<WidgetEligibilityEngine>(singletonCImpl, 82));
+      this.widgetPriorityManagerProvider = DoubleCheck.provider(new SwitchingProvider<WidgetPriorityManager>(singletonCImpl, 83));
+      this.provideWidgetRegistryManagerProvider = DoubleCheck.provider(new SwitchingProvider<IWidgetRegistryManager>(singletonCImpl, 80));
+      this.renderTreeExecutorProvider = DoubleCheck.provider(new SwitchingProvider<RenderTreeExecutor>(singletonCImpl, 85));
+      this.stateBindingEngineProvider = DoubleCheck.provider(new SwitchingProvider<StateBindingEngine>(singletonCImpl, 86));
+      this.gridGenerationEngineProvider = DoubleCheck.provider(new SwitchingProvider<GridGenerationEngine>(singletonCImpl, 88));
+      this.widgetPlacementOptimizerProvider = DoubleCheck.provider(new SwitchingProvider<WidgetPlacementOptimizer>(singletonCImpl, 89));
+      this.renderTreeBuilderProvider = DoubleCheck.provider(new SwitchingProvider<RenderTreeBuilder>(singletonCImpl, 90));
+      this.dashboardDecisionEngineProvider = DoubleCheck.provider(new SwitchingProvider<DashboardDecisionEngine>(singletonCImpl, 92));
+      this.widgetPlacementEngineProvider = DoubleCheck.provider(new SwitchingProvider<WidgetPlacementEngine>(singletonCImpl, 93));
+      this.recommendationEngineProvider = DoubleCheck.provider(new SwitchingProvider<RecommendationEngine>(singletonCImpl, 94));
+      this.provideDashboardIntelligenceManagerProvider = DoubleCheck.provider(new SwitchingProvider<IDashboardIntelligenceManager>(singletonCImpl, 91));
+      this.provideAdaptiveLayoutManagerProvider = DoubleCheck.provider(new SwitchingProvider<IAdaptiveLayoutManager>(singletonCImpl, 87));
+      this.provideDashboardRenderManagerProvider = DoubleCheck.provider(new SwitchingProvider<IDashboardRenderManager>(singletonCImpl, 84));
+      this.providePlatformVerifierProvider = DoubleCheck.provider(new SwitchingProvider<PlatformVerifier>(singletonCImpl, 44));
+      this.provideAuthenticationTransactionManagerProvider = DoubleCheck.provider(new SwitchingProvider<AuthenticationTransactionManager>(singletonCImpl, 5));
       this.provideAuthRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<AuthRepository>(singletonCImpl, 4));
-      this.healthMonitorProvider = DoubleCheck.provider(new SwitchingProvider<HealthMonitor>(singletonCImpl, 39));
-      DelegateFactory.setDelegate(provideAuthCoreManagerProvider, DoubleCheck.provider(new SwitchingProvider<AuthCoreManager>(singletonCImpl, 3)));
+      this.provideHealthMonitorProvider = DoubleCheck.provider(new SwitchingProvider<HealthMonitor>(singletonCImpl, 95));
+      this.provideAuthCoreManagerProvider = DoubleCheck.provider(new SwitchingProvider<AuthCoreManager>(singletonCImpl, 3));
+      this.providePlatformBootstrapProvider = DoubleCheck.provider(new SwitchingProvider<PlatformBootstrap>(singletonCImpl, 96));
       this.provideBootstrapManagerProvider = DoubleCheck.provider(new SwitchingProvider<BootstrapManager>(singletonCImpl, 0));
-      this.provideCookieSynchronizationManagerProvider = DoubleCheck.provider(new SwitchingProvider<ICookieSynchronizationManager>(singletonCImpl, 41));
-      this.certificatePinningServiceProvider = DoubleCheck.provider(new SwitchingProvider<CertificatePinningService>(singletonCImpl, 44));
-      this.provideCertificatePinningManagerProvider = DoubleCheck.provider(new SwitchingProvider<ICertificatePinningManager>(singletonCImpl, 43));
-      this.provideNetworkManagerProvider = DoubleCheck.provider(new SwitchingProvider<INetworkManager>(singletonCImpl, 42));
-      this.coreInitializerProvider = DoubleCheck.provider(new SwitchingProvider<CoreInitializer>(singletonCImpl, 40));
+    }
+
+    @SuppressWarnings("unchecked")
+    private void initialize5(final ApplicationContextModule applicationContextModuleParam) {
+      this.provideSecurityManagerProvider = DoubleCheck.provider(new SwitchingProvider<SecurityManager>(singletonCImpl, 98));
+      this.contextChangeDetectorProvider = DoubleCheck.provider(new SwitchingProvider<ContextChangeDetector>(singletonCImpl, 100));
+      this.deltaComputationEngineProvider = DoubleCheck.provider(new SwitchingProvider<DeltaComputationEngine>(singletonCImpl, 101));
+      this.contextMergerProvider = DoubleCheck.provider(new SwitchingProvider<ContextMerger>(singletonCImpl, 102));
+      this.provideContextSynchronizationManagerProvider = DoubleCheck.provider(new SwitchingProvider<IContextSynchronizationManager>(singletonCImpl, 99));
+      this.snapshotManagerProvider = DoubleCheck.provider(new SwitchingProvider<SnapshotManager>(singletonCImpl, 104));
+      this.incrementalCacheEngineProvider = DoubleCheck.provider(new SwitchingProvider<IncrementalCacheEngine>(singletonCImpl, 105));
+      this.cacheIntegrityValidatorProvider = DoubleCheck.provider(new SwitchingProvider<CacheIntegrityValidator>(singletonCImpl, 106));
+      this.provideContextCacheManagerProvider = DoubleCheck.provider(new SwitchingProvider<IContextCacheManager>(singletonCImpl, 103));
+      this.studentActivityDetectorProvider = DoubleCheck.provider(new SwitchingProvider<StudentActivityDetector>(singletonCImpl, 108));
+      this.dashboardRefreshPlannerProvider = DoubleCheck.provider(new SwitchingProvider<DashboardRefreshPlanner>(singletonCImpl, 109));
+      this.contextEventRouterProvider = DoubleCheck.provider(new SwitchingProvider<ContextEventRouter>(singletonCImpl, 111));
+      this.priorityEventDispatcherProvider = DoubleCheck.provider(new SwitchingProvider<PriorityEventDispatcher>(singletonCImpl, 110));
+      this.provideContextEventManagerProvider = DoubleCheck.provider(new SwitchingProvider<IContextEventManager>(singletonCImpl, 107));
+      this.transitionManagerProvider = DoubleCheck.provider(new SwitchingProvider<TransitionManager>(singletonCImpl, 113));
+      this.physicsAnimationEngineProvider = DoubleCheck.provider(new SwitchingProvider<PhysicsAnimationEngine>(singletonCImpl, 114));
+      this.loadingExperienceManagerProvider = DoubleCheck.provider(new SwitchingProvider<LoadingExperienceManager>(singletonCImpl, 115));
+      this.provideMotionEngineProvider = DoubleCheck.provider(new SwitchingProvider<IMotionEngine>(singletonCImpl, 112));
+      this.providePortalDiscoveryProvider = DoubleCheck.provider(new SwitchingProvider<PortalDiscovery>(singletonCImpl, 117));
+      this.provideEndpointRegistryProvider = DoubleCheck.provider(new SwitchingProvider<EndpointRegistry>(singletonCImpl, 118));
+      this.provideAuthenticationCoreProvider = DoubleCheck.provider(new SwitchingProvider<AuthenticationCore>(singletonCImpl, 116));
+      this.coreInitializerProvider = DoubleCheck.provider(new SwitchingProvider<CoreInitializer>(singletonCImpl, 97));
     }
 
     @Override
@@ -795,12 +1123,11 @@ public final class DaggerMKUApplication_HiltComponents_SingletonC {
         this.id = id;
       }
 
-      @Override
       @SuppressWarnings("unchecked")
-      public T get() {
+      private T get0() {
         switch (id) {
           case 0: // ke.ac.mku.authcore.bootstrap.BootstrapManager
-          return (T) AuthCoreModule_ProvideBootstrapManagerFactory.provideBootstrapManager(singletonCImpl.provideConfigManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get(), singletonCImpl.provideAuthCoreManagerProvider.get(), singletonCImpl.provideEventBusProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
+          return (T) AuthCoreModule_ProvideBootstrapManagerFactory.provideBootstrapManager(singletonCImpl.provideConfigManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get(), singletonCImpl.provideAuthCoreManagerProvider.get(), singletonCImpl.providePlatformBootstrapProvider.get(), singletonCImpl.providePlatformVerifierProvider.get(), singletonCImpl.provideEventBusProvider.get());
 
           case 1: // ke.ac.mku.authcore.config.ConfigManager
           return (T) AuthCoreModule_ProvideConfigManagerFactory.provideConfigManager(singletonCImpl.provideDependencyRegistryProvider.get());
@@ -809,25 +1136,25 @@ public final class DaggerMKUApplication_HiltComponents_SingletonC {
           return (T) AuthCoreModule_ProvideDependencyRegistryFactory.provideDependencyRegistry();
 
           case 3: // ke.ac.mku.authcore.manager.AuthCoreManager
-          return (T) AuthCoreModule_ProvideAuthCoreManagerFactory.provideAuthCoreManager(singletonCImpl.provideAuthRepositoryProvider.get(), singletonCImpl.provideConfigManagerProvider.get(), singletonCImpl.healthMonitorProvider.get());
+          return (T) AuthCoreModule_ProvideAuthCoreManagerFactory.provideAuthCoreManager(singletonCImpl.provideAuthRepositoryProvider.get(), singletonCImpl.provideConfigManagerProvider.get(), singletonCImpl.provideHealthMonitorProvider.get());
 
           case 4: // ke.ac.mku.authcore.domain.repository.AuthRepository
-          return (T) AuthCoreModule_ProvideAuthRepositoryFactory.provideAuthRepository(singletonCImpl.authRepositoryImplProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
+          return (T) AuthCoreModule_ProvideAuthRepositoryFactory.provideAuthRepository(singletonCImpl.provideAuthenticationTransactionManagerProvider.get(), singletonCImpl.provideSessionManagerProvider.get(), singletonCImpl.provideCookieManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
 
-          case 5: // ke.ac.mku.authcore.data.repository.AuthRepositoryImpl
-          return (T) new AuthRepositoryImpl(singletonCImpl.webFormLoginHandler(), singletonCImpl.provideSessionManagerProvider.get(), singletonCImpl.cookieManagerProvider.get());
+          case 5: // ke.ac.mku.authcore.auth.transaction.AuthenticationTransactionManager
+          return (T) AuthCoreModule_ProvideAuthenticationTransactionManagerFactory.provideAuthenticationTransactionManager(singletonCImpl.provideWebFormLoginHandlerProvider.get(), singletonCImpl.provideSessionManagerProvider.get(), singletonCImpl.provideCookieManagerProvider.get(), singletonCImpl.provideSessionValidatorProvider.get(), singletonCImpl.provideSessionRecoveryManagerProvider.get(), singletonCImpl.providePlatformVerifierProvider.get(), singletonCImpl.provideDashboardRenderManagerProvider.get(), singletonCImpl.provideEventBusProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideSecurityMonitorProvider.get(), singletonCImpl.providePortalConnectorProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
 
-          case 6: // ke.ac.mku.authcore.data.api.AuthApiService
-          return (T) AuthCoreModule_ProvideAuthApiServiceFactory.provideAuthApiService(singletonCImpl.provideRetrofitProvider.get());
+          case 6: // ke.ac.mku.authcore.data.api.WebFormLoginHandler
+          return (T) AuthCoreModule_ProvideWebFormLoginHandlerFactory.provideWebFormLoginHandler(singletonCImpl.provideAuthApiServiceProvider.get());
 
-          case 7: // retrofit2.Retrofit
-          return (T) AuthCoreModule_ProvideRetrofitFactory.provideRetrofit(singletonCImpl.provideOkHttpClientProvider.get(), singletonCImpl.provideConfigManagerProvider.get());
+          case 7: // ke.ac.mku.authcore.data.api.AuthApiService
+          return (T) AuthCoreModule_ProvideAuthApiServiceFactory.provideAuthApiService(singletonCImpl.provideOkHttpClientProvider.get(), singletonCImpl.provideConfigManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
 
           case 8: // okhttp3.OkHttpClient
-          return (T) AuthCoreModule_ProvideOkHttpClientFactory.provideOkHttpClient(singletonCImpl.provideConfigManagerProvider.get(), singletonCImpl.provideCookieManagerProvider.get(), singletonCImpl.provideCertificateTrustManagerProvider.get());
+          return (T) AuthCoreModule_ProvideOkHttpClientFactory.provideOkHttpClient(singletonCImpl.provideConfigManagerProvider.get(), singletonCImpl.provideCookieManagerProvider.get(), singletonCImpl.provideCertificateTrustManagerProvider.get(), singletonCImpl.networkInterceptorAnalyzerProvider.get());
 
           case 9: // ke.ac.mku.authcore.contracts.cookie.ICookieManager
-          return (T) AuthCoreModule_ProvideCookieManagerFactory.provideCookieManager(singletonCImpl.provideSessionManagerProvider.get(), singletonCImpl.provideSessionValidatorProvider, singletonCImpl.provideSessionRecoveryManagerProvider, singletonCImpl.provideSecureStorageManagerProvider.get(), singletonCImpl.provideCryptoManagerProvider.get(), singletonCImpl.provideSecurityMonitorProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
+          return (T) AuthCoreModule_ProvideCookieManagerFactory.provideCookieManager(singletonCImpl.provideSessionManagerProvider.get(), singletonCImpl.provideSessionValidatorProvider, singletonCImpl.provideSessionRecoveryManagerProvider, singletonCImpl.provideSecureStorageManagerProvider.get(), singletonCImpl.provideCryptoManagerProvider.get(), singletonCImpl.provideSecurityMonitorProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get(), singletonCImpl.provideStateRegistryProvider.get());
 
           case 10: // ke.ac.mku.authcore.contracts.authentication.ISessionManager
           return (T) AuthCoreModule_ProvideSessionManagerFactory.provideSessionManager(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), singletonCImpl.provideStateRegistryProvider.get(), singletonCImpl.provideSecureStorageManagerProvider.get(), singletonCImpl.provideRecoveryManagerProvider.get(), singletonCImpl.provideSecurityMonitorProvider.get(), singletonCImpl.provideEventBusProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideCryptoManagerProvider.get());
@@ -848,10 +1175,10 @@ public final class DaggerMKUApplication_HiltComponents_SingletonC {
           return (T) AuthCoreModule_ProvideSecureStorageManagerFactory.provideSecureStorageManager(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), singletonCImpl.provideCryptoManagerProvider.get(), singletonCImpl.provideSecurityAuditLoggerProvider.get(), singletonCImpl.provideEventBusProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
 
           case 16: // ke.ac.mku.authcore.contracts.crypto.ICryptoManager
-          return (T) SecurityModule_ProvideCryptoManagerFactory.provideCryptoManager(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), singletonCImpl.provideSecurityAuditLoggerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
+          return (T) SecurityModule_ProvideCryptoManagerFactory.provideCryptoManager(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), singletonCImpl.provideSecurityAuditLoggerProvider.get(), singletonCImpl.provideEventBusProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
 
           case 17: // ke.ac.mku.authcore.security.audit.SecurityAuditLogger
-          return (T) SecurityModule_ProvideSecurityAuditLoggerFactory.provideSecurityAuditLogger(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule));
+          return (T) SecurityModule_ProvideSecurityAuditLoggerFactory.provideSecurityAuditLogger(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), singletonCImpl.provideDependencyRegistryProvider.get());
 
           case 18: // ke.ac.mku.authcore.recovery.RecoveryManager
           return (T) AuthCoreModule_ProvideRecoveryManagerFactory.provideRecoveryManager(singletonCImpl.provideEventBusProvider.get(), singletonCImpl.provideServiceRegistryProvider.get(), singletonCImpl.provideStateRegistryProvider.get(), singletonCImpl.provideLifecycleManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
@@ -863,7 +1190,7 @@ public final class DaggerMKUApplication_HiltComponents_SingletonC {
           return (T) new ThreatMonitor(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), singletonCImpl.provideThreatDetectorProvider.get(), singletonCImpl.riskEngineProvider.get(), singletonCImpl.provideEventBusProvider.get());
 
           case 21: // ke.ac.mku.authcore.security.detection.ThreatDetector
-          return (T) SecurityModule_ProvideThreatDetectorFactory.provideThreatDetector(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), singletonCImpl.provideSecurityAuditLoggerProvider.get());
+          return (T) SecurityModule_ProvideThreatDetectorFactory.provideThreatDetector(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), singletonCImpl.provideSecurityAuditLoggerProvider.get(), singletonCImpl.provideEventBusProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
 
           case 22: // ke.ac.mku.authcore.security.monitor.RiskEngine
           return (T) new RiskEngine();
@@ -890,50 +1217,288 @@ public final class DaggerMKUApplication_HiltComponents_SingletonC {
           return (T) AuthCoreModule_ProvideAuthenticationEngineFactory.provideAuthenticationEngine(singletonCImpl.provideWebFormLoginHandlerAdapterProvider.get(), singletonCImpl.provideSecurityMonitorProvider.get(), singletonCImpl.provideSessionManagerProvider.get(), singletonCImpl.provideEventBusProvider.get(), singletonCImpl.provideStateRegistryProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get());
 
           case 30: // ke.ac.mku.authcore.contracts.network.IAuthNetworkService
-          return (T) AuthCoreModule_ProvideWebFormLoginHandlerAdapterFactory.provideWebFormLoginHandlerAdapter(singletonCImpl.webFormLoginHandler(), singletonCImpl.provideDependencyRegistryProvider.get());
+          return (T) AuthCoreModule_ProvideWebFormLoginHandlerAdapterFactory.provideWebFormLoginHandlerAdapter(singletonCImpl.provideWebFormLoginHandlerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
 
           case 31: // ke.ac.mku.authcore.contracts.portal.IPortalConnector
-          return (T) AuthCoreModule_ProvidePortalConnectorFactory.providePortalConnector(singletonCImpl.providePortalSDKProvider.get(), singletonCImpl.providePortalDiscoveryProvider.get(), singletonCImpl.provideEndpointRegistryProvider.get());
+          return (T) AuthCoreModule_ProvidePortalConnectorFactory.providePortalConnector(singletonCImpl.provideNetworkManagerProvider, singletonCImpl.provideWebFormLoginHandlerAdapterProvider.get(), singletonCImpl.provideResponseProcessingManagerProvider, singletonCImpl.provideSessionManagerProvider.get(), singletonCImpl.provideCookieManagerProvider.get(), singletonCImpl.provideSecurityMonitorProvider.get(), singletonCImpl.provideCertificatePinningManagerProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideServiceRegistryProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
 
-          case 32: // ke.ac.mku.authcore.registry.PortalSDK
-          return (T) AuthCoreModule_ProvidePortalSDKFactory.providePortalSDK(singletonCImpl.provideAuthCoreManagerProvider.get(), singletonCImpl.provideEndpointRegistryProvider.get(), singletonCImpl.providePortalDiscoveryProvider.get(), singletonCImpl.provideSecurityManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
+          case 32: // ke.ac.mku.authcore.contracts.network.INetworkManager
+          return (T) AuthCoreModule_ProvideNetworkManagerFactory.provideNetworkManager(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), singletonCImpl.provideCookieManagerProvider.get(), singletonCImpl.provideCookieSynchronizationManagerProvider.get(), singletonCImpl.provideSessionManagerProvider.get(), singletonCImpl.provideSecurityMonitorProvider.get(), singletonCImpl.provideCertificatePinningManagerProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideSessionRecoveryManagerProvider, singletonCImpl.provideSessionValidatorProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
 
-          case 33: // ke.ac.mku.authcore.registry.EndpointRegistry
-          return (T) AuthCoreModule_ProvideEndpointRegistryFactory.provideEndpointRegistry(singletonCImpl.provideConfigManagerProvider.get(), singletonCImpl.providePortalDiscoveryProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
+          case 33: // ke.ac.mku.authcore.contracts.cookie.ICookieSynchronizationManager
+          return (T) AuthCoreModule_ProvideCookieSynchronizationManagerFactory.provideCookieSynchronizationManager(singletonCImpl.provideCookieManagerProvider.get(), singletonCImpl.provideSessionManagerProvider.get(), singletonCImpl.provideSessionValidatorProvider.get(), singletonCImpl.provideSessionRecoveryManagerProvider, singletonCImpl.provideSecureStorageManagerProvider.get(), singletonCImpl.provideSecurityMonitorProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideServiceRegistryProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
 
-          case 34: // ke.ac.mku.authcore.registry.PortalDiscovery
-          return (T) AuthCoreModule_ProvidePortalDiscoveryFactory.providePortalDiscovery(singletonCImpl.provideDependencyRegistryProvider.get());
-
-          case 35: // ke.ac.mku.authcore.registry.SecurityManager
-          return (T) AuthCoreModule_ProvideSecurityManagerFactory.provideSecurityManager(singletonCImpl.provideConfigManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
-
-          case 36: // ke.ac.mku.authcore.contracts.authentication.IAuthenticationStateManager
-          return (T) AuthCoreModule_ProvideAuthenticationStateManagerFactory.provideAuthenticationStateManager(singletonCImpl.provideStateRegistryProvider.get(), singletonCImpl.provideSecureStorageManagerProvider.get(), singletonCImpl.provideRecoveryManagerProvider.get(), singletonCImpl.provideSecurityMonitorProvider.get(), singletonCImpl.provideEventBusProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get());
-
-          case 37: // ke.ac.mku.authcore.security.cert.CertificateTrustManager
-          return (T) AuthCoreModule_ProvideCertificateTrustManagerFactory.provideCertificateTrustManager(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), singletonCImpl.provideCryptoManagerProvider.get(), singletonCImpl.provideSecureStorageManagerProvider.get(), singletonCImpl.provideSecurityAuditLoggerProvider.get(), singletonCImpl.provideEventBusProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
-
-          case 38: // ke.ac.mku.authcore.manager.CookieManager
-          return (T) new CookieManager(singletonCImpl.provideSessionManagerProvider.get(), singletonCImpl.provideSessionValidatorProvider, singletonCImpl.provideSessionRecoveryManagerProvider, singletonCImpl.provideSecureStorageManagerProvider.get(), singletonCImpl.provideCryptoManagerProvider.get(), singletonCImpl.provideSecurityMonitorProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get());
-
-          case 39: // ke.ac.mku.authcore.config.HealthMonitor
-          return (T) new HealthMonitor(singletonCImpl.provideConfigManagerProvider.get());
-
-          case 40: // ke.ac.mku.authcore.bootstrap.CoreInitializer
-          return (T) new CoreInitializer(singletonCImpl.provideDependencyRegistryProvider.get(), singletonCImpl.provideEventBusProvider.get(), singletonCImpl.provideSecurityManagerProvider.get(), singletonCImpl.provideSecureStorageManagerProvider.get(), singletonCImpl.provideSessionManagerProvider.get(), singletonCImpl.provideCookieManagerProvider.get(), singletonCImpl.provideAuthenticationEngineProvider.get(), singletonCImpl.provideAuthenticationStateManagerProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideSessionValidatorProvider.get(), singletonCImpl.provideSessionRecoveryManagerProvider.get(), singletonCImpl.provideCookieSynchronizationManagerProvider.get(), singletonCImpl.provideNetworkManagerProvider.get());
-
-          case 41: // ke.ac.mku.authcore.contracts.cookie.ICookieSynchronizationManager
-          return (T) AuthCoreModule_ProvideCookieSynchronizationManagerFactory.provideCookieSynchronizationManager(singletonCImpl.provideCookieManagerProvider.get(), singletonCImpl.provideSessionManagerProvider.get(), singletonCImpl.provideSessionValidatorProvider.get(), singletonCImpl.provideSessionRecoveryManagerProvider.get(), singletonCImpl.provideSecureStorageManagerProvider.get(), singletonCImpl.provideSecurityMonitorProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideServiceRegistryProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
-
-          case 42: // ke.ac.mku.authcore.contracts.network.INetworkManager
-          return (T) AuthCoreModule_ProvideNetworkManagerFactory.provideNetworkManager(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), singletonCImpl.provideCookieManagerProvider.get(), singletonCImpl.provideCookieSynchronizationManagerProvider.get(), singletonCImpl.provideSessionManagerProvider.get(), singletonCImpl.provideSecurityMonitorProvider.get(), singletonCImpl.provideCertificatePinningManagerProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideSessionRecoveryManagerProvider.get(), singletonCImpl.provideSessionValidatorProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
-
-          case 43: // ke.ac.mku.authcore.contracts.security.ICertificatePinningManager
+          case 34: // ke.ac.mku.authcore.contracts.security.ICertificatePinningManager
           return (T) AuthCoreModule_ProvideCertificatePinningManagerFactory.provideCertificatePinningManager(singletonCImpl.certificatePinningServiceProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
 
-          case 44: // ke.ac.mku.authcore.security.cert.CertificatePinningService
+          case 35: // ke.ac.mku.authcore.security.cert.CertificatePinningService
           return (T) new CertificatePinningService();
 
+          case 36: // ke.ac.mku.authcore.contracts.network.IResponseProcessingManager
+          return (T) AuthCoreModule_ProvideResponseProcessingManagerFactory.provideResponseProcessingManager(singletonCImpl.provideCookieManagerProvider.get(), singletonCImpl.provideCookieSynchronizationManagerProvider.get(), singletonCImpl.provideSessionManagerProvider.get(), singletonCImpl.provideSessionValidatorProvider.get(), singletonCImpl.provideSessionRecoveryManagerProvider.get(), singletonCImpl.provideSecurityMonitorProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
+
+          case 37: // ke.ac.mku.authcore.contracts.authentication.IAuthenticationStateManager
+          return (T) AuthCoreModule_ProvideAuthenticationStateManagerFactory.provideAuthenticationStateManager(singletonCImpl.provideStateRegistryProvider.get(), singletonCImpl.provideSecureStorageManagerProvider.get(), singletonCImpl.provideRecoveryManagerProvider.get(), singletonCImpl.provideSecurityMonitorProvider.get(), singletonCImpl.provideEventBusProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get());
+
+          case 38: // ke.ac.mku.authcore.security.cert.CertificateTrustManager
+          return (T) AuthCoreModule_ProvideCertificateTrustManagerFactory.provideCertificateTrustManager(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), singletonCImpl.provideCryptoManagerProvider.get(), singletonCImpl.provideSecureStorageManagerProvider.get(), singletonCImpl.provideSecurityAuditLoggerProvider.get(), singletonCImpl.provideEventBusProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
+
+          case 39: // ke.ac.mku.authcore.manager.NetworkInterceptorAnalyzer
+          return (T) new NetworkInterceptorAnalyzer(singletonCImpl.requestDiscoveryManagerProvider.get());
+
+          case 40: // ke.ac.mku.authcore.manager.RequestDiscoveryManager
+          return (T) new RequestDiscoveryManager(singletonCImpl.requestFingerprintEngineProvider.get(), singletonCImpl.parameterAnalyzerProvider.get(), singletonCImpl.csrfTokenManagerProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get());
+
+          case 41: // ke.ac.mku.authcore.manager.RequestFingerprintEngine
+          return (T) new RequestFingerprintEngine();
+
+          case 42: // ke.ac.mku.authcore.manager.ParameterAnalyzer
+          return (T) new ParameterAnalyzer();
+
+          case 43: // ke.ac.mku.authcore.manager.CsrfTokenManager
+          return (T) new CsrfTokenManager(singletonCImpl.provideAuthenticationEventManagerProvider.get());
+
+          case 44: // ke.ac.mku.authcore.bootstrap.PlatformVerifier
+          return (T) AuthCoreModule_ProvidePlatformVerifierFactory.providePlatformVerifier(singletonCImpl.provideEventBusProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get(), singletonCImpl.provideSessionManagerProvider.get(), singletonCImpl.providePortalDiscoveryManagerProvider.get(), singletonCImpl.provideDomAnalysisManagerProvider.get(), singletonCImpl.provideKnowledgeGraphManagerProvider.get(), singletonCImpl.provideStudentContextManagerProvider.get(), singletonCImpl.provideContextValidationManagerProvider.get(), singletonCImpl.provideWidgetRegistryManagerProvider.get(), singletonCImpl.provideDashboardRenderManagerProvider.get());
+
+          case 45: // ke.ac.mku.authcore.contracts.portal.IPortalDiscoveryManager
+          return (T) AuthCoreModule_ProvidePortalDiscoveryManagerFactory.providePortalDiscoveryManager(singletonCImpl.providePortalConnectorProvider.get(), singletonCImpl.portalCrawlerProvider.get(), singletonCImpl.portalMapBuilderProvider.get(), singletonCImpl.navigationScannerProvider.get(), singletonCImpl.provideSessionManagerProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get(), singletonCImpl.provideDomAnalysisManagerProvider.get());
+
+          case 46: // ke.ac.mku.authcore.manager.PortalCrawler
+          return (T) new PortalCrawler(singletonCImpl.provideAuthApiServiceProvider.get());
+
+          case 47: // ke.ac.mku.authcore.manager.PortalMapBuilder
+          return (T) new PortalMapBuilder();
+
+          case 48: // ke.ac.mku.authcore.manager.NavigationScanner
+          return (T) new NavigationScanner();
+
+          case 49: // ke.ac.mku.authcore.contracts.portal.IDomAnalysisManager
+          return (T) AuthCoreModule_ProvideDomAnalysisManagerFactory.provideDomAnalysisManager(singletonCImpl.htmlDocumentParserProvider.get(), singletonCImpl.tableAnalyzerProvider.get(), singletonCImpl.formAnalyzerProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
+
+          case 50: // ke.ac.mku.authcore.manager.HtmlDocumentParser
+          return (T) new HtmlDocumentParser();
+
+          case 51: // ke.ac.mku.authcore.manager.TableAnalyzer
+          return (T) new TableAnalyzer();
+
+          case 52: // ke.ac.mku.authcore.manager.FormAnalyzer
+          return (T) new FormAnalyzer();
+
+          case 53: // ke.ac.mku.authcore.contracts.portal.IKnowledgeGraphManager
+          return (T) AuthCoreModule_ProvideKnowledgeGraphManagerFactory.provideKnowledgeGraphManager(singletonCImpl.graphDatabaseProvider.get(), singletonCImpl.reasoningEngineProvider.get(), singletonCImpl.semanticQueryEngineProvider.get(), singletonCImpl.provideRelationshipManagerProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
+
+          case 54: // ke.ac.mku.authcore.manager.GraphDatabase
+          return (T) new GraphDatabase();
+
+          case 55: // ke.ac.mku.authcore.manager.ReasoningEngine
+          return (T) new ReasoningEngine();
+
+          case 56: // ke.ac.mku.authcore.manager.SemanticQueryEngine
+          return (T) new SemanticQueryEngine();
+
+          case 57: // ke.ac.mku.authcore.contracts.portal.IRelationshipManager
+          return (T) AuthCoreModule_ProvideRelationshipManagerFactory.provideRelationshipManager(singletonCImpl.entityGraphBuilderProvider.get(), singletonCImpl.relationshipDiscoveryEngineProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get(), singletonCImpl.provideUniversalJsonManagerProvider);
+
+          case 58: // ke.ac.mku.authcore.manager.EntityGraphBuilder
+          return (T) new EntityGraphBuilder();
+
+          case 59: // ke.ac.mku.authcore.manager.RelationshipDiscoveryEngine
+          return (T) new RelationshipDiscoveryEngine();
+
+          case 60: // ke.ac.mku.authcore.contracts.portal.IUniversalJsonManager
+          return (T) AuthCoreModule_ProvideUniversalJsonManagerFactory.provideUniversalJsonManager(singletonCImpl.jsonSchemaBuilderProvider.get(), singletonCImpl.entitySerializerProvider.get(), singletonCImpl.datasetComposerProvider.get(), singletonCImpl.relationshipSerializerProvider.get(), singletonCImpl.metadataGeneratorProvider.get(), singletonCImpl.jsonValidatorProvider.get(), singletonCImpl.jsonCacheManagerProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get(), singletonCImpl.provideSemanticClassificationManagerProvider);
+
+          case 61: // ke.ac.mku.authcore.manager.JsonSchemaBuilder
+          return (T) new JsonSchemaBuilder();
+
+          case 62: // ke.ac.mku.authcore.manager.EntitySerializer
+          return (T) new EntitySerializer();
+
+          case 63: // ke.ac.mku.authcore.manager.DatasetComposer
+          return (T) new DatasetComposer();
+
+          case 64: // ke.ac.mku.authcore.manager.RelationshipSerializer
+          return (T) new RelationshipSerializer();
+
+          case 65: // ke.ac.mku.authcore.manager.MetadataGenerator
+          return (T) new MetadataGenerator();
+
+          case 66: // ke.ac.mku.authcore.manager.JsonValidator
+          return (T) new JsonValidator();
+
+          case 67: // ke.ac.mku.authcore.manager.JsonCacheManager
+          return (T) new JsonCacheManager(singletonCImpl.provideSecureStorageManagerProvider.get());
+
+          case 68: // ke.ac.mku.authcore.contracts.portal.ISemanticClassificationManager
+          return (T) AuthCoreModule_ProvideSemanticClassificationManagerFactory.provideSemanticClassificationManager(singletonCImpl.entityClassifierProvider.get(), singletonCImpl.contextAnalyzerProvider.get(), singletonCImpl.confidenceEngineProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get(), singletonCImpl.provideDomAnalysisManagerProvider);
+
+          case 69: // ke.ac.mku.authcore.manager.EntityClassifier
+          return (T) new EntityClassifier();
+
+          case 70: // ke.ac.mku.authcore.manager.ContextAnalyzer
+          return (T) new ContextAnalyzer();
+
+          case 71: // ke.ac.mku.authcore.manager.ConfidenceEngine
+          return (T) new ConfidenceEngine();
+
+          case 72: // ke.ac.mku.authcore.contracts.portal.IStudentContextManager
+          return (T) AuthCoreModule_ProvideStudentContextManagerFactory.provideStudentContextManager(singletonCImpl.provideKnowledgeGraphManagerProvider.get(), singletonCImpl.studentContextBuilderProvider.get(), singletonCImpl.priorityEngineProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
+
+          case 73: // ke.ac.mku.authcore.manager.StudentContextBuilder
+          return (T) new StudentContextBuilder();
+
+          case 74: // ke.ac.mku.authcore.manager.PriorityEngine
+          return (T) new PriorityEngine();
+
+          case 75: // ke.ac.mku.authcore.contracts.portal.IContextValidationManager
+          return (T) AuthCoreModule_ProvideContextValidationManagerFactory.provideContextValidationManager(singletonCImpl.schemaValidatorProvider.get(), singletonCImpl.integrityValidatorProvider.get(), singletonCImpl.contextRepairEngineProvider.get(), singletonCImpl.dashboardReadinessEvaluatorProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get(), singletonCImpl.provideStudentContextManagerProvider);
+
+          case 76: // ke.ac.mku.authcore.manager.SchemaValidator
+          return (T) new SchemaValidator();
+
+          case 77: // ke.ac.mku.authcore.manager.IntegrityValidator
+          return (T) new IntegrityValidator();
+
+          case 78: // ke.ac.mku.authcore.manager.ContextRepairEngine
+          return (T) new ContextRepairEngine();
+
+          case 79: // ke.ac.mku.authcore.manager.DashboardReadinessEvaluator
+          return (T) new DashboardReadinessEvaluator();
+
+          case 80: // ke.ac.mku.authcore.contracts.ui.IWidgetRegistryManager
+          return (T) AuthCoreModule_ProvideWidgetRegistryManagerFactory.provideWidgetRegistryManager(singletonCImpl.provideStudentContextManagerProvider.get(), singletonCImpl.widgetFactoryProvider.get(), singletonCImpl.widgetEligibilityEngineProvider.get(), singletonCImpl.widgetPriorityManagerProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
+
+          case 81: // ke.ac.mku.authcore.manager.ui.WidgetFactory
+          return (T) new WidgetFactory();
+
+          case 82: // ke.ac.mku.authcore.manager.ui.WidgetEligibilityEngine
+          return (T) new WidgetEligibilityEngine();
+
+          case 83: // ke.ac.mku.authcore.manager.ui.WidgetPriorityManager
+          return (T) new WidgetPriorityManager();
+
+          case 84: // ke.ac.mku.authcore.contracts.ui.IDashboardRenderManager
+          return (T) AuthCoreModule_ProvideDashboardRenderManagerFactory.provideDashboardRenderManager(singletonCImpl.provideStudentContextManagerProvider.get(), singletonCImpl.renderTreeExecutorProvider.get(), singletonCImpl.stateBindingEngineProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get(), singletonCImpl.provideAdaptiveLayoutManagerProvider, singletonCImpl.provideDashboardIntelligenceManagerProvider);
+
+          case 85: // ke.ac.mku.authcore.manager.ui.RenderTreeExecutor
+          return (T) new RenderTreeExecutor();
+
+          case 86: // ke.ac.mku.authcore.manager.ui.StateBindingEngine
+          return (T) new StateBindingEngine();
+
+          case 87: // ke.ac.mku.authcore.contracts.ui.IAdaptiveLayoutManager
+          return (T) AuthCoreModule_ProvideAdaptiveLayoutManagerFactory.provideAdaptiveLayoutManager(singletonCImpl.gridGenerationEngineProvider.get(), singletonCImpl.widgetPlacementOptimizerProvider.get(), singletonCImpl.renderTreeBuilderProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get(), singletonCImpl.provideDashboardIntelligenceManagerProvider);
+
+          case 88: // ke.ac.mku.authcore.manager.ui.GridGenerationEngine
+          return (T) new GridGenerationEngine(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule));
+
+          case 89: // ke.ac.mku.authcore.manager.ui.WidgetPlacementOptimizer
+          return (T) new WidgetPlacementOptimizer();
+
+          case 90: // ke.ac.mku.authcore.manager.ui.RenderTreeBuilder
+          return (T) new RenderTreeBuilder();
+
+          case 91: // ke.ac.mku.authcore.contracts.ui.IDashboardIntelligenceManager
+          return (T) AuthCoreModule_ProvideDashboardIntelligenceManagerFactory.provideDashboardIntelligenceManager(singletonCImpl.provideStudentContextManagerProvider.get(), singletonCImpl.provideWidgetRegistryManagerProvider.get(), singletonCImpl.dashboardDecisionEngineProvider.get(), singletonCImpl.widgetPlacementEngineProvider.get(), singletonCImpl.recommendationEngineProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
+
+          case 92: // ke.ac.mku.authcore.manager.ui.DashboardDecisionEngine
+          return (T) new DashboardDecisionEngine();
+
+          case 93: // ke.ac.mku.authcore.manager.ui.WidgetPlacementEngine
+          return (T) new WidgetPlacementEngine();
+
+          case 94: // ke.ac.mku.authcore.manager.ui.RecommendationEngine
+          return (T) new RecommendationEngine();
+
+          case 95: // ke.ac.mku.authcore.config.HealthMonitor
+          return (T) AuthCoreModule_ProvideHealthMonitorFactory.provideHealthMonitor(singletonCImpl.provideConfigManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
+
+          case 96: // ke.ac.mku.authcore.bootstrap.PlatformBootstrap
+          return (T) AuthCoreModule_ProvidePlatformBootstrapFactory.providePlatformBootstrap(singletonCImpl.provideDependencyRegistryProvider.get(), singletonCImpl.provideEventBusProvider.get());
+
+          case 97: // ke.ac.mku.authcore.bootstrap.CoreInitializer
+          return (T) new CoreInitializer(singletonCImpl.provideDependencyRegistryProvider.get(), singletonCImpl.provideSecurityManagerProvider.get(), singletonCImpl.provideSecureStorageManagerProvider.get(), singletonCImpl.provideSessionManagerProvider.get(), singletonCImpl.provideCookieManagerProvider.get(), singletonCImpl.provideAuthenticationEngineProvider.get(), singletonCImpl.provideAuthenticationStateManagerProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideSessionValidatorProvider.get(), singletonCImpl.provideSessionRecoveryManagerProvider.get(), singletonCImpl.provideNetworkManagerProvider.get(), singletonCImpl.providePortalConnectorProvider.get(), singletonCImpl.providePortalDiscoveryManagerProvider.get(), singletonCImpl.provideDomAnalysisManagerProvider.get(), singletonCImpl.provideSemanticClassificationManagerProvider.get(), singletonCImpl.provideUniversalJsonManagerProvider.get(), singletonCImpl.provideRelationshipManagerProvider.get(), singletonCImpl.provideKnowledgeGraphManagerProvider.get(), singletonCImpl.provideStudentContextManagerProvider.get(), singletonCImpl.provideContextSynchronizationManagerProvider.get(), singletonCImpl.provideContextCacheManagerProvider.get(), singletonCImpl.provideContextEventManagerProvider.get(), singletonCImpl.provideContextValidationManagerProvider.get(), singletonCImpl.provideWidgetRegistryManagerProvider.get(), singletonCImpl.provideDashboardIntelligenceManagerProvider.get(), singletonCImpl.provideAdaptiveLayoutManagerProvider.get(), singletonCImpl.provideMotionEngineProvider.get(), singletonCImpl.provideDashboardRenderManagerProvider.get(), singletonCImpl.provideAuthenticationCoreProvider.get(), singletonCImpl.providePortalDiscoveryProvider.get(), singletonCImpl.provideEndpointRegistryProvider.get());
+
+          case 98: // ke.ac.mku.authcore.registry.SecurityManager
+          return (T) AuthCoreModule_ProvideSecurityManagerFactory.provideSecurityManager(singletonCImpl.provideConfigManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
+
+          case 99: // ke.ac.mku.authcore.contracts.portal.IContextSynchronizationManager
+          return (T) AuthCoreModule_ProvideContextSynchronizationManagerFactory.provideContextSynchronizationManager(singletonCImpl.provideStudentContextManagerProvider.get(), singletonCImpl.contextChangeDetectorProvider.get(), singletonCImpl.deltaComputationEngineProvider.get(), singletonCImpl.contextMergerProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
+
+          default: throw new AssertionError(id);
+        }
+      }
+
+      @SuppressWarnings("unchecked")
+      private T get1() {
+        switch (id) {
+          case 100: // ke.ac.mku.authcore.manager.ContextChangeDetector
+          return (T) new ContextChangeDetector();
+
+          case 101: // ke.ac.mku.authcore.manager.DeltaComputationEngine
+          return (T) new DeltaComputationEngine();
+
+          case 102: // ke.ac.mku.authcore.manager.ContextMerger
+          return (T) new ContextMerger();
+
+          case 103: // ke.ac.mku.authcore.contracts.portal.IContextCacheManager
+          return (T) AuthCoreModule_ProvideContextCacheManagerFactory.provideContextCacheManager(singletonCImpl.snapshotManagerProvider.get(), singletonCImpl.incrementalCacheEngineProvider.get(), singletonCImpl.cacheIntegrityValidatorProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
+
+          case 104: // ke.ac.mku.authcore.manager.SnapshotManager
+          return (T) new SnapshotManager();
+
+          case 105: // ke.ac.mku.authcore.manager.IncrementalCacheEngine
+          return (T) new IncrementalCacheEngine(singletonCImpl.provideSecureStorageManagerProvider.get());
+
+          case 106: // ke.ac.mku.authcore.manager.CacheIntegrityValidator
+          return (T) new CacheIntegrityValidator();
+
+          case 107: // ke.ac.mku.authcore.contracts.portal.IContextEventManager
+          return (T) AuthCoreModule_ProvideContextEventManagerFactory.provideContextEventManager(singletonCImpl.provideContextSynchronizationManagerProvider.get(), singletonCImpl.studentActivityDetectorProvider.get(), singletonCImpl.dashboardRefreshPlannerProvider.get(), singletonCImpl.priorityEventDispatcherProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
+
+          case 108: // ke.ac.mku.authcore.manager.StudentActivityDetector
+          return (T) new StudentActivityDetector();
+
+          case 109: // ke.ac.mku.authcore.manager.DashboardRefreshPlanner
+          return (T) new DashboardRefreshPlanner();
+
+          case 110: // ke.ac.mku.authcore.manager.PriorityEventDispatcher
+          return (T) new PriorityEventDispatcher(singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.contextEventRouterProvider.get());
+
+          case 111: // ke.ac.mku.authcore.manager.ContextEventRouter
+          return (T) new ContextEventRouter(singletonCImpl.provideEventBusProvider.get());
+
+          case 112: // ke.ac.mku.authcore.contracts.ui.IMotionEngine
+          return (T) AuthCoreModule_ProvideMotionEngineFactory.provideMotionEngine(singletonCImpl.transitionManagerProvider.get(), singletonCImpl.physicsAnimationEngineProvider.get(), singletonCImpl.loadingExperienceManagerProvider.get(), singletonCImpl.provideAuthenticationEventManagerProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
+
+          case 113: // ke.ac.mku.authcore.manager.ui.TransitionManager
+          return (T) new TransitionManager();
+
+          case 114: // ke.ac.mku.authcore.manager.ui.PhysicsAnimationEngine
+          return (T) new PhysicsAnimationEngine();
+
+          case 115: // ke.ac.mku.authcore.manager.ui.LoadingExperienceManager
+          return (T) new LoadingExperienceManager();
+
+          case 116: // ke.ac.mku.authcore.bootstrap.AuthenticationCore
+          return (T) AuthCoreModule_ProvideAuthenticationCoreFactory.provideAuthenticationCore(singletonCImpl.provideAuthRepositoryProvider.get(), singletonCImpl.providePortalDiscoveryProvider.get(), singletonCImpl.provideEndpointRegistryProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
+
+          case 117: // ke.ac.mku.authcore.registry.PortalDiscovery
+          return (T) AuthCoreModule_ProvidePortalDiscoveryFactory.providePortalDiscovery(singletonCImpl.provideDependencyRegistryProvider.get());
+
+          case 118: // ke.ac.mku.authcore.registry.EndpointRegistry
+          return (T) AuthCoreModule_ProvideEndpointRegistryFactory.provideEndpointRegistry(singletonCImpl.provideConfigManagerProvider.get(), singletonCImpl.providePortalDiscoveryProvider.get(), singletonCImpl.provideDependencyRegistryProvider.get());
+
+          default: throw new AssertionError(id);
+        }
+      }
+
+      @Override
+      public T get() {
+        switch (id / 100) {
+          case 0: return get0();
+          case 1: return get1();
           default: throw new AssertionError(id);
         }
       }

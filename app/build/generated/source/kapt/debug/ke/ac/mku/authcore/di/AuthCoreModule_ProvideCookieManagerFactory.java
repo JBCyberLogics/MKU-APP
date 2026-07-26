@@ -16,6 +16,7 @@ import ke.ac.mku.authcore.contracts.session.ISessionRecoveryManager;
 import ke.ac.mku.authcore.contracts.session.ISessionValidator;
 import ke.ac.mku.authcore.contracts.storage.ISecureStorageManager;
 import ke.ac.mku.authcore.registry.DependencyRegistry;
+import ke.ac.mku.authcore.state.StateRegistry;
 
 @ScopeMetadata("javax.inject.Singleton")
 @QualifierMetadata
@@ -50,6 +51,8 @@ public final class AuthCoreModule_ProvideCookieManagerFactory implements Factory
 
   private final Provider<DependencyRegistry> registryProvider;
 
+  private final Provider<StateRegistry> stateRegistryProvider;
+
   private AuthCoreModule_ProvideCookieManagerFactory(
       Provider<ISessionManager> sessionManagerProvider,
       Provider<ISessionValidator> sessionValidatorProvider,
@@ -58,7 +61,8 @@ public final class AuthCoreModule_ProvideCookieManagerFactory implements Factory
       Provider<ICryptoManager> cryptoManagerProvider,
       Provider<ISecurityMonitor> securityMonitorProvider,
       Provider<IAuthenticationEventManager> authEventManagerProvider,
-      Provider<DependencyRegistry> registryProvider) {
+      Provider<DependencyRegistry> registryProvider,
+      Provider<StateRegistry> stateRegistryProvider) {
     this.sessionManagerProvider = sessionManagerProvider;
     this.sessionValidatorProvider = sessionValidatorProvider;
     this.recoveryManagerProvider = recoveryManagerProvider;
@@ -67,11 +71,12 @@ public final class AuthCoreModule_ProvideCookieManagerFactory implements Factory
     this.securityMonitorProvider = securityMonitorProvider;
     this.authEventManagerProvider = authEventManagerProvider;
     this.registryProvider = registryProvider;
+    this.stateRegistryProvider = stateRegistryProvider;
   }
 
   @Override
   public ICookieManager get() {
-    return provideCookieManager(sessionManagerProvider.get(), sessionValidatorProvider, recoveryManagerProvider, secureStorageManagerProvider.get(), cryptoManagerProvider.get(), securityMonitorProvider.get(), authEventManagerProvider.get(), registryProvider.get());
+    return provideCookieManager(sessionManagerProvider.get(), sessionValidatorProvider, recoveryManagerProvider, secureStorageManagerProvider.get(), cryptoManagerProvider.get(), securityMonitorProvider.get(), authEventManagerProvider.get(), registryProvider.get(), stateRegistryProvider.get());
   }
 
   public static AuthCoreModule_ProvideCookieManagerFactory create(
@@ -82,8 +87,9 @@ public final class AuthCoreModule_ProvideCookieManagerFactory implements Factory
       Provider<ICryptoManager> cryptoManagerProvider,
       Provider<ISecurityMonitor> securityMonitorProvider,
       Provider<IAuthenticationEventManager> authEventManagerProvider,
-      Provider<DependencyRegistry> registryProvider) {
-    return new AuthCoreModule_ProvideCookieManagerFactory(sessionManagerProvider, sessionValidatorProvider, recoveryManagerProvider, secureStorageManagerProvider, cryptoManagerProvider, securityMonitorProvider, authEventManagerProvider, registryProvider);
+      Provider<DependencyRegistry> registryProvider,
+      Provider<StateRegistry> stateRegistryProvider) {
+    return new AuthCoreModule_ProvideCookieManagerFactory(sessionManagerProvider, sessionValidatorProvider, recoveryManagerProvider, secureStorageManagerProvider, cryptoManagerProvider, securityMonitorProvider, authEventManagerProvider, registryProvider, stateRegistryProvider);
   }
 
   public static ICookieManager provideCookieManager(ISessionManager sessionManager,
@@ -91,7 +97,7 @@ public final class AuthCoreModule_ProvideCookieManagerFactory implements Factory
       javax.inject.Provider<ISessionRecoveryManager> recoveryManagerProvider,
       ISecureStorageManager secureStorageManager, ICryptoManager cryptoManager,
       ISecurityMonitor securityMonitor, IAuthenticationEventManager authEventManager,
-      DependencyRegistry registry) {
-    return Preconditions.checkNotNullFromProvides(AuthCoreModule.INSTANCE.provideCookieManager(sessionManager, sessionValidatorProvider, recoveryManagerProvider, secureStorageManager, cryptoManager, securityMonitor, authEventManager, registry));
+      DependencyRegistry registry, StateRegistry stateRegistry) {
+    return Preconditions.checkNotNullFromProvides(AuthCoreModule.INSTANCE.provideCookieManager(sessionManager, sessionValidatorProvider, recoveryManagerProvider, secureStorageManager, cryptoManager, securityMonitor, authEventManager, registry, stateRegistry));
   }
 }

@@ -1,66 +1,82 @@
-# Implementation Plan - Authentication Transaction Manager (AUTH-TXN-001)
+# Implementation Plan - Platform Audit & Automatic Repair (PLATFORM-AUDIT-001)
 
-Implement a robust `AuthenticationTransactionManager` to guarantee atomic authentication transactions and prevent race conditions with concurrent platform services.
+Complete forensic audit and repair of the Authentication Platform to resolve architectural conflicts, race conditions, and initialization gaps.
 
 ## User Review Required
 
-> [!IMPORTANT]
-> This change introduces a new `AuthenticationTransactionManager` that will orchestrate the entire login flow, superseding basic login implementations in `AuthRepositoryImpl`.
+> [!CAUTION]
+> This plan involves consolidating redundant registries (`ServiceRegistry` vs `DependencyRegistry`) and harmonizing the dual orchestration layers (`LoginOrchestrator` vs `AuthenticationTransactionManager`). This is a significant refactor but required for platform stability.
+
+## Open Questions
+- Should `LoginOrchestrator` be completely replaced by `AuthenticationTransactionManager`, or should it serve as a high-level UI-facing wrapper? *Decision: Merge high-level workflow logic into AuthenticationTransactionManager to ensure atomicity across all steps.*
 
 ## Proposed Changes
 
-### Core Transaction Logic
+### 1. Registry Consolidation (CORE-005/CORE-007)
+The current system has "Double Authority" with both `DependencyRegistry` and `ServiceRegistry`.
 
-#### [NEW] [AuthTransactionState.kt](file:///home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/auth/transaction/AuthTransactionState.kt)
-Define the 14 states required for the transactional state machine:
-`IDLE`, `LOGIN_PAGE_LOADING`, `LOGIN_PAGE_READY`, `AUTHENTICATING`, `LOGIN_REQUEST_SENT`, `LOGIN_RESPONSE_RECEIVED`, `COOKIE_CAPTURE`, `COOKIE_PERSISTED`, `SESSION_CREATING`, `SESSION_CREATED`, `SESSION_VALIDATING`, `PORTAL_VALIDATING`, `AUTHENTICATED`, `FAILED`.
+#### [MODIFY] [ServiceRegistry.kt](file:///home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/service/ServiceRegistry.kt)
+- Convert to a simple lookup wrapper around `DependencyRegistry` if needed for backward compatibility, or prepare for removal.
+- Remove redundant manual registration logic that happens after `BootstrapCompleted`.
 
-#### [NEW] [AuthenticationTransactionManager.kt](file:///home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/auth/transaction/AuthenticationTransactionManager.kt)
-The central orchestrator for authentication transactions.
-- Implements `AUTH_TRANSACTION_LOCK` by coordinating service suspension.
-- Manages the state machine.
-- Orchestrates the login process step-by-step as defined in the JSON spec.
-- Handles success/failure conditions and portal validation rules.
+#### [MODIFY] [DependencyRegistry.kt](file:///home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/registry/DependencyRegistry.kt)
+- Ensure it remains the single source of truth for service instances during and after bootstrap.
 
-### Service Updates for Suspension Support
+---
 
-#### [MODIFY] [ICookieManager.kt](file:///home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/contracts/cookie/ICookieManager.kt) & [CookieManager.kt](file:///home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/manager/CookieManager.kt)
-Add `setTransactionLock(locked: Boolean)` to restrict `delete` and `validation` operations during authentication.
+### 2. Initialization Flow Repair (FINAL-001)
+Fix the gaps in the `NetworkPlatformReady` and `CookiePlatformReady` chain.
 
-#### [MODIFY] [ISessionValidator.kt](file:///home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/contracts/session/ISessionValidator.kt) & [SessionValidator.kt](file:///home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/session/validation/SessionValidator.kt)
-Add `setEnabled(enabled: Boolean)` to pause session validation during the transaction.
+#### [MODIFY] [NetworkManager.kt](file:///home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/manager/NetworkManager.kt)
+- Publish `NetworkPlatformReady` only after successful initialization and internet check.
+- Remove dependency on `ResponseProcessingManager` for this event.
 
-#### [MODIFY] [ISessionRecoveryManager.kt](file:///home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/contracts/session/ISessionRecoveryManager.kt) & [SessionRecoveryManager.kt](file:///home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/session/recovery/SessionRecoveryManager.kt)
-Add `setEnabled(enabled: Boolean)` to prevent session recovery attempts during authentication.
+#### [MODIFY] [ResponseProcessingManager.kt](file:///home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/manager/ResponseProcessingManager.kt)
+- Remove `NetworkPlatformReady` publication. It should focus on response handling, not platform readiness.
 
-#### [MODIFY] [PlatformVerifier.kt](file:///home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/bootstrap/PlatformVerifier.kt)
-Update to wait for the `AUTHENTICATED` transaction state before running the full stack verification.
+---
 
-#### [MODIFY] [IDashboardRenderManager.kt](file:///home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/contracts/ui/IDashboardRenderManager.kt) & [DashboardRenderManager.kt](file:///home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/manager/ui/DashboardRenderManager.kt)
-Add `setEnabled(enabled: Boolean)` to prevent dashboard rendering until authentication is fully completed.
+### 3. Orchestration Harmonization (AUTH-002/AUTH-TXN-001)
+Unify the workflow and transaction logic.
 
-### Event Bus Enhancements
+#### [MODIFY] [AuthenticationTransactionManager.kt](file:///home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/auth/transaction/AuthenticationTransactionManager.kt)
+- Incorporate the 12-step high-level workflow from `LoginOrchestrator`.
+- Add comprehensive error mapping.
+- Ensure `AUTHENTICATED` state triggers immediate dashboard launch via `EventBus`.
 
-#### [MODIFY] [EventBus.kt](file:///home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/bootstrap/EventBus.kt)
-Implement event queuing logic to buffer specific events (like `SessionValidationStarted`) during the transaction and release them once `AUTHENTICATED` is reached.
+#### [DELETE] [LoginOrchestrator.kt](file:///home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/auth/workflow/LoginOrchestrator.kt)
+- Remove to prevent dual-execution and event collisions.
 
-### Integration
+---
 
-#### [MODIFY] [AuthRepositoryImpl.kt](file:///home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/data/repository/AuthRepositoryImpl.kt)
-Refactor `login()` to use `AuthenticationTransactionManager`.
+### 4. Direct Dashboard Launch & Navigation
+Ensure the UI responds immediately to the `AUTHENTICATED` transaction state.
+
+#### [MODIFY] [AuthViewModel.kt](file:///home/darkage/Desktop/mku/app/src/main/java/com/example/app/AuthViewModel.kt)
+- Listen for `AuthTransactionState.AUTHENTICATED` (mapped via `BootstrapEvent`) to immediately set `isLoggedIn = true`.
+- Ensure no intermediate "Success" screen blocks the dashboard transition.
+
+#### [MODIFY] [DashboardRenderManager.kt](file:///home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/manager/ui/DashboardRenderManager.kt)
+- Ensure it is ready to receive the `renderDashboard` call immediately after `AUTHENTICATED`.
+
+---
+
+### 5. Dependency Injection Cleanup
 
 #### [MODIFY] [AuthCoreModule.kt](file:///home/darkage/Desktop/mku/app/src/main/java/ke/ac/mku/authcore/di/AuthCoreModule.kt)
-Wire the new `AuthenticationTransactionManager` into the Hilt dependency graph.
+- Remove `LoginOrchestrator` binding.
+- Fix any remaining "Stub" or improper casts in `provideAuthRepository`.
+- Ensure `AuthenticationTransactionManager` is properly injected everywhere.
 
 ## Verification Plan
 
 ### Automated Tests
-- Unit tests for `AuthenticationTransactionManager` verifying state transitions.
-- Unit tests for `EventBus` verifying event queuing during "active transaction" state.
-- Integration tests verifying that `SessionValidator` and `SessionRecoveryManager` are correctly paused/resumed.
+- `gradle_build("app:assembleDebug")` to ensure DI and references are correct.
+- Verify DAG topological sort in `DependencyRegistry` with a test case.
 
 ### Manual Verification
-- Deploy to device/emulator.
-- Perform login and observe Logcat for transaction timeline and service pause/resume logs.
-- Verify that no cookies are deleted during the login process.
-- Verify that the dashboard launches only after the transaction is fully complete.
+- Trace the login flow in Logcat:
+    - Check for `Transaction Locked`.
+    - Check for topological startup sequence.
+    - Verify `NetworkPlatformReady` timing.
+    - Confirm direct transition to `DashboardReady` without success screen delay.

@@ -7,10 +7,17 @@ import dagger.internal.Provider;
 import dagger.internal.QualifierMetadata;
 import dagger.internal.ScopeMetadata;
 import javax.annotation.processing.Generated;
+import ke.ac.mku.authcore.contracts.authentication.IAuthenticationEventManager;
+import ke.ac.mku.authcore.contracts.authentication.ISessionManager;
+import ke.ac.mku.authcore.contracts.cookie.ICookieManager;
+import ke.ac.mku.authcore.contracts.network.IAuthNetworkService;
+import ke.ac.mku.authcore.contracts.network.INetworkManager;
+import ke.ac.mku.authcore.contracts.network.IResponseProcessingManager;
 import ke.ac.mku.authcore.contracts.portal.IPortalConnector;
-import ke.ac.mku.authcore.registry.EndpointRegistry;
-import ke.ac.mku.authcore.registry.PortalDiscovery;
-import ke.ac.mku.authcore.registry.PortalSDK;
+import ke.ac.mku.authcore.contracts.security.ICertificatePinningManager;
+import ke.ac.mku.authcore.contracts.security.ISecurityMonitor;
+import ke.ac.mku.authcore.registry.DependencyRegistry;
+import ke.ac.mku.authcore.service.ServiceRegistry;
 
 @ScopeMetadata("javax.inject.Singleton")
 @QualifierMetadata
@@ -29,33 +36,76 @@ import ke.ac.mku.authcore.registry.PortalSDK;
     "nullness:initialization.field.uninitialized"
 })
 public final class AuthCoreModule_ProvidePortalConnectorFactory implements Factory<IPortalConnector> {
-  private final Provider<PortalSDK> portalSDKProvider;
+  private final Provider<INetworkManager> networkManagerProvider;
 
-  private final Provider<PortalDiscovery> portalDiscoveryProvider;
+  private final Provider<IAuthNetworkService> networkServiceProvider;
 
-  private final Provider<EndpointRegistry> endpointRegistryProvider;
+  private final Provider<IResponseProcessingManager> responseProcessorProvider;
 
-  private AuthCoreModule_ProvidePortalConnectorFactory(Provider<PortalSDK> portalSDKProvider,
-      Provider<PortalDiscovery> portalDiscoveryProvider,
-      Provider<EndpointRegistry> endpointRegistryProvider) {
-    this.portalSDKProvider = portalSDKProvider;
-    this.portalDiscoveryProvider = portalDiscoveryProvider;
-    this.endpointRegistryProvider = endpointRegistryProvider;
+  private final Provider<ISessionManager> sessionManagerProvider;
+
+  private final Provider<ICookieManager> cookieManagerProvider;
+
+  private final Provider<ISecurityMonitor> securityMonitorProvider;
+
+  private final Provider<ICertificatePinningManager> pinningManagerProvider;
+
+  private final Provider<IAuthenticationEventManager> authEventManagerProvider;
+
+  private final Provider<ServiceRegistry> serviceRegistryProvider;
+
+  private final Provider<DependencyRegistry> registryProvider;
+
+  private AuthCoreModule_ProvidePortalConnectorFactory(
+      Provider<INetworkManager> networkManagerProvider,
+      Provider<IAuthNetworkService> networkServiceProvider,
+      Provider<IResponseProcessingManager> responseProcessorProvider,
+      Provider<ISessionManager> sessionManagerProvider,
+      Provider<ICookieManager> cookieManagerProvider,
+      Provider<ISecurityMonitor> securityMonitorProvider,
+      Provider<ICertificatePinningManager> pinningManagerProvider,
+      Provider<IAuthenticationEventManager> authEventManagerProvider,
+      Provider<ServiceRegistry> serviceRegistryProvider,
+      Provider<DependencyRegistry> registryProvider) {
+    this.networkManagerProvider = networkManagerProvider;
+    this.networkServiceProvider = networkServiceProvider;
+    this.responseProcessorProvider = responseProcessorProvider;
+    this.sessionManagerProvider = sessionManagerProvider;
+    this.cookieManagerProvider = cookieManagerProvider;
+    this.securityMonitorProvider = securityMonitorProvider;
+    this.pinningManagerProvider = pinningManagerProvider;
+    this.authEventManagerProvider = authEventManagerProvider;
+    this.serviceRegistryProvider = serviceRegistryProvider;
+    this.registryProvider = registryProvider;
   }
 
   @Override
   public IPortalConnector get() {
-    return providePortalConnector(portalSDKProvider.get(), portalDiscoveryProvider.get(), endpointRegistryProvider.get());
+    return providePortalConnector(networkManagerProvider, networkServiceProvider.get(), responseProcessorProvider, sessionManagerProvider.get(), cookieManagerProvider.get(), securityMonitorProvider.get(), pinningManagerProvider.get(), authEventManagerProvider.get(), serviceRegistryProvider.get(), registryProvider.get());
   }
 
   public static AuthCoreModule_ProvidePortalConnectorFactory create(
-      Provider<PortalSDK> portalSDKProvider, Provider<PortalDiscovery> portalDiscoveryProvider,
-      Provider<EndpointRegistry> endpointRegistryProvider) {
-    return new AuthCoreModule_ProvidePortalConnectorFactory(portalSDKProvider, portalDiscoveryProvider, endpointRegistryProvider);
+      Provider<INetworkManager> networkManagerProvider,
+      Provider<IAuthNetworkService> networkServiceProvider,
+      Provider<IResponseProcessingManager> responseProcessorProvider,
+      Provider<ISessionManager> sessionManagerProvider,
+      Provider<ICookieManager> cookieManagerProvider,
+      Provider<ISecurityMonitor> securityMonitorProvider,
+      Provider<ICertificatePinningManager> pinningManagerProvider,
+      Provider<IAuthenticationEventManager> authEventManagerProvider,
+      Provider<ServiceRegistry> serviceRegistryProvider,
+      Provider<DependencyRegistry> registryProvider) {
+    return new AuthCoreModule_ProvidePortalConnectorFactory(networkManagerProvider, networkServiceProvider, responseProcessorProvider, sessionManagerProvider, cookieManagerProvider, securityMonitorProvider, pinningManagerProvider, authEventManagerProvider, serviceRegistryProvider, registryProvider);
   }
 
-  public static IPortalConnector providePortalConnector(PortalSDK portalSDK,
-      PortalDiscovery portalDiscovery, EndpointRegistry endpointRegistry) {
-    return Preconditions.checkNotNullFromProvides(AuthCoreModule.INSTANCE.providePortalConnector(portalSDK, portalDiscovery, endpointRegistry));
+  public static IPortalConnector providePortalConnector(
+      javax.inject.Provider<INetworkManager> networkManagerProvider,
+      IAuthNetworkService networkService,
+      javax.inject.Provider<IResponseProcessingManager> responseProcessorProvider,
+      ISessionManager sessionManager, ICookieManager cookieManager,
+      ISecurityMonitor securityMonitor, ICertificatePinningManager pinningManager,
+      IAuthenticationEventManager authEventManager, ServiceRegistry serviceRegistry,
+      DependencyRegistry registry) {
+    return Preconditions.checkNotNullFromProvides(AuthCoreModule.INSTANCE.providePortalConnector(networkManagerProvider, networkService, responseProcessorProvider, sessionManager, cookieManager, securityMonitor, pinningManager, authEventManager, serviceRegistry, registry));
   }
 }

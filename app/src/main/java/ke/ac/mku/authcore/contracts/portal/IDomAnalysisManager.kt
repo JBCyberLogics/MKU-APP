@@ -21,6 +21,11 @@ interface IDomAnalysisManager {
     fun getLatestAnalysisReport(): AnalysisReport?
 
     /**
+     * Return the most recent semantic DOM.
+     */
+    fun getLatestSemanticDom(): SemanticDom?
+
+    /**
      * Clear cached analysis data.
      */
     fun clearCache()

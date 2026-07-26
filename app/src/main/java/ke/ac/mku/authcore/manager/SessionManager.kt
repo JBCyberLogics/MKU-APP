@@ -50,7 +50,7 @@ class SessionManager @Inject constructor(
     private val recoveryManager: RecoveryManager,
     private val securityMonitor: ISecurityMonitor,
     private val eventBus: EventBus,
-    private val dependencyRegistry: DependencyRegistry,
+    private val dependencyRegistry: ke.ac.mku.authcore.contracts.registry.IDependencyRegistry,
     private val authEventManager: IAuthenticationEventManager,
     private val cryptoManager: ICryptoManager
 ) : ISessionManager, BootstrapObserver {
@@ -102,7 +102,8 @@ class SessionManager @Inject constructor(
     override fun createSession(
         regNumber: String,
         studentName: String?,
-        cookies: Map<String, String>
+        cookies: Map<String, String>,
+        portalType: String
     ): Boolean {
         val from = currentState
 
@@ -152,6 +153,7 @@ class SessionManager @Inject constructor(
                 lastRefreshTimestamp = now,
                 refreshCount = 0,
                 expiryTimestamp = now + SESSION_TIMEOUT_MS,
+                portalType = portalType,
                 isEncrypted = true
             )
 
@@ -173,7 +175,7 @@ class SessionManager @Inject constructor(
             lastSessionTimestamp = now
 
             // Publish events
-            authEventManager.publish(BootstrapEvent.SessionCreated)
+            authEventManager.publish(BootstrapEvent.SessionCreated(portalType))
 
             Log.i(TAG, "Session created: $sessionId for user: $regNumber")
             true
@@ -325,14 +327,20 @@ class SessionManager @Inject constructor(
 
     override fun getCurrentSession(): Session? = currentSession
 
-    override fun isSessionActive(): Boolean {
-        return currentState == SessionState.ACTIVE &&
+    override fun isSessionActive(portalType: String?): Boolean {
+        val isActive = currentState == SessionState.ACTIVE &&
                currentSession?.isExpired() == false
+        
+        if (!isActive) return false
+        
+        return portalType == null || currentSession?.portalType == portalType
     }
 
     override fun getRegNumber(): String? = currentSession?.user?.registrationNumber
 
     override fun getStudentName(): String? = currentSession?.user?.studentName
+
+    override fun getPortalType(): String? = currentSession?.portalType
 
     override fun getLoginTimestamp(): Long = currentSession?.loginTimestamp ?: 0L
 
@@ -406,22 +414,6 @@ class SessionManager @Inject constructor(
             is BootstrapEvent.AuthenticationReady -> {
                 Log.i(TAG, "Authentication platform ready, attempting session restore")
                 restoreSession()
-            }
-            is BootstrapEvent.BootstrapCompleted -> {
-                // Register with dependency registry
-                dependencyRegistry.register(
-                    name = "session_manager",
-                    instance = this,
-                    dependencies = listOf(
-                        "state_registry",
-                        "secure_storage_manager",
-                        "recovery_manager",
-                        "security_monitor"
-                    ),
-                    startupOrder = 20,
-                    isRequired = true
-                )
-                Log.i(TAG, "SessionManager registered with DependencyRegistry")
             }
             else -> { /* Ignore other events */ }
         }
@@ -519,6 +511,7 @@ class SessionManager @Inject constructor(
             put("refresh_count", session.refreshCount)
             put("expiry_timestamp", session.expiryTimestamp)
             put("device_id", session.deviceId ?: "")
+            put("portal_type", session.portalType)
             put("is_encrypted", session.isEncrypted)
             put("cookies", JSONObject(session.cookies).toString())
         }
@@ -550,6 +543,7 @@ class SessionManager @Inject constructor(
             lastRefreshTimestamp = json.optLong("last_refresh_timestamp", json.getLong("login_timestamp")),
             refreshCount = json.optInt("refresh_count", 0),
             expiryTimestamp = json.optLong("expiry_timestamp", json.getLong("login_timestamp") + SESSION_TIMEOUT_MS),
+            portalType = json.optString("portal_type", "student"),
             isEncrypted = json.optBoolean("is_encrypted", true)
         )
     }

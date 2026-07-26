@@ -43,7 +43,7 @@ public final class AuthCoreModule_ProvideAuthenticationEngineFactory implements 
 
   private final Provider<StateRegistry> stateRegistryProvider;
 
-  private final Provider<DependencyRegistry> dependencyRegistryProvider;
+  private final Provider<DependencyRegistry> registryProvider;
 
   private final Provider<IAuthenticationEventManager> authEventManagerProvider;
 
@@ -51,37 +51,35 @@ public final class AuthCoreModule_ProvideAuthenticationEngineFactory implements 
       Provider<IAuthNetworkService> authNetworkServiceProvider,
       Provider<SecurityMonitor> securityMonitorProvider,
       Provider<ISessionManager> sessionManagerProvider, Provider<EventBus> eventBusProvider,
-      Provider<StateRegistry> stateRegistryProvider,
-      Provider<DependencyRegistry> dependencyRegistryProvider,
+      Provider<StateRegistry> stateRegistryProvider, Provider<DependencyRegistry> registryProvider,
       Provider<IAuthenticationEventManager> authEventManagerProvider) {
     this.authNetworkServiceProvider = authNetworkServiceProvider;
     this.securityMonitorProvider = securityMonitorProvider;
     this.sessionManagerProvider = sessionManagerProvider;
     this.eventBusProvider = eventBusProvider;
     this.stateRegistryProvider = stateRegistryProvider;
-    this.dependencyRegistryProvider = dependencyRegistryProvider;
+    this.registryProvider = registryProvider;
     this.authEventManagerProvider = authEventManagerProvider;
   }
 
   @Override
   public IAuthenticationEngine get() {
-    return provideAuthenticationEngine(authNetworkServiceProvider.get(), securityMonitorProvider.get(), sessionManagerProvider.get(), eventBusProvider.get(), stateRegistryProvider.get(), dependencyRegistryProvider.get(), authEventManagerProvider.get());
+    return provideAuthenticationEngine(authNetworkServiceProvider.get(), securityMonitorProvider.get(), sessionManagerProvider.get(), eventBusProvider.get(), stateRegistryProvider.get(), registryProvider.get(), authEventManagerProvider.get());
   }
 
   public static AuthCoreModule_ProvideAuthenticationEngineFactory create(
       Provider<IAuthNetworkService> authNetworkServiceProvider,
       Provider<SecurityMonitor> securityMonitorProvider,
       Provider<ISessionManager> sessionManagerProvider, Provider<EventBus> eventBusProvider,
-      Provider<StateRegistry> stateRegistryProvider,
-      Provider<DependencyRegistry> dependencyRegistryProvider,
+      Provider<StateRegistry> stateRegistryProvider, Provider<DependencyRegistry> registryProvider,
       Provider<IAuthenticationEventManager> authEventManagerProvider) {
-    return new AuthCoreModule_ProvideAuthenticationEngineFactory(authNetworkServiceProvider, securityMonitorProvider, sessionManagerProvider, eventBusProvider, stateRegistryProvider, dependencyRegistryProvider, authEventManagerProvider);
+    return new AuthCoreModule_ProvideAuthenticationEngineFactory(authNetworkServiceProvider, securityMonitorProvider, sessionManagerProvider, eventBusProvider, stateRegistryProvider, registryProvider, authEventManagerProvider);
   }
 
   public static IAuthenticationEngine provideAuthenticationEngine(
       IAuthNetworkService authNetworkService, SecurityMonitor securityMonitor,
       ISessionManager sessionManager, EventBus eventBus, StateRegistry stateRegistry,
-      DependencyRegistry dependencyRegistry, IAuthenticationEventManager authEventManager) {
-    return Preconditions.checkNotNullFromProvides(AuthCoreModule.INSTANCE.provideAuthenticationEngine(authNetworkService, securityMonitor, sessionManager, eventBus, stateRegistry, dependencyRegistry, authEventManager));
+      DependencyRegistry registry, IAuthenticationEventManager authEventManager) {
+    return Preconditions.checkNotNullFromProvides(AuthCoreModule.INSTANCE.provideAuthenticationEngine(authNetworkService, securityMonitor, sessionManager, eventBus, stateRegistry, registry, authEventManager));
   }
 }

@@ -236,6 +236,14 @@ class SecurityMonitor @Inject constructor(
                 moduleReadyStatus["SecureStorageManager"] = true
                 checkAndPublishPlatformReady()
             }
+            is BootstrapEvent.CryptoManagerReady -> {
+                moduleReadyStatus["CryptoManager"] = true
+                checkAndPublishPlatformReady()
+            }
+            is BootstrapEvent.ThreatDetectorReady -> {
+                moduleReadyStatus["ThreatDetector"] = true
+                checkAndPublishPlatformReady()
+            }
             is BootstrapEvent.SecurityMonitorReady -> {
                 // Our own initialization event
             }

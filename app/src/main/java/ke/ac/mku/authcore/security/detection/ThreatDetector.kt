@@ -6,6 +6,8 @@ import android.os.Build
 import dagger.hilt.android.qualifiers.ApplicationContext
 import ke.ac.mku.authcore.security.audit.SecurityAuditLogger
 import ke.ac.mku.authcore.security.audit.SecurityEvent
+import ke.ac.mku.authcore.bootstrap.BootstrapEvent
+import ke.ac.mku.authcore.bootstrap.EventBus
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -19,7 +21,8 @@ import javax.inject.Singleton
 @Singleton
 class ThreatDetector @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val auditLogger: SecurityAuditLogger
+    private val auditLogger: SecurityAuditLogger,
+    private val eventBus: EventBus
 ) {
     companion object {
         // Root detection paths
@@ -56,6 +59,10 @@ class ThreatDetector @Inject constructor(
             "/data/data/de.robv.android.xposed/shared_prefs/xposed.pb",
             "/data/data/com.saurik.substrate/shared_prefs/substrate.xml"
         )
+    }
+
+    init {
+        eventBus.publish(BootstrapEvent.ThreatDetectorReady)
     }
 
     /**

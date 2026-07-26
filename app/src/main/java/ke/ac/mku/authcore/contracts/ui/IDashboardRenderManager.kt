@@ -29,4 +29,7 @@ interface IDashboardRenderManager {
      * Determine if the dashboard is ready for user interaction.
      */
     fun isDashboardReady(): Boolean
+    
+    // AUTH-TXN-001: Transaction Lock
+    fun setEnabled(enabled: Boolean)
 }

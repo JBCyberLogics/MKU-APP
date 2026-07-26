@@ -39,6 +39,8 @@ class DashboardIntelligenceManager @Inject constructor(
         Log.i(TAG, "Initializing $moduleName ($moduleId)")
     }
 
+    private var lastPlan: DashboardPlan? = null
+
     // ==================== IDashboardIntelligenceManager Implementation ====================
 
     override fun generateDashboardPlan(): DashboardPlan {
@@ -64,6 +66,7 @@ class DashboardIntelligenceManager @Inject constructor(
                 dashboardScore = 0.98f // Initial score
             )
 
+            lastPlan = plan
             authEventManager.publish(BootstrapEvent.DashboardReadyForLayout)
             authEventManager.publish(BootstrapEvent.DashboardGenerationCompleted)
             
@@ -76,6 +79,8 @@ class DashboardIntelligenceManager @Inject constructor(
             throw e
         }
     }
+
+    override fun getLatestPlan(): DashboardPlan? = lastPlan
 
     override fun getRecommendationModel(): RecommendationModel {
         val context = contextManager.getStudentContext()
@@ -99,7 +104,7 @@ class DashboardIntelligenceManager @Inject constructor(
         when (event) {
             is BootstrapEvent.WidgetRegistryCompleted -> {
                 Log.i(TAG, "Widget Ecosystem ready. Activating Intelligence Engine...")
-                // Initial generation trigger
+                generateDashboardPlan()
             }
             else -> {}
         }

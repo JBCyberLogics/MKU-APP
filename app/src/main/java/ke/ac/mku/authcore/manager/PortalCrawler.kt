@@ -12,7 +12,7 @@ import javax.inject.Singleton
  */
 @Singleton
 class PortalCrawler @Inject constructor(
-    private val networkService: IAuthNetworkService
+    private val authApiService: ke.ac.mku.authcore.data.api.AuthApiService
 ) {
     companion object {
         private const val TAG = "PortalCrawler"
@@ -37,7 +37,7 @@ class PortalCrawler @Inject constructor(
         visitedUrls.add(url)
 
         try {
-            val response = networkService.getLoginPage(url) // Using GET for crawling
+            val response = authApiService.getLoginPage(url)
             if (response.isSuccessful) {
                 val html = response.body()?.string() ?: ""
                 onPageDiscovered(url, html)

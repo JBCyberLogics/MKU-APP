@@ -14,6 +14,7 @@ import ke.ac.mku.authcore.contracts.session.ISessionValidator
 import ke.ac.mku.authcore.contracts.storage.ISecureStorageManager
 import ke.ac.mku.authcore.service.ServiceRegistry
 import javax.inject.Inject
+import javax.inject.Provider
 import javax.inject.Singleton
 
 /**
@@ -27,7 +28,7 @@ class CookieSynchronizationManager @Inject constructor(
     private val cookieManager: ICookieManager,
     private val sessionManager: ISessionManager,
     private val sessionValidator: ISessionValidator,
-    private val recoveryManager: ISessionRecoveryManager,
+    private val recoveryManagerProvider: Provider<ISessionRecoveryManager>,
     private val secureStorage: ISecureStorageManager,
     private val securityMonitor: ISecurityMonitor,
     private val authEventManager: IAuthenticationEventManager,
@@ -197,7 +198,7 @@ class CookieSynchronizationManager @Inject constructor(
         sessionValidator.validateSession()
         
         // JSON: invoke_session_recovery
-        recoveryManager.recoverSession()
+        recoveryManagerProvider.get().recoverSession()
     }
 
     // ==================== BootstrapObserver ====================

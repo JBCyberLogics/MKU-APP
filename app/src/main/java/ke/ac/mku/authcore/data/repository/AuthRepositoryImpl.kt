@@ -1,7 +1,6 @@
 package ke.ac.mku.authcore.data.repository
 
 import ke.ac.mku.authcore.contracts.authentication.ISessionManager
-import ke.ac.mku.authcore.data.api.WebFormLoginHandler
 import ke.ac.mku.authcore.domain.model.AuthResult
 import ke.ac.mku.authcore.domain.model.User
 import ke.ac.mku.authcore.domain.repository.AuthRepository
@@ -11,30 +10,14 @@ import javax.inject.Singleton
 
 @Singleton
 class AuthRepositoryImpl @Inject constructor(
-    private val webFormLoginHandler: WebFormLoginHandler,
+    private val transactionManager: ke.ac.mku.authcore.auth.transaction.AuthenticationTransactionManager,
     private val sessionManager: ISessionManager,
     private val cookieManager: CookieManager
 ) : AuthRepository {
 
-    override suspend fun login(regNumber: String, password: String): AuthResult {
-        val response = webFormLoginHandler.executeLogin(regNumber, password)
-
-        return if (response.isSuccess) {
-            // Save session
-            sessionManager.createSession(
-                regNumber = regNumber,
-                studentName = null,
-                cookies = response.cookies
-            )
-            // Save cookies for HTTP requests
-            cookieManager.saveCookies(response.cookies)
-
-            AuthResult.Success(
-                User(registrationNumber = regNumber)
-            )
-        } else {
-            AuthResult.Failure(response.errorMessage ?: "Login failed")
-        }
+    override suspend fun login(regNumber: String, password: String, portalType: String): AuthResult {
+        android.util.Log.d("AuthRepository", "Forwarding login to Transaction Manager")
+        return transactionManager.executeLoginTransaction(regNumber, password, portalType)
     }
 
     override suspend fun logout() {
@@ -54,6 +37,7 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun isLoggedIn(): Boolean {
+        // This is a general check, but we could make it portal-aware if needed
         return sessionManager.isSessionActive()
     }
 }

@@ -45,13 +45,13 @@ import javax.inject.Singleton
  * Only retries on network/connection failures, not invalid credentials.
  */
 @Singleton
-class AuthenticationEngine @Inject constructor(
+class AuthenticationEngine constructor(
     private val networkService: IAuthNetworkService,
     private val securityMonitor: SecurityMonitor,
     private val sessionManager: SessionManager,
     private val eventBus: EventBus,
     private val stateRegistry: StateRegistry,
-    private val dependencyRegistry: DependencyRegistry,
+    private val dependencyRegistry: ke.ac.mku.authcore.contracts.registry.IDependencyRegistry,
     private val authEventManager: IAuthenticationEventManager
 ) : IAuthenticationEngine, BootstrapObserver {
 
@@ -93,22 +93,6 @@ class AuthenticationEngine @Inject constructor(
 
     init {
         eventBus.subscribe(this)
-        registerWithDependencyRegistry()
-    }
-
-    private fun registerWithDependencyRegistry() {
-        dependencyRegistry.register(
-            name = "authentication_engine",
-            instance = this,
-            dependencies = listOf(
-                "security_monitor",
-                "session_manager",
-                "event_bus",
-                "state_registry"
-            ),
-            startupOrder = 3,
-            isRequired = true
-        )
     }
 
     // IAuthenticationEngine implementation
@@ -183,7 +167,7 @@ class AuthenticationEngine @Inject constructor(
                         registrationNumber = request.registrationNumber,
                         studentName = null // Will be populated from session if available
                     )
-                    return AuthResult.Success(user)
+                    return AuthResult.Success(user, networkResponse.sessionCookies)
                 } else {
                     // Network call succeeded but auth failed - don't retry
                     val errorMessage = networkResponse.errorMessage ?: "Authentication failed"
@@ -295,7 +279,7 @@ class AuthenticationEngine @Inject constructor(
         sessionManager.createSession(
             regNumber = result.user.registrationNumber,
             studentName = result.user.studentName,
-            cookies = emptyMap() // Cookies come from network response
+            cookies = result.cookies
         )
 
         // Publish success event

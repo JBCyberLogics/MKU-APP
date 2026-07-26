@@ -1,70 +1,54 @@
 package ke.ac.mku.authcore.contracts.portal
 
-import ke.ac.mku.authcore.models.portal.PortalConnectionResult
-import ke.ac.mku.authcore.models.portal.PortalConnectionState
-import ke.ac.mku.authcore.models.portal.PortalInfo
-
 /**
- * IPortalConnector - CORE-012
+ * PORTAL-001: Portal Connector Contract
  *
- * Public platform contract for portal connection operations.
- * This interface abstracts portal connection away from direct PortalSDK access.
- *
- * The [ke.ac.mku.authcore.auth.orchestrator.LoginOrchestrator] uses this interface
- * to connect to and manage portal sessions without coupling to PortalSDK directly.
- *
- * This allows:
- * - Different portal implementations (current and future)
- * - Easier testing via mock implementations
- * - Separation of concerns between workflow orchestration and portal management
- *
- * Wraps existing components:
- * - [ke.ac.mku.authcore.registry.PortalSDK] for portal operations
- * - [ke.ac.mku.authcore.registry.PortalDiscovery] for portal discovery
- * - [ke.ac.mku.authcore.registry.EndpointRegistry] for endpoint management
- *
- * Future modules (PORTAL-001, PORTAL-002) will consume this contract.
+ * Central gateway responsible for establishing, maintaining and terminating 
+ * secure communication with the Student Portal.
  */
 interface IPortalConnector {
 
     /**
-     * Connect to the Student Portal.
-     *
-     * Establishes a connection to the portal and returns the connection result
-     * including portal metadata on success.
-     *
-     * @return The [PortalConnectionResult] containing success/failure and portal info
+     * Establish secure connection to the portal.
      */
-    suspend fun connect(): PortalConnectionResult
+    suspend fun connect()
 
     /**
-     * Disconnect from the Portal Session.
-     *
-     * Closes the current portal session and cleans up any resources.
+     * Terminate portal connection.
      */
-    suspend fun disconnect(): Unit
+    suspend fun disconnect()
 
     /**
-     * Verify Portal Availability.
-     *
-     * Checks if the portal is currently available and responsive.
-     *
-     * @return True if the portal is available, false otherwise
+     * Reconnect after connection failure.
      */
-    suspend fun isPortalAvailable(): Boolean
+    suspend fun reconnect()
 
     /**
-     * Retrieve Portal Metadata.
-     *
-     * @return The [PortalInfo] containing portal identification and details
-     * @throws IllegalStateException if not connected
+     * Determine portal connectivity.
      */
-    fun getPortalInfo(): PortalInfo
+    fun isConnected(): Boolean
 
     /**
-     * Get the current portal connection state.
-     *
-     * @return The current [PortalConnectionState]
+     * Return current portal state.
      */
-    fun getConnectionState(): PortalConnectionState
+    fun getPortalState(): PortalState
+
+    /**
+     * Return supported portal capabilities.
+     */
+    fun getPortalCapabilities(): List<String>
+}
+
+/**
+ * Represents the current state of portal connectivity.
+ */
+enum class PortalState {
+    UNINITIALIZED,
+    INITIALIZING,
+    DISCONNECTED,
+    CONNECTING,
+    CONNECTED,
+    AUTHENTICATED,
+    RECONNECTING,
+    FAILED
 }

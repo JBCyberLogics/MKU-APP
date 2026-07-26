@@ -43,8 +43,8 @@ class AuthCoreManager constructor(
 
     suspend fun getCurrentUser() = authRepository.getCurrentUser()
 
-    suspend fun login(regNumber: String, password: String) =
-        authRepository.login(regNumber, password)
+    suspend fun login(regNumber: String, password: String, portalType: String = "student") =
+        authRepository.login(regNumber, password, portalType)
 
     suspend fun logout() = authRepository.logout()
 

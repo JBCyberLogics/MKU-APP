@@ -8,3 +8,7 @@ sealed class RegistryEvent {
     object RegistryReady : RegistryEvent()
     data class RegistryError(val error: String) : RegistryEvent()
 }
+
+interface RegistryObserver {
+    fun onRegistryEvent(event: RegistryEvent)
+}

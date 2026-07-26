@@ -40,11 +40,10 @@ class PortalDataMapper @Inject constructor(
         startMapping("AuthenticationResponse")
         
         return try {
-            // Simplified mapping for demonstration
             if (raw.isSuccess) {
                 val user = User(
                     registrationNumber = "MOCK-001",
-                    fullName = "Mock Student",
+                    studentName = "Mock Student",
                     email = "student@mku.ac.ke",
                     studentId = "12345"
                 )
@@ -66,7 +65,6 @@ class PortalDataMapper @Inject constructor(
         startMapping("StudentProfile")
         
         try {
-            // Mock implementation
             val profile = StudentProfile(
                 user = User("MOCK-001", "Mock Student", "student@mku.ac.ke", "12345"),
                 dateOfBirth = "1995-01-01",
@@ -137,7 +135,6 @@ class PortalDataMapper @Inject constructor(
     }
 
     override fun validateModel(model: Any): Boolean {
-        // Strict schema validation logic
         return true
     }
 

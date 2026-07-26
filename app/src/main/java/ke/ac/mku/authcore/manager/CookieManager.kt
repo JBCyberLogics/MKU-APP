@@ -13,10 +13,13 @@ import ke.ac.mku.authcore.contracts.session.ISessionRecoveryManager
 import ke.ac.mku.authcore.contracts.session.ISessionValidator
 import ke.ac.mku.authcore.contracts.storage.ISecureStorageManager
 import ke.ac.mku.authcore.contracts.storage.StorageDomain
+import ke.ac.mku.authcore.state.AuthenticationState
+import ke.ac.mku.authcore.state.StateRegistry
 import okhttp3.Cookie
 import okhttp3.CookieJar
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Singleton
@@ -35,7 +38,8 @@ class CookieManager @Inject constructor(
     private val secureStorage: ISecureStorageManager,
     private val cryptoManager: ICryptoManager,
     private val securityMonitor: ISecurityMonitor,
-    private val authEventManager: IAuthenticationEventManager
+    private val authEventManager: IAuthenticationEventManager,
+    private val stateRegistry: StateRegistry
 ) : CookieJar, ICookieManager, BootstrapObserver {
 
     /**
@@ -51,14 +55,23 @@ class CookieManager @Inject constructor(
         private const val COOKIE_PREFIX = "cookie_"
     }
 
-    // In-memory cache for fast access
-    private val cookieStore = mutableMapOf<String, Cookie>()
+    // In-memory cache for fast access (Thread-safe)
+    private val cookieStore = ConcurrentHashMap<String, Cookie>()
+
+    // AUTH-TXN-001: Transaction Lock
+    @Volatile
+    private var isTransactionLocked = false
 
     init {
         Log.i(TAG, "Initializing $moduleName ($moduleId) v$moduleVersion")
     }
 
     // ==================== ICookieManager Implementation ====================
+    
+    override fun setTransactionLock(locked: Boolean) {
+        Log.i(TAG, "CookieManager transaction lock: $locked")
+        isTransactionLocked = locked
+    }
 
     override fun storeCookie(name: String, value: String, type: CookieType, domain: String?, path: String?) {
         val cookie = Cookie.Builder()
@@ -121,6 +134,10 @@ class CookieManager @Inject constructor(
     }
 
     override fun deleteCookie(name: String) {
+        if (isTransactionLocked) {
+            Log.w(TAG, "Attempted to delete cookie $name during locked transaction. Operation ignored.")
+            return
+        }
         cookieStore.remove(name)
         secureStorage.delete(StorageDomain.COOKIES, "$COOKIE_PREFIX$name")
         authEventManager.publish(BootstrapEvent.CookieDeleted(name))
@@ -133,6 +150,10 @@ class CookieManager @Inject constructor(
     }
 
     override fun validateCookie(name: String): Boolean {
+        if (isTransactionLocked) {
+            Log.d(TAG, "Skipping cookie validation for $name during locked transaction (Policy: skip_validation)")
+            return true
+        }
         val cookie = cookieStore[name] ?: return false
         authEventManager.publish(BootstrapEvent.CookieValidationStarted(name))
 
@@ -145,8 +166,10 @@ class CookieManager @Inject constructor(
         }
 
         // 2. Session binding check (per policy)
-        if (!sessionManager.isSessionActive()) {
-            Log.w(TAG, "Cookie validation failed: No active session for $name")
+        // Allow cookies if session is active OR if authentication is in progress
+        val isAuthenticating = stateRegistry.getState().authentication == AuthenticationState.AUTHENTICATING
+        if (!sessionManager.isSessionActive() && !isAuthenticating) {
+            Log.w(TAG, "Cookie validation failed: No active session for $name and not authenticating")
             handleCookieFailure(name, "Session inactive")
             return false
         }

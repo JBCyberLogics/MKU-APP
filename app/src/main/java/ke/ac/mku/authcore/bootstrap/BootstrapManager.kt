@@ -14,11 +14,19 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * BootstrapManager - FINAL-001
+ * 
+ * Orchestrates the complete platform initialization using graph-driven bootstrap
+ * and multi-stage verification.
+ */
 @Singleton
 class BootstrapManager @Inject constructor(
     private val configManager: ConfigManager,
     private val dependencyRegistry: DependencyRegistry,
     private val authCoreManager: AuthCoreManager,
+    private val bootstrap: PlatformBootstrap,
+    private val verifier: PlatformVerifier,
     private val eventBus: EventBus
 ) {
     companion object {
@@ -49,76 +57,56 @@ class BootstrapManager @Inject constructor(
         return true
     }
 
-    fun getStatus(): BootstrapStatus {
-        return BootstrapStatus(
-            state = _state.value,
-            progress = _progress.value,
-            isReady = _state.value == BootstrapState.READY,
-            isFailed = _state.value == BootstrapState.FAILED
-        )
-    }
-
     private suspend fun executePipeline() {
         startTime = System.currentTimeMillis()
+        Log.i(TAG, "Platform bootstrap pipeline starting...")
 
         try {
-            // Step 1: Load Configuration Manager
-            executeStep(1, "Load Configuration Manager") {
-                if (!configManager.isLoaded) {
-                    configManager.load()
-                }
-                eventBus.publish(BootstrapEvent.ConfigurationLoaded)
-                Log.i(TAG, "Step 1/6: Configuration loaded")
+            // Stage 1: Load & Validate Configuration
+            updateProgress(1, "Loading System Configuration")
+            if (!configManager.isLoaded) {
+                configManager.load()
             }
+            eventBus.publish(BootstrapEvent.ConfigurationLoaded)
+            eventBus.publish(BootstrapEvent.ConfigurationValidated)
 
-            // Step 2: Validate Configuration
-            executeStep(2, "Validate Configuration") {
-                // Config validation happens during load
-                eventBus.publish(BootstrapEvent.ConfigurationValidated)
-                Log.i(TAG, "Step 2/6: Configuration validated")
-            }
+            // Stage 2: Initialize Core Engines
+            updateProgress(2, "Initializing Core Engines")
+            eventBus.publish(BootstrapEvent.AuthenticationCoreInitialized)
 
-            // Step 3: Initialize Authentication Core
-            executeStep(3, "Initialize Authentication Core") {
-                // AuthCoreManager init happens via constructor
-                eventBus.publish(BootstrapEvent.AuthenticationCoreInitialized)
-                Log.i(TAG, "Step 3/6: Authentication Core initialized")
+            // Stage 3: Dependency-Driven Bootstrap (DAG Traversal)
+            updateProgress(3, "Resolving Service Dependencies")
+            // Basic health check
+            if (!verifier.verifyRuntime()) {
+                throw IllegalStateException("Runtime environment is unstable.")
             }
+            
+            updateProgress(4, "Initializing Platform Services")
+            bootstrap.executeSequence()
+            eventBus.publish(BootstrapEvent.DependenciesResolved)
 
-            // Step 4: Resolve Dependencies
-            executeStep(4, "Resolve Dependencies") {
-                val result = dependencyRegistry.validate()
-                if (!result.isValid) {
-                    throw IllegalStateException("Dependency validation failed: ${result.errors.joinToString("; ")}")
-                }
-                eventBus.publish(BootstrapEvent.DependenciesResolved)
-                Log.i(TAG, "Step 4/6: Dependencies resolved")
-            }
-
-            // Step 5: Initialize Registered Services
-            executeStep(5, "Initialize Registered Services") {
-                dependencyRegistry.list().forEach { serviceName ->
-                    dependencyRegistry.resolve(serviceName)
-                    Log.d(TAG, "  Resolved service: $serviceName")
-                }
-                Log.i(TAG, "Step 5/6: Registered services initialized")
-            }
-
-            // Step 6: Publish Bootstrap Complete
-            executeStep(6, "Publish Bootstrap Complete") {
-                _state.value = BootstrapState.READY
-                val elapsed = System.currentTimeMillis() - startTime
-                _progress.value = StartupProgress.fromStep(6, "Bootstrap Complete", elapsed)
-                eventBus.publish(BootstrapEvent.BootstrapCompleted)
-                Log.i(TAG, "Step 6/6: Bootstrap completed in ${elapsed}ms")
-            }
+            // Stage 5: Finalize Cold Boot
+            _state.value = BootstrapState.READY
+            val elapsed = System.currentTimeMillis() - startTime
+            _progress.value = StartupProgress.fromStep(6, "Platform Ready", elapsed)
+            eventBus.publish(BootstrapEvent.BootstrapCompleted)
+            
+            Log.i(TAG, "Platform bootstrap COMPLETED in ${elapsed}ms")
 
         } catch (e: Exception) {
             handleFailure(e)
         }
     }
 
-    private suspend fun executeStep(step: Int, action: String, block: suspend () -> Unit) {
+    /**
+     * Triggers the full 10-step platform verification (Post-Auth).
+     */
+    fun verifyPlatform() {
+        Log.i(TAG, "Triggering deep platform verification...")
+        verifier.verifyStack()
+    }
+
+    private fun updateProgress(step: Int, action: String) {
         _state.value = when (step) {
             1 -> BootstrapState.BOOTSTRAPPING
             2 -> BootstrapState.VALIDATING
@@ -127,13 +115,10 @@ class BootstrapManager @Inject constructor(
 
         val elapsed = System.currentTimeMillis() - startTime
         _progress.value = StartupProgress.fromStep(step, action, elapsed)
-
         eventBus.publish(BootstrapEvent.BootstrapStarted)
-
-        block()
     }
 
-    private suspend fun handleFailure(e: Exception) {
+    private fun handleFailure(e: Exception) {
         _state.value = BootstrapState.FAILED
         val elapsed = System.currentTimeMillis() - startTime
         _progress.value = StartupProgress.fromStep(
@@ -142,13 +127,6 @@ class BootstrapManager @Inject constructor(
             elapsed
         )
         eventBus.publish(BootstrapEvent.BootstrapFailed(e.message ?: "Unknown error"))
-        Log.e(TAG, "Bootstrap failed: ${e.message}", e)
+        Log.e(TAG, "Platform bootstrap failed: ${e.message}", e)
     }
 }
-
-data class BootstrapStatus(
-    val state: BootstrapState,
-    val progress: StartupProgress?,
-    val isReady: Boolean,
-    val isFailed: Boolean
-)

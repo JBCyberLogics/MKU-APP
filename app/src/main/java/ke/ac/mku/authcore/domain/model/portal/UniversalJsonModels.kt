@@ -3,26 +3,34 @@ package ke.ac.mku.authcore.domain.model.portal
 /**
  * UniversalJsonModels - PROGRAM-008
  *
- * Models for the standardized JSON representation of portal data.
+ * Models for the universal, standardized representation of portal data.
  */
 
-data class NormalizedPortalJson(
+data class UniversalPortalJson(
     val metadata: JsonMetadata,
-    val domains: Map<String, Any>,
+    val student: Map<String, Any> = emptyMap(),
+    val academics: Map<String, Any> = emptyMap(),
+    val finance: Map<String, Any> = emptyMap(),
+    val learning: Map<String, Any> = emptyMap(),
+    val resources: Map<String, Any> = emptyMap(),
+    val dashboard: Map<String, Any> = emptyMap(),
+    val relationships: Map<String, Any> = emptyMap(),
+    val rawEntities: List<SemanticEntity> = emptyList(),
     val rawJson: String
 )
 
 data class JsonMetadata(
-    val portalName: String,
-    val generatedAt: Long,
+    val portalVersion: String,
     val schemaVersion: String,
+    val generatedAt: Long,
+    val studentSession: String,
     val confidence: Float
 )
 
-data class PortalDataDomain(
-    val name: String,
-    val data: Map<String, Any>,
-    val relationships: List<String>
+data class DashboardDataset(
+    val widgets: List<Map<String, Any>>,
+    val charts: List<Map<String, Any>>,
+    val summary: Map<String, Any>
 )
 
 data class SchemaDefinition(

@@ -46,7 +46,7 @@ public final class AuthCoreModule_ProvideSessionValidatorFactory implements Fact
 
   private final Provider<EventBus> eventBusProvider;
 
-  private final Provider<DependencyRegistry> dependencyRegistryProvider;
+  private final Provider<DependencyRegistry> registryProvider;
 
   private final Provider<IAuthenticationEventManager> authEventManagerProvider;
 
@@ -55,7 +55,7 @@ public final class AuthCoreModule_ProvideSessionValidatorFactory implements Fact
       Provider<SecureStorageManager> secureStorageManagerProvider,
       Provider<ICryptoManager> cryptoManagerProvider,
       Provider<SecurityMonitor> securityMonitorProvider, Provider<EventBus> eventBusProvider,
-      Provider<DependencyRegistry> dependencyRegistryProvider,
+      Provider<DependencyRegistry> registryProvider,
       Provider<IAuthenticationEventManager> authEventManagerProvider) {
     this.contextProvider = contextProvider;
     this.sessionManagerProvider = sessionManagerProvider;
@@ -63,13 +63,13 @@ public final class AuthCoreModule_ProvideSessionValidatorFactory implements Fact
     this.cryptoManagerProvider = cryptoManagerProvider;
     this.securityMonitorProvider = securityMonitorProvider;
     this.eventBusProvider = eventBusProvider;
-    this.dependencyRegistryProvider = dependencyRegistryProvider;
+    this.registryProvider = registryProvider;
     this.authEventManagerProvider = authEventManagerProvider;
   }
 
   @Override
   public ISessionValidator get() {
-    return provideSessionValidator(contextProvider.get(), sessionManagerProvider.get(), secureStorageManagerProvider.get(), cryptoManagerProvider.get(), securityMonitorProvider.get(), eventBusProvider.get(), dependencyRegistryProvider.get(), authEventManagerProvider.get());
+    return provideSessionValidator(contextProvider.get(), sessionManagerProvider.get(), secureStorageManagerProvider.get(), cryptoManagerProvider.get(), securityMonitorProvider.get(), eventBusProvider.get(), registryProvider.get(), authEventManagerProvider.get());
   }
 
   public static AuthCoreModule_ProvideSessionValidatorFactory create(
@@ -77,15 +77,15 @@ public final class AuthCoreModule_ProvideSessionValidatorFactory implements Fact
       Provider<SecureStorageManager> secureStorageManagerProvider,
       Provider<ICryptoManager> cryptoManagerProvider,
       Provider<SecurityMonitor> securityMonitorProvider, Provider<EventBus> eventBusProvider,
-      Provider<DependencyRegistry> dependencyRegistryProvider,
+      Provider<DependencyRegistry> registryProvider,
       Provider<IAuthenticationEventManager> authEventManagerProvider) {
-    return new AuthCoreModule_ProvideSessionValidatorFactory(contextProvider, sessionManagerProvider, secureStorageManagerProvider, cryptoManagerProvider, securityMonitorProvider, eventBusProvider, dependencyRegistryProvider, authEventManagerProvider);
+    return new AuthCoreModule_ProvideSessionValidatorFactory(contextProvider, sessionManagerProvider, secureStorageManagerProvider, cryptoManagerProvider, securityMonitorProvider, eventBusProvider, registryProvider, authEventManagerProvider);
   }
 
   public static ISessionValidator provideSessionValidator(Context context,
       ISessionManager sessionManager, SecureStorageManager secureStorageManager,
       ICryptoManager cryptoManager, SecurityMonitor securityMonitor, EventBus eventBus,
-      DependencyRegistry dependencyRegistry, IAuthenticationEventManager authEventManager) {
-    return Preconditions.checkNotNullFromProvides(AuthCoreModule.INSTANCE.provideSessionValidator(context, sessionManager, secureStorageManager, cryptoManager, securityMonitor, eventBus, dependencyRegistry, authEventManager));
+      DependencyRegistry registry, IAuthenticationEventManager authEventManager) {
+    return Preconditions.checkNotNullFromProvides(AuthCoreModule.INSTANCE.provideSessionValidator(context, sessionManager, secureStorageManager, cryptoManager, securityMonitor, eventBus, registry, authEventManager));
   }
 }

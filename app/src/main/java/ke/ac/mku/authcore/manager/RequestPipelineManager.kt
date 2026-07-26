@@ -6,11 +6,15 @@ import ke.ac.mku.authcore.bootstrap.BootstrapObserver
 import ke.ac.mku.authcore.contracts.authentication.IAuthenticationEventManager
 import ke.ac.mku.authcore.contracts.authentication.ISessionManager
 import ke.ac.mku.authcore.contracts.cookie.ICookieManager
+import ke.ac.mku.authcore.contracts.network.EnrichedRequest
+import ke.ac.mku.authcore.contracts.network.ExecutionReadyRequest
 import ke.ac.mku.authcore.contracts.network.IRequestPipelineManager
 import ke.ac.mku.authcore.contracts.network.OutboundRequest
-import ke.ac.mku.authcore.contracts.network.ProcessedRequest
-import ke.ac.mku.authcore.contracts.network.PriorityLevel
 import ke.ac.mku.authcore.contracts.network.PipelineStatus
+import ke.ac.mku.authcore.contracts.network.PrioritizedRequest
+import ke.ac.mku.authcore.contracts.network.PriorityLevel
+import ke.ac.mku.authcore.contracts.network.ProcessedRequest
+import ke.ac.mku.authcore.contracts.network.ValidatedRequest
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -51,23 +55,28 @@ class RequestPipelineManager @Inject constructor(
     override fun processRequest(request: OutboundRequest): ProcessedRequest? {
         val startTime = System.currentTimeMillis()
         totalProcessed++
+        authEventManager.publish(BootstrapEvent.RequestReceived)
 
         try {
             // 1. Validate request
             val validated = validateRequest(request)
             if (!validated.isValid) {
                 validationFailures++
+                authEventManager.publish(BootstrapEvent.PipelineValidationFailed(validated.validationErrors.joinToString()))
                 return null
             }
+            authEventManager.publish(BootstrapEvent.RequestValidated)
 
             // 2. Enrich with headers and cookies
             val enriched = enrichRequest(request)
+            authEventManager.publish(BootstrapEvent.RequestEnriched)
 
             // 3. Assign priority
             val prioritized = assignPriority(request)
 
-            // 4. Prepare for execution
+            // 4. Prepare for execution (including signing)
             val executionReady = prepareExecution(request)
+            authEventManager.publish(BootstrapEvent.RequestSigned)
 
             // 5. Assemble processed request
             val processed = ProcessedRequest(
@@ -75,7 +84,7 @@ class RequestPipelineManager @Inject constructor(
                 validated = validated,
                 enriched = enriched,
                 prioritized = prioritized,
-                executionReady
+                executionReady = executionReady
             )
 
             // Update metrics
@@ -84,9 +93,11 @@ class RequestPipelineManager @Inject constructor(
             val currentCount = priorityCounts[prioritized.priority] ?: 0
             priorityCounts[prioritized.priority] = currentCount + 1
 
+            authEventManager.publish(BootstrapEvent.RequestReady)
             return processed
         } catch (e: Exception) {
             Log.e(TAG, "Request processing failed: ${e.message}")
+            authEventManager.publish(BootstrapEvent.PipelineExecutionFailed(e.message ?: "Unknown error"))
             return null
         }
     }
@@ -117,7 +128,7 @@ class RequestPipelineManager @Inject constructor(
         val cookies = cookieManager.getAllCookies()
 
         // Get session info for headers
-        val sessionId = sessionManager.getSessionId() ?: ""
+        val sessionId = sessionManager.getCurrentSession()?.sessionId ?: ""
         val userAgent = "MKU-AuthClient/1.0"
 
         val headers = mutableMapOf<String, String>()
@@ -176,9 +187,10 @@ class RequestPipelineManager @Inject constructor(
 
     override fun onBootstrapEvent(event: BootstrapEvent) {
         when (event) {
-            is BootstrapEvent.SessionPlatformReady -> {
-                // Pipeline initializes after session platform is ready
-                // No specific initialization needed for this stateless pipeline
+            is BootstrapEvent.AuthenticationNetworkReady -> {
+                // startup_sequence: trigger: authentication_network_ready
+                Log.i(TAG, "Initializing Request Pipeline (Step-by-step)...")
+                authEventManager.publish(BootstrapEvent.RequestPipelineReady)
             }
             else -> {}
         }

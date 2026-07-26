@@ -9,6 +9,7 @@ import dagger.internal.QualifierMetadata;
 import dagger.internal.ScopeMetadata;
 import javax.annotation.processing.Generated;
 import ke.ac.mku.authcore.contracts.crypto.ICryptoManager;
+import ke.ac.mku.authcore.registry.DependencyRegistry;
 import ke.ac.mku.authcore.security.audit.SecurityAuditLogger;
 import ke.ac.mku.authcore.security.storage.EncryptedSessionStore;
 
@@ -35,27 +36,32 @@ public final class SecurityModule_ProvideEncryptedSessionStoreFactory implements
 
   private final Provider<SecurityAuditLogger> auditLoggerProvider;
 
+  private final Provider<DependencyRegistry> registryProvider;
+
   private SecurityModule_ProvideEncryptedSessionStoreFactory(Provider<Context> contextProvider,
       Provider<ICryptoManager> cryptoManagerProvider,
-      Provider<SecurityAuditLogger> auditLoggerProvider) {
+      Provider<SecurityAuditLogger> auditLoggerProvider,
+      Provider<DependencyRegistry> registryProvider) {
     this.contextProvider = contextProvider;
     this.cryptoManagerProvider = cryptoManagerProvider;
     this.auditLoggerProvider = auditLoggerProvider;
+    this.registryProvider = registryProvider;
   }
 
   @Override
   public EncryptedSessionStore get() {
-    return provideEncryptedSessionStore(contextProvider.get(), cryptoManagerProvider.get(), auditLoggerProvider.get());
+    return provideEncryptedSessionStore(contextProvider.get(), cryptoManagerProvider.get(), auditLoggerProvider.get(), registryProvider.get());
   }
 
   public static SecurityModule_ProvideEncryptedSessionStoreFactory create(
       Provider<Context> contextProvider, Provider<ICryptoManager> cryptoManagerProvider,
-      Provider<SecurityAuditLogger> auditLoggerProvider) {
-    return new SecurityModule_ProvideEncryptedSessionStoreFactory(contextProvider, cryptoManagerProvider, auditLoggerProvider);
+      Provider<SecurityAuditLogger> auditLoggerProvider,
+      Provider<DependencyRegistry> registryProvider) {
+    return new SecurityModule_ProvideEncryptedSessionStoreFactory(contextProvider, cryptoManagerProvider, auditLoggerProvider, registryProvider);
   }
 
   public static EncryptedSessionStore provideEncryptedSessionStore(Context context,
-      ICryptoManager cryptoManager, SecurityAuditLogger auditLogger) {
-    return Preconditions.checkNotNullFromProvides(SecurityModule.INSTANCE.provideEncryptedSessionStore(context, cryptoManager, auditLogger));
+      ICryptoManager cryptoManager, SecurityAuditLogger auditLogger, DependencyRegistry registry) {
+    return Preconditions.checkNotNullFromProvides(SecurityModule.INSTANCE.provideEncryptedSessionStore(context, cryptoManager, auditLogger, registry));
   }
 }

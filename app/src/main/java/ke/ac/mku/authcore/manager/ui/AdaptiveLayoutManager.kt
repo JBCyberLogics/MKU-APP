@@ -5,9 +5,11 @@ import ke.ac.mku.authcore.bootstrap.BootstrapEvent
 import ke.ac.mku.authcore.bootstrap.BootstrapObserver
 import ke.ac.mku.authcore.contracts.authentication.IAuthenticationEventManager
 import ke.ac.mku.authcore.contracts.ui.IAdaptiveLayoutManager
+import ke.ac.mku.authcore.contracts.ui.IDashboardIntelligenceManager
 import ke.ac.mku.authcore.domain.model.ui.*
 import java.util.UUID
 import javax.inject.Inject
+import javax.inject.Provider
 import javax.inject.Singleton
 
 /**
@@ -20,7 +22,8 @@ class AdaptiveLayoutManager @Inject constructor(
     private val gridEngine: GridGenerationEngine,
     private val optimizer: WidgetPlacementOptimizer,
     private val treeBuilder: RenderTreeBuilder,
-    private val authEventManager: IAuthenticationEventManager
+    private val authEventManager: IAuthenticationEventManager,
+    private val intelligenceManager: Provider<IDashboardIntelligenceManager>
 ) : IAdaptiveLayoutManager, BootstrapObserver {
 
     private val moduleId = "PROGRAM-018"
@@ -91,7 +94,9 @@ class AdaptiveLayoutManager @Inject constructor(
         when (event) {
             is BootstrapEvent.DashboardGenerationCompleted -> {
                 Log.i(TAG, "Dashboard intelligence ready. Calculating adaptive layout...")
-                // Initial generation trigger
+                intelligenceManager.get().getLatestPlan()?.let { plan ->
+                    generateLayout(plan)
+                }
             }
             else -> {}
         }

@@ -7,7 +7,9 @@ import dagger.internal.Provider;
 import dagger.internal.QualifierMetadata;
 import dagger.internal.ScopeMetadata;
 import javax.annotation.processing.Generated;
-import ke.ac.mku.authcore.data.repository.AuthRepositoryImpl;
+import ke.ac.mku.authcore.auth.transaction.AuthenticationTransactionManager;
+import ke.ac.mku.authcore.contracts.authentication.ISessionManager;
+import ke.ac.mku.authcore.contracts.cookie.ICookieManager;
 import ke.ac.mku.authcore.domain.repository.AuthRepository;
 import ke.ac.mku.authcore.registry.DependencyRegistry;
 
@@ -28,30 +30,41 @@ import ke.ac.mku.authcore.registry.DependencyRegistry;
     "nullness:initialization.field.uninitialized"
 })
 public final class AuthCoreModule_ProvideAuthRepositoryFactory implements Factory<AuthRepository> {
-  private final Provider<AuthRepositoryImpl> authRepositoryImplProvider;
+  private final Provider<AuthenticationTransactionManager> transactionManagerProvider;
+
+  private final Provider<ISessionManager> sessionManagerProvider;
+
+  private final Provider<ICookieManager> cookieManagerProvider;
 
   private final Provider<DependencyRegistry> registryProvider;
 
   private AuthCoreModule_ProvideAuthRepositoryFactory(
-      Provider<AuthRepositoryImpl> authRepositoryImplProvider,
+      Provider<AuthenticationTransactionManager> transactionManagerProvider,
+      Provider<ISessionManager> sessionManagerProvider,
+      Provider<ICookieManager> cookieManagerProvider,
       Provider<DependencyRegistry> registryProvider) {
-    this.authRepositoryImplProvider = authRepositoryImplProvider;
+    this.transactionManagerProvider = transactionManagerProvider;
+    this.sessionManagerProvider = sessionManagerProvider;
+    this.cookieManagerProvider = cookieManagerProvider;
     this.registryProvider = registryProvider;
   }
 
   @Override
   public AuthRepository get() {
-    return provideAuthRepository(authRepositoryImplProvider.get(), registryProvider.get());
+    return provideAuthRepository(transactionManagerProvider.get(), sessionManagerProvider.get(), cookieManagerProvider.get(), registryProvider.get());
   }
 
   public static AuthCoreModule_ProvideAuthRepositoryFactory create(
-      Provider<AuthRepositoryImpl> authRepositoryImplProvider,
+      Provider<AuthenticationTransactionManager> transactionManagerProvider,
+      Provider<ISessionManager> sessionManagerProvider,
+      Provider<ICookieManager> cookieManagerProvider,
       Provider<DependencyRegistry> registryProvider) {
-    return new AuthCoreModule_ProvideAuthRepositoryFactory(authRepositoryImplProvider, registryProvider);
+    return new AuthCoreModule_ProvideAuthRepositoryFactory(transactionManagerProvider, sessionManagerProvider, cookieManagerProvider, registryProvider);
   }
 
-  public static AuthRepository provideAuthRepository(AuthRepositoryImpl authRepositoryImpl,
-      DependencyRegistry registry) {
-    return Preconditions.checkNotNullFromProvides(AuthCoreModule.INSTANCE.provideAuthRepository(authRepositoryImpl, registry));
+  public static AuthRepository provideAuthRepository(
+      AuthenticationTransactionManager transactionManager, ISessionManager sessionManager,
+      ICookieManager cookieManager, DependencyRegistry registry) {
+    return Preconditions.checkNotNullFromProvides(AuthCoreModule.INSTANCE.provideAuthRepository(transactionManager, sessionManager, cookieManager, registry));
   }
 }

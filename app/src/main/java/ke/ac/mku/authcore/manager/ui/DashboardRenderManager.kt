@@ -5,10 +5,13 @@ import ke.ac.mku.authcore.bootstrap.BootstrapEvent
 import ke.ac.mku.authcore.bootstrap.BootstrapObserver
 import ke.ac.mku.authcore.contracts.authentication.IAuthenticationEventManager
 import ke.ac.mku.authcore.contracts.portal.IStudentContextManager
+import ke.ac.mku.authcore.contracts.ui.IAdaptiveLayoutManager
+import ke.ac.mku.authcore.contracts.ui.IDashboardIntelligenceManager
 import ke.ac.mku.authcore.contracts.ui.IDashboardRenderManager
 import ke.ac.mku.authcore.domain.model.ui.DashboardPlan
 import ke.ac.mku.authcore.domain.model.ui.LayoutBlueprint
 import javax.inject.Inject
+import javax.inject.Provider
 import javax.inject.Singleton
 
 /**
@@ -21,7 +24,9 @@ class DashboardRenderManager @Inject constructor(
     private val contextManager: IStudentContextManager,
     private val executor: RenderTreeExecutor,
     private val binder: StateBindingEngine,
-    private val authEventManager: IAuthenticationEventManager
+    private val authEventManager: IAuthenticationEventManager,
+    private val adaptiveLayoutProvider: Provider<IAdaptiveLayoutManager>,
+    private val intelligenceManagerProvider: Provider<IDashboardIntelligenceManager>
 ) : IDashboardRenderManager, BootstrapObserver {
 
     private val moduleId = "PROGRAM-020"
@@ -33,6 +38,9 @@ class DashboardRenderManager @Inject constructor(
 
     private var isRendering = false
     private var isDashboardReady = false
+    
+    // AUTH-TXN-001: Transaction Lock
+    private var isEnabled = true
 
     init {
         Log.i(TAG, "Initializing $moduleName ($moduleId)")
@@ -40,8 +48,18 @@ class DashboardRenderManager @Inject constructor(
 
     // ==================== IDashboardRenderManager Implementation ====================
 
+    override fun setEnabled(enabled: Boolean) {
+        Log.i(TAG, "DashboardRenderer enabled: $enabled")
+        this.isEnabled = enabled
+    }
+
     override fun renderDashboard(plan: DashboardPlan, layout: LayoutBlueprint) {
+        if (!isEnabled) {
+            Log.d(TAG, "Skipping dashboard render: Renderer disabled (Policy: auth_transaction_active)")
+            return
+        }
         Log.i(TAG, "Starting dashboard render pipeline for Plan: ${plan.planId}")
+        authEventManager.publish(BootstrapEvent.DashboardLaunchStarted)
         authEventManager.publish(BootstrapEvent.DashboardRenderStarted)
         isRendering = true
 
@@ -88,8 +106,11 @@ class DashboardRenderManager @Inject constructor(
         when (event) {
             is BootstrapEvent.LayoutReady -> {
                 Log.i(TAG, "UI design ready. Finalizing platform visual assembly...")
-                // In a production app, we would trigger renderDashboard() here
-                // assuming we have the plan and layout in hand.
+                val layout = adaptiveLayoutProvider.get().getActiveLayout()
+                val plan = intelligenceManagerProvider.get().getLatestPlan()
+                if (layout != null && plan != null) {
+                    renderDashboard(plan, layout)
+                }
             }
             is BootstrapEvent.StudentContextUpdated -> {
                 if (isDashboardReady) {
