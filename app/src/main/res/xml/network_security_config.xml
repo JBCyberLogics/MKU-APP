@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">mku.ac.ke</domain>
+        <pin-set expiration="2026-11-04">
+            <pin digest="SHA-256">AYajYaKzuz3YSRwertDDgzz5l1Pkv+arBvmnzwucOjw=</pin>
+            <pin digest="SHA-256">8kGWrpQHhmc0jwLo43RYo6bmqtHgsNxhARjM5yFCe/w=</pin>
+        </pin-set>
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" />
+        </trust-anchors>
+    </domain-config>
+</network-security-config>
